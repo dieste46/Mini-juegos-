@@ -1,5 +1,5 @@
 // Caché sencilla "red primero": funciona offline tras la primera visita y siempre coge lo último si hay conexión.
-const CACHE = 'juegos-peque-v1';
+const CACHE = 'mini-juegos-v1';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', e => {

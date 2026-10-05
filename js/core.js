@@ -118,7 +118,7 @@ const Core = (() => {
             b.classList.add('right');
             registerAnswer(game.id, errors === 0, game.maxLevel);
             if (errors === 0) addStar();
-            celebrate();
+            celebrate(); sfx.ding();
             say(pick(PRAISE) + (q.explain ? ' ' + q.explain : ''));
             qIndex++;
             setTimeout(next, q.explain ? 2600 : 1500);
@@ -139,7 +139,7 @@ const Core = (() => {
 
     function finish() {
       g.played++; save();
-      celebrate(true);
+      celebrate(true); sfx.fanfare();
       say('¡Has terminado! ¿Jugamos otra vez?');
       root.innerHTML = `
         <div class="prompt" style="flex-direction:column;font-size:2rem">🏆<span>¡Has terminado!</span></div>
@@ -154,7 +154,39 @@ const Core = (() => {
     next();
   }
 
-  return { say, rand, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+  // ---------- Efectos de sonido sintetizados (sin archivos de audio) ----------
+  let actx = null;
+  function tone(freq, dur = 0.15, type = 'sine', vol = 0.25, slideTo = null, delay = 0) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+      const t = actx.currentTime + delay;
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur + 0.02);
+    } catch {}
+  }
+  const sfx = {
+    pop:   () => tone(700, 0.12, 'triangle', 0.3, 1400),
+    ding:  () => { tone(880, 0.12, 'sine', 0.25); tone(1320, 0.2, 'sine', 0.2, null, 0.1); },
+    bonk:  () => tone(180, 0.25, 'square', 0.15, 70),
+    whoosh:() => tone(300, 0.2, 'sawtooth', 0.06, 900),
+    fanfare: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.25, 'triangle', 0.22, null, i * 0.12)),
+    note:  (f) => tone(f, 0.5, 'triangle', 0.3)
+  };
+
+  // Pantalla de fin reutilizable para los juegos de recreo.
+  function endScreen(root, html, phrase, again, exit) {
+    celebrate(true); sfx.fanfare(); say(phrase);
+    root.innerHTML = `<div class="prompt" style="flex-direction:column;font-size:2rem">${html}</div>
+      <div class="options"><button class="opt" id="again">🔁</button><button class="opt" id="out">🏠</button></div>`;
+    root.querySelector('#again').onclick = again;
+    root.querySelector('#out').onclick = exit;
+  }
+
+  return { say, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
            get state() { return state; }, reset() { state = { stars: 0, games: {} }; save(); } };
 })();
 

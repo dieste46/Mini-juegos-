@@ -133,3 +133,46 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
   .opt { min-height: 80px; font-size: 2.2rem; }
   .prompt { font-size: 1.3rem; }
 }
+
+/* ---------- Recreo: área de juego a pantalla ---------- */
+.section-title { font-size: 1.4rem; font-weight: 800; margin: 18px 4px 10px; }
+.section-title:first-child { margin-top: 0; }
+.hud { display: flex; justify-content: space-between; align-items: center; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+.play {
+  position: relative; overflow: hidden; touch-action: none;
+  height: calc(100dvh - 140px); min-height: 380px;
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  background: linear-gradient(#bfe6ff, #eaf7ff);
+}
+.sprite { position: absolute; top: 0; line-height: 1; cursor: pointer; will-change: transform; }
+.balloon { font-size: 4.2rem; filter: drop-shadow(0 4px 2px rgba(0,0,0,.15)); }
+.burst { position: absolute; font-size: 2rem; pointer-events: none; animation: burst .5s forwards; }
+.floating { position: absolute; font-size: 1.6rem; font-weight: 800; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.3); pointer-events: none; animation: rise .8s forwards; }
+@keyframes burst { to { transform: scale(2.4); opacity: 0; } }
+@keyframes rise { to { transform: translateY(-60px); opacity: 0; } }
+
+/* Topo */
+.holes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; height: 100%; padding: 14px; align-content: center; }
+.hole { position: relative; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(#5b3a1c 55%, #7a5230 56%); overflow: hidden; }
+.hole .who { position: absolute; left: 0; right: 0; text-align: center; bottom: -100%; font-size: clamp(3rem, 15vw, 5rem); transition: bottom .15s; }
+.hole.up .who { bottom: 8%; }
+.hole.hit .who { animation: shake .3s; }
+
+/* Pintar */
+.paint-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.swatch { width: 46px; height: 46px; border-radius: 50%; border: 4px solid #fff; box-shadow: var(--shadow); cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; background: #fff; }
+.swatch.sel { outline: 4px solid var(--ink); }
+.paint canvas { width: 100%; height: 100%; display: block; background: #fff; border-radius: var(--radius); }
+
+/* Piano */
+.keys { display: flex; height: 100%; gap: 4px; padding: 6px; }
+.key { flex: 1; min-width: 0; padding-left: 0; padding-right: 0; border: 0; border-radius: 16px; box-shadow: var(--shadow); cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 18px; font-size: clamp(1.4rem, 6vw, 3rem); transition: transform .08s; }
+.key.on { transform: translateY(6px) scale(.97); filter: brightness(1.15); }
+.key.on span { animation: pop .3s; }
+
+/* Carrera */
+.road { background: #555; }
+.road .lane { position: absolute; top: 0; bottom: 0; width: 6px; background: repeating-linear-gradient(#fff 0 30px, transparent 30px 60px); background-size: 6px 60px; animation: road .5s linear infinite; }
+@keyframes road { to { background-position: 0 60px; } }
+.car { font-size: 4rem; transition: left .12s; }
+.lives { letter-spacing: 2px; }

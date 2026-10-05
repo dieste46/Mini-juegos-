@@ -1,6 +1,6 @@
-# Juegos Peque
+# Mini Juegos
 
-Web de minijuegos educativos para niños de 4–6 años, inspirada en juegapop.com pero centrada en una sola edad y en un único niño.
+Web de minijuegos para niños de 4–6 años, inspirada en juegapop.com. Lo principal es pasarlo bien (sección **¡A jugar!**); hay además una sección **Aprende jugando** con juegos educativos que se adaptan a su nivel.
 
 Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se instala como app en la tablet o el móvil (PWA) y funciona offline tras la primera visita.
 
@@ -13,7 +13,19 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 - **Rondas cortas** (5 preguntas), pensadas para sesiones de 5–10 minutos.
 - **Zona de padres** (protegida con una multiplicación) con nivel, % de acierto a la primera y partidas por juego. Los datos se guardan solo en el dispositivo (localStorage).
 
-## Juegos
+## ¡A jugar! (recreo)
+
+| Juego | Cómo se juega |
+|---|---|
+| 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
+| 🐽 Pilla al cerdito | Topo de 40 s: tocar cerditos y no tocar al lobo. Guarda récord |
+| 🏎️ Carrera | Cambiar de carril tocando izquierda/derecha, coger 15 estrellas y esquivar obstáculos (3 vidas) |
+| 🖍️ Pintar | Dibujo libre con colores, pincel arcoíris, sellos y guardar el dibujo |
+| 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
+
+Ningún juego castiga: lo que se escapa no resta, chocar solo quita una vida y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
+
+## Aprende jugando
 
 | Juego | Qué trabaja | Niveles |
 |---|---|---|
@@ -30,9 +42,11 @@ index.html          shell y menú
 css/style.css       estilos (botones grandes, táctil)
 js/core.js          voz, progreso, nivel adaptativo, celebración, motor de preguntas
 js/app.js           navegación por hash y zona de padres
-js/games/*.js       un archivo por juego
+js/games/*.js       un archivo por juego (section: 'recreo' | 'aprende')
 sw.js, manifest.json  PWA / offline
 ```
+
+Un juego de recreo es un `Games.push({ id, section: 'recreo', name, emoji, color, start(root, exit) })` cuyo `start` devuelve una función de limpieza (parar bucles y temporizadores).
 
 Añadir un juego de preguntas = un archivo nuevo en `js/games/` que haga `Games.push({...})` con una función `makeQuestion(level)` y llamar a `Core.runQuiz`. Luego añadir su `<script>` en `index.html`.
 
@@ -49,6 +63,7 @@ El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a
 
 ## Ideas siguientes
 
+- Más recreo: Flappy-cerdito, burbujas de jabón, puzle de piezas arrastrables, laberinto con el dedo, granja que se va ampliando con las estrellas ganadas.
 - Trazar letras y números con el dedo (canvas).
 - Reloj: en punto / y media.
 - Dinero: monedas de 1 y 2 €.
