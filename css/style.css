@@ -18,9 +18,14 @@ html, body {
   font-family: 'Baloo 2', system-ui, sans-serif;
   user-select: none;
   -webkit-user-select: none;
-  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  /* pan-y: se puede hacer scroll vertical pero no zoom (pellizco ni doble toque). */
+  touch-action: pan-y;
   overscroll-behavior: none;
 }
+/* En los juegos de recreo no hay nada que desplazar: se bloquea todo gesto. */
+body.in-game { touch-action: none; overflow: hidden; }
+body.in-game main { overflow: hidden; }
 
 .topbar {
   display: flex; align-items: center; gap: 12px;
@@ -36,6 +41,7 @@ html, body {
 }
 
 main { padding: 16px; max-width: 900px; margin: 0 auto; }
+.hello { font-size: 1.5rem; font-weight: 800; margin: 0 4px 12px; color: var(--primary); }
 
 /* ---------- Menú ---------- */
 .menu-grid {
@@ -123,6 +129,8 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
 .parents table { width: 100%; border-collapse: collapse; }
 .parents td, .parents th { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
 .parents button { font-family: inherit; font-size: 1rem; padding: 8px 14px; border-radius: 10px; border: 1px solid #ccc; background: #fafafa; }
+.parents label { display: block; margin-bottom: 14px; }
+.parents input { font-family: inherit; font-size: 1.1rem; padding: 8px 10px; border-radius: 10px; border: 1px solid #ccc; width: 60%; max-width: 240px; }
 
 @keyframes pop { 50% { transform: scale(1.15); } }
 @keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
@@ -140,7 +148,7 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
 .hud { display: flex; justify-content: space-between; align-items: center; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
 .play {
   position: relative; overflow: hidden; touch-action: none;
-  height: calc(100dvh - 140px); min-height: 380px;
+  height: calc(100vh - 140px); height: calc(100dvh - 140px); min-height: 380px;
   border-radius: var(--radius); box-shadow: var(--shadow);
   background: linear-gradient(#bfe6ff, #eaf7ff);
 }
@@ -175,4 +183,9 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
 .road .lane { position: absolute; top: 0; bottom: 0; width: 6px; background: repeating-linear-gradient(#fff 0 30px, transparent 30px 60px); background-size: 6px 60px; animation: road .5s linear infinite; }
 @keyframes road { to { background-position: 0 60px; } }
 .car { font-size: 4rem; transition: left .12s; }
-.lives { letter-spacing: 2px; }
+.car.crash { animation: crash .6s; }
+@keyframes crash { 20% { transform: rotate(-20deg); } 50% { transform: rotate(20deg); } 80% { transform: rotate(-10deg); } }
+
+/* Barra de objetivo (sin cronómetro) */
+.goalbar { flex: 1; height: 18px; margin: 0 12px; background: rgba(0,0,0,.08); border-radius: 9px; overflow: hidden; }
+.goalbar > div { height: 100%; width: 0; background: var(--ok); border-radius: 9px; transition: width .3s; }

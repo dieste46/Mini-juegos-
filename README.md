@@ -11,19 +11,19 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 - **Estrellas solo por acierto a la primera**, para premiar la atención y no el ensayo-error a lo loco.
 - **Nivel adaptativo por juego.** Sube tras 3 aciertos seguidos a la primera; baja tras 2 preguntas seguidas con fallos.
 - **Rondas cortas** (5 preguntas), pensadas para sesiones de 5–10 minutos.
-- **Zona de padres** (protegida con una multiplicación) con nivel, % de acierto a la primera y partidas por juego. Los datos se guardan solo en el dispositivo (localStorage).
+- **Zona de padres** (protegida con una multiplicación) con nivel, % de acierto a la primera y partidas por juego, y el nombre del niño para que la voz le salude y le anime. Los datos se guardan solo en el dispositivo (localStorage).
 
 ## ¡A jugar! (recreo)
 
 | Juego | Cómo se juega |
 |---|---|
 | 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
-| 🐽 Pilla al cerdito | Topo de 40 s: tocar cerditos y no tocar al lobo. Guarda récord |
-| 🏎️ Carrera | Cambiar de carril tocando izquierda/derecha, coger 15 estrellas y esquivar obstáculos (3 vidas) |
+| 🐽 Pilla al cerdito | Topo: pillar 20 cerditos y no tocar al lobo. Sin reloj; cuenta el total acumulado |
+| 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
 | 🖍️ Pintar | Dibujo libre con colores, pincel arcoíris, sellos y guardar el dibujo |
 | 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
 
-Ningún juego castiga: lo que se escapa no resta, chocar solo quita una vida y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
+Ningún juego castiga: no hay vidas, cronómetros ni cruces rojas; lo que se escapa no resta, chocar solo frena y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
 
 ## Aprende jugando
 
@@ -49,6 +49,13 @@ sw.js, manifest.json  PWA / offline
 Un juego de recreo es un `Games.push({ id, section: 'recreo', name, emoji, color, start(root, exit) })` cuyo `start` devuelve una función de limpieza (parar bucles y temporizadores).
 
 Añadir un juego de preguntas = un archivo nuevo en `js/games/` que haga `Games.push({...})` con una función `makeQuestion(level)` y llamar a `Core.runQuiz`. Luego añadir su `<script>` en `index.html`.
+
+## iPhone / iPad
+
+- Safari ignora `user-scalable=no`, así que el zoom por pellizco (dos pulgares jugando) se bloquea por JS en `app.js` (`gesturestart`, `touchmove` multitáctil, doble toque) y, si aun así la página queda ampliada, se fuerza la vuelta a escala 1 tocando el `meta viewport`.
+- El audio y la voz solo arrancan tras el primer toque (`Core.unlockAudio`). Si no suena, revisar el interruptor de silencio del iPhone.
+- Icono de pantalla de inicio: `apple-touch-icon.png` (iOS no usa el SVG del manifest). Añadir a pantalla de inicio para ir a pantalla completa.
+- Guardar dibujo: en iOS se usa la hoja de compartir (`navigator.share`), porque el atributo `download` no guarda en Fotos.
 
 ## Probar en local
 

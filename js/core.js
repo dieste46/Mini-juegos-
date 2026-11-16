@@ -21,6 +21,9 @@ const Core = (() => {
     document.getElementById('star-count').textContent = state.stars;
   }
 
+  const PRAISE = ['¡Muy bien!', '¡Genial!', '¡Lo has conseguido!', '¡Bravo!', '¡Qué listo!', '¡Fenomenal!'];
+  const RETRY  = ['Casi. Prueba otra vez.', 'Uy, esa no. ¡Tú puedes!', 'Mira bien y vuelve a probar.'];
+
   // ---------- Voz (Web Speech API, es-ES) ----------
   let voice = null;
   function pickVoice() {
@@ -33,14 +36,27 @@ const Core = (() => {
     pickVoice();
     speechSynthesis.onvoiceschanged = pickVoice;
   }
+  let sayTimer = null;
   function say(text) {
     if (!('speechSynthesis' in window) || !text) return;
-    speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'es-ES'; u.rate = 0.9; u.pitch = 1.1;
     if (voice) u.voice = voice;
-    speechSynthesis.speak(u);
+    clearTimeout(sayTimer);
+    // iOS Safari pierde la frase si se llama a speak() justo después de cancel(): pequeña espera.
+    if (speechSynthesis.speaking || speechSynthesis.pending) {
+      speechSynthesis.cancel();
+      sayTimer = setTimeout(() => speechSynthesis.speak(u), 80);
+    } else {
+      speechSynthesis.speak(u);
+    }
   }
+
+  // Nombre del niño (opcional, se pone en la zona de padres).
+  const getName = () => (state.name || '').trim();
+  function setName(n) { state.name = (n || '').trim().slice(0, 20); save(); }
+  // Elogio, a veces con el nombre.
+  const praise = () => { const n = getName(); return pick(PRAISE) + (n && Math.random() < 0.35 ? ` ¡${n}!` : ''); };
 
   // ---------- Utilidades ----------
   const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -49,8 +65,6 @@ const Core = (() => {
   const sample = (arr, n) => shuffle(arr).slice(0, n);
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
 
-  const PRAISE = ['¡Muy bien!', '¡Genial!', '¡Lo has conseguido!', '¡Bravo!', '¡Qué listo!', '¡Fenomenal!'];
-  const RETRY  = ['Casi. Prueba otra vez.', 'Uy, esa no. ¡Tú puedes!', 'Mira bien y vuelve a probar.'];
 
   function celebrate(big = false) {
     const c = document.getElementById('celebration');
@@ -119,7 +133,7 @@ const Core = (() => {
             registerAnswer(game.id, errors === 0, game.maxLevel);
             if (errors === 0) addStar();
             celebrate(); sfx.ding();
-            say(pick(PRAISE) + (q.explain ? ' ' + q.explain : ''));
+            say(praise() + (q.explain ? ' ' + q.explain : ''));
             qIndex++;
             setTimeout(next, q.explain ? 2600 : 1500);
           } else {
@@ -168,6 +182,15 @@ const Core = (() => {
       o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur + 0.02);
     } catch {}
   }
+  // iOS solo arranca el audio dentro de un gesto del usuario: se llama en el primer toque/click.
+  function unlockAudio() {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+      const b = actx.createBuffer(1, 1, 22050), src = actx.createBufferSource();
+      src.buffer = b; src.connect(actx.destination); src.start(0);
+    } catch {}
+  }
   const sfx = {
     pop:   () => tone(700, 0.12, 'triangle', 0.3, 1400),
     ding:  () => { tone(880, 0.12, 'sine', 0.25); tone(1320, 0.2, 'sine', 0.2, null, 0.1); },
@@ -186,7 +209,7 @@ const Core = (() => {
     root.querySelector('#out').onclick = exit;
   }
 
-  return { say, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+  return { say, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
            get state() { return state; }, reset() { state = { stars: 0, games: {} }; save(); } };
 })();
 

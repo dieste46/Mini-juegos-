@@ -8,9 +8,11 @@ Games.push({
     const STAMPS = ['⭐', '🐷', '❤️', '🌸', '🚗', '🦋', '☀️'];
     let tool = { kind: 'color', value: COLORS[0] }, size = 14, hue = 0;
 
-    root.innerHTML = `<div class="paint-tools" id="tools"></div><div class="play paint" style="height:calc(100dvh - 250px)"><canvas></canvas></div>`;
+    root.innerHTML = `<div class="paint-tools" id="tools"></div><div class="play paint"><canvas></canvas></div>`;
     Core.say('¡A pintar! Elige un color y dibuja con el dedo.');
-    const tools = root.querySelector('#tools'), canvas = root.querySelector('canvas'), ctx = canvas.getContext('2d');
+    const tools = root.querySelector('#tools'), paint = root.querySelector('.paint'), canvas = root.querySelector('canvas'), ctx = canvas.getContext('2d');
+    // El lienzo ocupa lo que queda de pantalla debajo de las herramientas.
+    const sizeCanvas = () => { paint.style.height = `calc(100dvh - ${100 + tools.offsetHeight}px)`; paint.style.minHeight = '260px'; };
 
     function fit() {
       const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
@@ -21,8 +23,8 @@ Games.push({
       if (old) ctx.putImageData(old, 0, 0);
       ctx.lineCap = ctx.lineJoin = 'round';
     }
-    fit();
-    window.addEventListener('resize', fit);
+    const refit = () => { sizeCanvas(); fit(); };
+    window.addEventListener('resize', refit);
 
     const addTool = (html, style, onPick, sel) => {
       const b = Core.el(`<button class="swatch" style="${style}">${html}</button>`);
@@ -36,9 +38,20 @@ Games.push({
     const sizeBtn = addTool('●', 'font-size:1rem', () => { size = size === 14 ? 30 : size === 30 ? 6 : 14; sizeBtn.style.fontSize = { 6: '.6rem', 14: '1rem', 30: '1.8rem' }[size]; }, false);
     addTool('🗑️', '', () => { if (confirm('¿Borrar el dibujo?')) { canvas.width = 0; fit(); Core.sfx.whoosh(); } }, false);
     addTool('💾', '', () => {
-      const a = document.createElement('a'); a.download = 'mi-dibujo.png'; a.href = canvas.toDataURL('image/png'); a.click();
-      Core.sfx.ding(); Core.say('¡Dibujo guardado!');
+      // En iPhone/iPad el atributo download no guarda en Fotos: se usa la hoja de compartir si existe.
+      canvas.toBlob(async blob => {
+        const file = new File([blob], 'mi-dibujo.png', { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'Mi dibujo' }); Core.sfx.ding(); Core.say('¡Dibujo guardado!'); } catch {}
+          return;
+        }
+        const a = document.createElement('a'); a.download = 'mi-dibujo.png'; a.href = URL.createObjectURL(blob); a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+        Core.sfx.ding(); Core.say('¡Dibujo guardado!');
+      }, 'image/png');
     }, false);
+
+    refit();
 
     const strokes = new Map();
     const pos = e => { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
@@ -66,6 +79,6 @@ Games.push({
     canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
 
     Core.gameState('pintar').played++;
-    return () => window.removeEventListener('resize', fit);
+    return () => window.removeEventListener('resize', refit);
   }
 });
