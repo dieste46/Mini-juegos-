@@ -189,3 +189,45 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
 /* Barra de objetivo (sin cronómetro) */
 .goalbar { flex: 1; height: 18px; margin: 0 12px; background: rgba(0,0,0,.08); border-radius: 9px; overflow: hidden; }
 .goalbar > div { height: 100%; width: 0; background: var(--ok); border-radius: 9px; transition: width .3s; }
+
+/* ---------- Mi granja ---------- */
+.farm { position: relative; overflow: hidden; container-type: inline-size;
+  background: linear-gradient(#8fd3ff 0 46%, #86d45f 46% 100%); }
+.farm .hill { position: absolute; left: -10%; right: -10%; top: 34%; height: 30%; border-radius: 50%; background: #6cc04a; }
+.farm .sun { position: absolute; left: 6%; top: 5%; font-size: 12vw; font-size: 12cqw; line-height: 1; }
+.cloud { position: absolute; font-size: 3rem; opacity: .85; animation: drift 26s linear infinite; pointer-events: none; }
+.cloud.c1 { top: 6%; animation-delay: -4s; } .cloud.c2 { top: 20%; animation-duration: 38s; animation-delay: -20s; font-size: 2.2rem; }
+.cloud.c3 { top: 55%; animation-duration: 31s; animation-delay: -11s; opacity: .5; }
+@keyframes drift { from { left: 105%; } to { left: -25%; } }
+.fitem { position: absolute; line-height: 1; cursor: pointer; transform: translate(-50%, -100%);
+  font-size: calc(var(--s) * 1vw); font-size: calc(var(--s) * 1cqw);
+  animation: bob 2.4s ease-in-out infinite; filter: drop-shadow(0 3px 2px rgba(0,0,0,.18)); }
+.fitem.jump { animation: jump .5s; }
+.fitem.arrive { animation: arrive .7s; }
+@keyframes bob { 50% { transform: translate(-50%, -104%); } }
+@keyframes jump { 40% { transform: translate(-50%, -150%) rotate(-12deg) scale(1.2); } }
+@keyframes arrive { 0% { transform: translate(-50%, -100%) scale(0); } 70% { transform: translate(-50%, -100%) scale(1.4); } }
+.farm-banner { display: block; width: 100%; padding: 0; border: 0; margin-bottom: 6px; cursor: pointer; font-family: inherit;
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; color: var(--ink); }
+.farm-banner:active { transform: translateY(4px); }
+.farm-banner .mini { height: 150px; pointer-events: none; }
+.farm-banner.new { outline: 5px solid var(--warn); animation: pop 1s infinite; }
+.farm-foot { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 1.2rem; }
+.farm-foot b { margin-right: auto; font-weight: 800; }
+.farm-foot .goalbar { max-width: 110px; margin: 0; }
+.gift { font-weight: 800; white-space: nowrap; }
+.gift.bounce { color: #d7263d; }
+.farm-hud { justify-content: center; gap: 10px; }
+.farm-hud .goalbar { max-width: 220px; margin: 0; }
+
+/* ---------- Súper Cerdito ---------- */
+.sky { background: linear-gradient(#5cb8ff, #c9ecff 70%, #e9f9d8); }
+.hero { width: 80px; height: 80px; left: 0; }
+.hero .pig { position: absolute; inset: 0; font-size: 4rem; line-height: 80px; text-align: center; }
+.hero .cape { position: absolute; left: -34px; top: 22px; width: 56px; height: 40px; background: #d7263d;
+  clip-path: polygon(100% 20%, 100% 80%, 0 100%, 18% 50%, 0 0); transform-origin: right center; animation: flap .35s ease-in-out infinite alternate; }
+@keyframes flap { from { transform: scaleY(.75) skewY(-6deg); } to { transform: scaleY(1.1) skewY(6deg); } }
+.lost { display: flex; flex-direction: column; align-items: center; font-size: 2.6rem; left: 0; }
+.lost span:first-child { font-size: 3rem; margin-bottom: -10px; }
+.storm { font-size: 3.6rem; left: 0; }
+.follower { font-size: 1.6rem; left: 0; }

@@ -209,7 +209,7 @@ const Core = (() => {
     root.querySelector('#out').onclick = exit;
   }
 
-  return { say, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+  return { say, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
            get state() { return state; }, reset() { state = { stars: 0, games: {} }; save(); } };
 })();
 

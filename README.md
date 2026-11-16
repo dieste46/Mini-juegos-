@@ -17,6 +17,7 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 
 | Juego | Cómo se juega |
 |---|---|
+| 🦸 Súper Cerdito | Superhéroe propio: vuela siguiendo el dedo y rescata 10 pollitos; las nubes de tormenta solo le hacen girar |
 | 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
 | 🐽 Pilla al cerdito | Topo: pillar 20 cerditos y no tocar al lobo. Sin reloj; cuenta el total acumulado |
 | 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
@@ -24,6 +25,10 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 | 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
 
 Ningún juego castiga: no hay vidas, cronómetros ni cruces rojas; lo que se escapa no resta, chocar solo frena y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
+
+## Mi granja
+
+Tarjeta fija arriba del menú (`js/farm.js`). Las estrellas de cualquier juego hacen crecer la granja: 18 amigos y edificios que llegan a las 0, 3, 6, 10, 14, 19, 24, 30, 36, 43, 50, 58, 66, 75, 85, 95, 106 y 118 estrellas. Al tocar cada uno salta, suena y la voz dice su nombre. Cuando hay regalo nuevo la tarjeta late y la voz avisa. Nunca se pierde nada.
 
 ## Aprende jugando
 

@@ -61,7 +61,10 @@
       app.querySelector('#' + (g.section || 'aprende')).appendChild(b);
     });
     app.querySelector('#parents').onclick = () => (location.hash = 'padres');
-    if (name && !greeted) { greeted = true; setTimeout(() => Core.say(`¡Hola, ${name}! ¿A qué jugamos?`), 300); }
+    // Mi granja: crece con las estrellas. Si hay regalo nuevo, se avisa por voz.
+    app.querySelector('.section-title').before(Farm.banner());
+    if (Farm.hasNew() && Core.state.farmSeen) { greeted = true; setTimeout(() => Core.say('¡Tienes un regalo nuevo en tu granja! Toca la granja.'), 300); }
+    else if (name && !greeted) { greeted = true; setTimeout(() => Core.say(`¡Hola, ${name}! ¿A qué jugamos?`), 300); }
   }
 
   // ---------- Zona de padres ----------
@@ -98,6 +101,11 @@
     unzoom();
     const id = location.hash.slice(1);
     if (id === 'padres') return parents();
+    if (id === 'granja') {
+      title.textContent = 'Mi granja'; btnHome.hidden = false;
+      document.body.classList.add('in-game'); app.innerHTML = ''; window.scrollTo(0, 0);
+      cleanup = Farm.start(app) || null; return;
+    }
     const game = Games.find(g => g.id === id);
     if (!game) return menu();
     title.textContent = game.name;
