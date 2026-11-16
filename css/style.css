@@ -130,6 +130,7 @@ main { padding: 16px; max-width: 900px; margin: 0 auto; }
 .parents td, .parents th { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
 .parents button { font-family: inherit; font-size: 1rem; padding: 8px 14px; border-radius: 10px; border: 1px solid #ccc; background: #fafafa; }
 .parents label { display: block; margin-bottom: 14px; }
+.parents select { font-family: inherit; font-size: 1rem; padding: 8px; border-radius: 10px; border: 1px solid #ccc; max-width: 70%; }
 .parents input { font-family: inherit; font-size: 1.1rem; padding: 8px 10px; border-radius: 10px; border: 1px solid #ccc; width: 60%; max-width: 240px; }
 
 @keyframes pop { 50% { transform: scale(1.15); } }

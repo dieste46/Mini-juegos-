@@ -85,11 +85,23 @@
     app.innerHTML = `<div class="parents">
       <label>Nombre del niño (la voz le saludará y le animará por su nombre)<br>
         <input id="name" type="text" maxlength="20" value="${Core.getName().replace(/"/g, '&quot;')}" placeholder="Nombre"> <button id="save-name">Guardar</button></label>
+      <label>Voz<br><select id="voice"></select> <button id="test-voice">Probar</button><br>
+        <small>Si suena a robot, descarga una voz mejor en el dispositivo (iPhone: Ajustes → Accesibilidad → Contenido leído → Voces → Español) y elígela aquí.</small></label>
       <p>El nivel se ajusta solo: sube tras 3 aciertos seguidos a la primera y baja si falla dos preguntas seguidas. Los datos se guardan solo en este dispositivo.</p>
       <table><tr><th>Juego</th><th>Nivel / marca</th><th>Acierto a la 1ª</th><th>Partidas</th></tr>${rows}</table>
       <p>⭐ Estrellas totales: ${Core.state.stars}</p>
       <p><small>En iPhone o iPad: Compartir → "Añadir a pantalla de inicio" para que vaya a pantalla completa, sin barras del navegador.</small></p>
       <button id="reset">Borrar progreso</button></div>`;
+    const sel = app.querySelector('#voice');
+    const fillVoices = () => {
+      const vs = Core.spanishVoices();
+      sel.innerHTML = vs.length ? vs.map(v => `<option value="${v.voiceURI.replace(/"/g, '&quot;')}">${v.name} (${v.lang})</option>`).join('') : '<option value="">Voz del sistema</option>';
+      sel.value = Core.voiceURI;
+    };
+    fillVoices(); setTimeout(fillVoices, 600);
+    const sample = () => Core.say(`¡Hola${Core.getName() ? ', ' + Core.getName() : ''}! ¿Cuántos cerditos hay? ¡Muy bien!`);
+    sel.onchange = () => { Core.setVoice(sel.value); sample(); };
+    app.querySelector('#test-voice').onclick = sample;
     app.querySelector('#save-name').onclick = () => { Core.setName(app.querySelector('#name').value); greeted = false; Core.say(`Hola, ${Core.getName() || 'campeón'}`); };
     app.querySelector('#reset').onclick = () => { if (confirm('¿Borrar todo el progreso?')) { const n = Core.getName(); Core.reset(); Core.setName(n); document.getElementById('star-count').textContent = 0; location.hash = ''; } };
   }

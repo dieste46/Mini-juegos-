@@ -26,12 +26,32 @@ const Core = (() => {
 
   // ---------- Voz (Web Speech API, es-ES) ----------
   let voice = null;
-  function pickVoice() {
-    const vs = speechSynthesis.getVoices();
-    voice = vs.find(v => v.lang === 'es-ES' && /google|mónica|monica|lucia|elvira/i.test(v.name))
-         || vs.find(v => v.lang === 'es-ES')
-         || vs.find(v => v.lang.startsWith('es')) || null;
+  // Puntúa las voces instaladas: primero español de España y calidad alta; fuera las voces "robot".
+  const plain = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  function voiceScore(v) {
+    const lang = (v.lang || '').replace('_', '-').toLowerCase();
+    if (!lang.startsWith('es')) return -1;
+    const id = plain(v.name) + ' ' + plain(v.voiceURI);
+    let sc = lang === 'es-es' ? 100 : 50;
+    if (/premium/.test(id)) sc += 40;
+    if (/natural|neural|online/.test(id)) sc += 35;
+    if (/enhanced|mejorada/.test(id)) sc += 30;
+    if (/google/.test(id)) sc += 25;
+    if (/monica|marisol|elvira|lucia|helena|laura|paulina/.test(id)) sc += 10;
+    if (/compact/.test(id)) sc -= 5;
+    // Voces sintéticas antiguas y de broma de iOS/macOS: suenan a robot.
+    if (/eloquence|speech\.synthesis|eddy|flo\b|grandma|grandpa|reed|rocko|sandy|shelley|abuel/.test(id)) sc -= 90;
+    return sc;
   }
+  function spanishVoices() {
+    if (!('speechSynthesis' in window)) return [];
+    return speechSynthesis.getVoices().map(v => ({ v, sc: voiceScore(v) })).filter(x => x.sc >= 0).sort((a, b) => b.sc - a.sc).map(x => x.v);
+  }
+  function pickVoice() {
+    const vs = spanishVoices();
+    voice = vs.find(v => v.voiceURI === state.voiceURI) || vs[0] || null;
+  }
+  function setVoice(uri) { state.voiceURI = uri || ''; save(); pickVoice(); }
   if ('speechSynthesis' in window) {
     pickVoice();
     speechSynthesis.onvoiceschanged = pickVoice;
@@ -40,7 +60,9 @@ const Core = (() => {
   function say(text) {
     if (!('speechSynthesis' in window) || !text) return;
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'es-ES'; u.rate = 0.9; u.pitch = 1.1;
+    if (!voice) pickVoice();   // en iOS la lista de voces puede llegar tarde y sin avisar
+    // Tono natural (subirlo artificialmente la hace sonar rara) y un pelín más despacio.
+    u.lang = voice ? voice.lang : 'es-ES'; u.rate = 0.95; u.pitch = 1;
     if (voice) u.voice = voice;
     clearTimeout(sayTimer);
     // iOS Safari pierde la frase si se llama a speak() justo después de cancel(): pequeña espera.
@@ -209,8 +231,8 @@ const Core = (() => {
     root.querySelector('#out').onclick = exit;
   }
 
-  return { say, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
-           get state() { return state; }, reset() { state = { stars: 0, games: {} }; save(); } };
+  return { say, spanishVoices, setVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+           get state() { return state; }, reset() { state = { stars: 0, games: {}, voiceURI: state.voiceURI }; save(); } };
 })();
 
 const Games = [];
