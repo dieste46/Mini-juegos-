@@ -25,7 +25,7 @@ const World = (() => {
     return W().items.slice(0, count).map((it, i) => {
       const e = document.createElement('span');
       e.className = 'fitem';
-      e.textContent = it[0];
+      e.innerHTML = Core.pic(it[0]);
       e.style.cssText = `left:${it[3]}%;top:${it[4]}%;--s:${it[5]};z-index:${Math.round(it[4])};animation-delay:${-(i * 0.37) % 2}s`;
       container.appendChild(e);
       return e;

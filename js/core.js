@@ -78,6 +78,12 @@ const Core = (() => {
   const praise = () => { const n = getName(); return pick(PRAISE) + (n && Math.random() < 0.35 ? ` ¡${n}!` : ''); };
 
   // ---------- Utilidades ----------
+  // Emoji -> icono ilustrado de img/icons. Para añadir uno: copiar el .webp y apuntarlo aquí.
+  const PICS = { '🐮': 'vaca', '🐷': 'cerdo', '🎈': 'globos', '🚁': 'rescate', '🧩': 'series' };
+  const hasPic = ch => !!PICS[ch];
+  const pic = ch => (PICS[ch] ? `<img class="pic" src="img/icons/${PICS[ch]}.webp" alt="" data-e="${ch}" onerror="this.replaceWith(this.dataset.e)">` : ch);
+  // En juegos que mezclan varios dibujos a la vez solo se cambia si TODOS tienen icono (no mezclar estilos).
+  const pics = list => (list.every(hasPic) ? list.map(pic) : list);
   const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
   const pick = arr => arr[Math.floor(Math.random() * arr.length)];
   const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -224,7 +230,7 @@ const Core = (() => {
     root.querySelector('#out').onclick = exit;
   }
 
-  return { say, spanishVoices, setVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+  return { pic, pics, hasPic, say, spanishVoices, setVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
            get state() { return P(); }, reset() { Store.resetProgress(); } };
 })();
 

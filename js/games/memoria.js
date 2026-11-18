@@ -14,7 +14,8 @@ Games.push({
 
     function play() {
       const [pairs, cols] = LEVELS[g.level];
-      const deck = Core.shuffle(Core.sample(CARDS, pairs).flatMap(c => [c, c]));
+      const chosen = Core.sample(CARDS, pairs), illustrated = chosen.every(c => Core.hasPic(c[0]));
+      const deck = Core.shuffle(chosen.flatMap(c => [c, c]));
       let open = [], found = 0, moves = 0, busy = false;
 
       root.innerHTML = `<div class="prompt"><button class="speak-btn">🔊</button><span>Encuentra las parejas</span></div>
@@ -24,7 +25,7 @@ Games.push({
 
       const grid = root.querySelector('.memory-grid');
       deck.forEach(([emoji, name]) => {
-        const b = Core.el(`<button class="mcard">${emoji}</button>`);
+        const b = Core.el(`<button class="mcard">${illustrated ? Core.pic(emoji) : emoji}</button>`);
         b.onclick = () => {
           if (busy || b.classList.contains('open') || b.classList.contains('done')) return;
           b.classList.add('open'); open.push({ b, emoji, name });

@@ -13,7 +13,7 @@ Games.push({
     Core.runQuiz(root, {
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
-        const set = Core.shuffle(Core.pick(SETS));
+        const set = Core.shuffle(Core.pics(Core.pick(SETS)));
         const pat = Core.pick(PATTERNS[level]);
         const map = ch => set['ABCD'.indexOf(ch)];
         const shownLen = pat.length * 2 + Core.rand(0, pat.length - 1);

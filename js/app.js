@@ -44,7 +44,7 @@
   // ---------- Menú ----------
   const emojiOf = g => typeof g.emoji === 'function' ? g.emoji(Themes.current()) : g.emoji;
   // Dibujo de la tarjeta: imagen si el juego la tiene para este tema; si no, su emoji.
-  const artOf = g => { const a = g.art && g.art(Themes.current()); return a ? `<img class="art" src="img/icons/${a}.webp" alt="">` : `<span class="emoji">${emojiOf(g)}</span>`; };
+  const artOf = g => { const a = g.art && g.art(Themes.current()); return a ? `<img class="art" src="img/icons/${a}.webp" alt="" data-e="${emojiOf(g)}" onerror="this.outerHTML='<span class=emoji>'+this.dataset.e+'</span>'">` : `<span class="emoji">${emojiOf(g)}</span>`; };
   const TILES = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6', '#B79CFF'];
   let greeted = false;
   function menu() {

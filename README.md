@@ -120,3 +120,4 @@ El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a
 - **Pegatina**: opción por jugador en la zona de padres (`profile.look = 'normal' | 'pegatina'`). Añade la clase `body.sticker`: contorno negro y sombra dura en ambos temas.
 - **Iconos**: `img/icons/<nombre>.webp` (256 px, fondo transparente). Un juego lo usa con `art: t => 'nombre'` (o `null` para caer al emoji del tema).
 - Tipografías locales: Lilita One (títulos) y Nunito (texto), en `fonts/`.
+- **Iconos dentro de los juegos**: `Core.pic(emoji)` devuelve el icono ilustrado si el emoji está en la tabla `PICS` de `js/core.js` (y vuelve al emoji si la imagen falla). `Core.pics(lista)` solo cambia si todos tienen icono, para no mezclar estilos. Añadir un dibujo = copiar el `.webp` a `img/icons/` y apuntarlo en `PICS`.

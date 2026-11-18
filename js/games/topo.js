@@ -51,7 +51,7 @@ Games.push({
           const h = Core.pick(free), r = Math.random();
           const kind = !hard ? 'pig' : r < 0.15 ? 'wolf' : r < 0.22 ? 'gold' : 'pig';
           h.dataset.kind = kind;
-          h.querySelector('.who').textContent = { wolf: T.avoid, gold: T.gold, pig: Core.pick(T.targets) }[kind];
+          h.querySelector('.who').innerHTML = Core.pic({ wolf: T.avoid, gold: T.gold, pig: Core.pick(T.targets) }[kind]);
           h.classList.add('up');
           const tok = String(++seq); h.dataset.tok = tok;
           timers.push(setTimeout(() => { if (h.dataset.tok === tok) down(h); }, stayMs));

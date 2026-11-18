@@ -605,3 +605,14 @@ body.sticker .game-card:active, body.sticker .opt:active, body.sticker .pbtn:act
 body.sticker .bubble::before { display: none; }
 body.sticker .fitem, body.sticker .game-card .art, body.sticker .game-card .emoji { filter: drop-shadow(2px 0 0 var(--line)) drop-shadow(-2px 0 0 var(--line)) drop-shadow(0 2px 0 var(--line)) drop-shadow(0 -2px 0 var(--line)); }
 body.sticker .pbtn.on { transform: translateY(-3px); }
+
+/* Iconos ilustrados dentro de los juegos (sustituyen al emoji cuando existe el dibujo) */
+.pic { width: 1.15em; height: 1.15em; object-fit: contain; vertical-align: middle; filter: drop-shadow(0 .06em .04em rgba(0,0,0,.22)); pointer-events: none; }
+/* Foco visible para teclado o mando (no aparece al tocar) */
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible { outline: 4px solid #FFD23F; outline-offset: 3px; }
+/* Menos movimiento: se paran los adornos; los juegos siguen funcionando igual */
+@media (prefers-reduced-motion: reduce) {
+  .mascot-eyes, .mascot-light, .stars-bg .tw, body.theme-espacio #decor .planet, .starfield, .end-mascot, .world-banner.new, .gift.bounce, .buddy, .car .flame { animation: none !important; }
+  body.sticker .topbar h1, body.sticker .menu-grid .game-card { transform: none !important; }
+  .game-card .art { transition: none; }
+}

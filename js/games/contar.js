@@ -28,7 +28,7 @@ Games.push({
           return {
             text: `¿${cuantos} ${plural} hay?`,
             say: `¿${cuantos} ${plural} hay? Cuenta con el dedo.`,
-            stage: Array(count).fill(`<span>${emoji}</span>`).join(''),
+            stage: Array(count).fill(`<span>${Core.pic(emoji)}</span>`).join(''),
             options: makeOptions(count, Math.max(max, 5), n),
             answer: count,
             explain: `Hay ${NUM[count]}.`
@@ -38,7 +38,7 @@ Games.push({
         return {
           text: `¿${cuantos} ${plural} hay en total?`,
           say: `Aquí hay ${NUM[a]}, y llegan ${NUM[b]} más. ¿${cuantos} hay en total?`,
-          stage: `<span>${emoji.repeat(a)}</span><span style="margin:0 12px">➕</span><span>${emoji.repeat(b)}</span>`,
+          stage: `<span>${Core.pic(emoji).repeat(a)}</span><span style="margin:0 12px">➕</span><span>${Core.pic(emoji).repeat(b)}</span>`,
           options: makeOptions(a + b, 10, 4),
           answer: a + b,
           explain: `${NUM[a]} más ${NUM[b]} son ${NUM[a + b]}.`
