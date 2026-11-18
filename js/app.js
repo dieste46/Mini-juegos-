@@ -1,7 +1,10 @@
 /* Menú, navegación, zona de padres y protecciones para móvil (iOS). */
 (() => {
   const app = document.getElementById('app');
-  const title = document.getElementById('title');
+  const titleEl = document.getElementById('title');
+  // Título con letras de colores (estilo cartel infantil).
+  const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); } };
+  Decor.mount();
   const btnHome = document.getElementById('btn-home');
   document.getElementById('star-count').textContent = Core.state.stars;
 
@@ -48,21 +51,23 @@
     document.body.classList.remove('in-game');
     const name = Core.getName();
     app.innerHTML = `
-      ${name ? `<div class="hello">👋 ¡Hola, ${name}!</div>` : ''}
-      <h2 class="section-title">🎮 ¡A jugar!</h2><div class="menu-grid" id="recreo"></div>
-      <h2 class="section-title">📚 Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
+      <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div>
+        <div class="bubble">${name ? `¡Hola, ${name}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div></div>
+      <h2 class="section-title"><span>🎮</span> ¡A jugar!</h2><div class="menu-grid" id="recreo"></div>
+      <h2 class="section-title"><span>📚</span> Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
       <button class="parents-link" id="parents">Zona de padres</button>`;
     Games.forEach(g => {
       const s = Core.gameState(g.id);
       const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(s.level) + '☆'.repeat(g.maxLevel - s.level) : '';
       const b = Core.el(`<button class="game-card" style="--c:${g.color}">
-          <span class="emoji">${g.emoji}</span><span>${g.name}</span><span class="lvl">${badge}</span></button>`);
+          <span class="emoji"><span>${g.emoji}</span></span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
       b.onclick = () => { Core.say(g.name); location.hash = g.id; };
       app.querySelector('#' + (g.section || 'aprende')).appendChild(b);
     });
     app.querySelector('#parents').onclick = () => (location.hash = 'padres');
     // Mi granja: crece con las estrellas. Si hay regalo nuevo, se avisa por voz.
     app.querySelector('.section-title').before(Farm.banner());
+    const m = app.querySelector('.hello-mascot'); m.onclick = () => { m.classList.remove('jump'); void m.offsetWidth; m.classList.add('jump'); Core.sfx.pop(); Core.say(name ? `¡Hola, ${name}! Soy Cerdi.` : '¡Hola! Soy Cerdi.'); };
     if (Farm.hasNew() && Core.state.farmSeen) { greeted = true; setTimeout(() => Core.say('¡Tienes un regalo nuevo en tu granja! Toca la granja.'), 300); }
     else if (name && !greeted) { greeted = true; setTimeout(() => Core.say(`¡Hola, ${name}! ¿A qué jugamos?`), 300); }
   }

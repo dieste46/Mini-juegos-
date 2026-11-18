@@ -39,7 +39,7 @@ const Farm = (() => {
   // Dibuja la escena. Devuelve los elementos por índice.
   function scene(container, count) {
     container.classList.add('farm');
-    container.innerHTML = '<span class="sun">☀️</span><span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><div class="hill"></div>';
+    container.innerHTML = Decor.farmScene();
     return ITEMS.slice(0, count).map((it, i) => {
       const e = document.createElement('span');
       e.className = 'fitem';
