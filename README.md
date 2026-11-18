@@ -17,9 +17,9 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 
 | Juego | Cómo se juega |
 |---|---|
-| 🦸 Súper Cerdito | Superhéroe propio: vuela siguiendo el dedo y rescata 10 pollitos; las nubes de tormenta solo le hacen girar |
+| 🦸 Súper Rescate | El héroe del tema vuela siguiendo el dedo y rescata a 10 (pollitos en la granja, marcianitos en el espacio); lo que se esquiva solo le hace girar |
 | 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
-| 🐽 Pilla al cerdito | Topo: pillar 20 cerditos y no tocar al lobo. Sin reloj; cuenta el total acumulado |
+| 🐹 ¡Pilla, pilla! | Topo: pillar 20 y no tocar al que no toca (lobo / meteorito). Sin reloj; cuenta el total acumulado |
 | 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
 | 🖍️ Pintar | Dibujo libre con colores, pincel arcoíris, sellos y guardar el dibujo |
 | 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
@@ -40,20 +40,48 @@ Tarjeta fija arriba del menú (`js/farm.js`). Las estrellas de cualquier juego h
 | 🔤 Letras | Sonido inicial (conciencia fonológica), vocales y consonantes | vocales · consonantes · letra → dibujo |
 | 🧩 Series | Patrones lógicos (base del pensamiento computacional) | AB · AAB/ABB/ABC · AABB/ABCB/ABAC/ABCD |
 
-## Estructura
+## Arquitectura (para crecer sin rehacer)
+
+Sin build ni dependencias: cada archivo se carga con un `<script>` en `index.html`, en este orden.
 
 ```
-index.html          shell y menú
-css/style.css       estilos (botones grandes, táctil)
-js/core.js          voz, progreso, nivel adaptativo, celebración, motor de preguntas
-js/app.js           navegación por hash y zona de padres
-js/games/*.js       un archivo por juego (section: 'recreo' | 'aprende')
-sw.js, manifest.json  PWA / offline
+js/store.js     Guardado: perfiles, ajustes del dispositivo, versiones y migraciones, copia de seguridad
+js/core.js      Servicios comunes: voz, sonidos, estrellas, nivel adaptativo, motor de preguntas
+js/mascot.js    Bip, la mascota (SVG)
+js/decor.js     Piezas de decorado (nubes, sol, colinas) y títulos de colores
+js/themes.js    Temas: fondo, mundo de recompensas y conjuntos de objetos (granja, espacio)
+js/world.js     Mundo de recompensas que crece con las estrellas (lo dibuja el tema)
+js/games/*.js   Un archivo por juego
+js/app.js       Menú, navegación por #hash, zona de padres
 ```
 
-Un juego de recreo es un `Games.push({ id, section: 'recreo', name, emoji, color, start(root, exit) })` cuyo `start` devuelve una función de limpieza (parar bucles y temporizadores).
+**Contrato de un juego** (`Games.push({...})`):
 
-Añadir un juego de preguntas = un archivo nuevo en `js/games/` que haga `Games.push({...})` con una función `makeQuestion(level)` y llamar a `Core.runQuiz`. Luego añadir su `<script>` en `index.html`.
+| Campo | Para qué |
+|---|---|
+| `id` | Ruta `#id` y clave de su progreso |
+| `section` | `'recreo'` o `'aprende'` (sección del menú) |
+| `name`, `color`, `learns` | Tarjeta del menú y zona de padres |
+| `emoji` | Texto o función `t => ...` que lo saca del tema |
+| `maxLevel` | Solo si usa nivel adaptativo (`Core.registerAnswer`) |
+| `badge(state)` | Opcional: marca a mostrar en la tarjeta |
+| `start(root, exit)` | Pinta el juego en `root`; devuelve una función de limpieza (parar bucles y temporizadores) |
+
+Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `Themes.set('<conjunto>')`. Guarda su progreso solo en `Core.gameState(id)` y llama a `Core.save()` (o `Core.addStar()`).
+
+**Contrato de un tema** (`themes.js`): `id`, `name`, `emoji`, `say`, `background()`, `world` (nombre, escena e `items`) y `sets` (`contables`, `parejas`, `pilla`, `rescate`, `carrera`, `series`, `piano`, `sellos`, `letras`). Si a un tema le falta un conjunto, se usa el de granja.
+
+**Datos** (`localStorage`, clave `mini-juegos-store`):
+
+```
+{ v: 2, active: 'p…', device: { voiceURI },
+  profiles: { 'p…': { id, name, avatar, theme, stars, games: { <id>: {...} }, worlds: { granja: { seen } }, created, updated } } }
+```
+
+- Cambiar el formato = subir `v` y añadir el paso en `migrate()`. Lo antiguo (`juegos-peque-v1`) se migra solo y se deja como copia.
+- Guardado agrupado (400 ms) y forzado al salir de la app; `navigator.storage.persist()` para que el navegador no lo borre.
+- Copia de seguridad en la zona de padres (exportar / importar JSON).
+- Sincronizar en la nube más adelante = otro adaptador con `load()`/`save()` en `store.js` (p. ej. Supabase, una fila por perfil con `updated` para resolver conflictos). El resto del código no cambia.
 
 ## iPhone / iPad
 

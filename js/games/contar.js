@@ -1,13 +1,13 @@
-/* Contar animales: conteo 1-10, reconocer la cifra y, en el último nivel, sumar dos grupos. */
+/* Contar (los objetos los pone el tema): conteo 1-10, reconocer la cifra y, en el último nivel, sumar dos grupos. */
 Games.push({
   id: 'contar',
   name: 'Cuenta',
-  emoji: '🐷',
+  emoji: t => t.sets.contables[0][0],
   color: '#ff6fa5',
   learns: 'Contar del 1 al 10, asociar cantidad con cifra y primeras sumas.',
   maxLevel: 4,
   start(root, exit) {
-    const ANIMALS = [['🐷', 'cerditos', 'm'], ['🐮', 'vacas', 'f'], ['🐔', 'gallinas', 'f'], ['🐑', 'ovejas', 'f'], ['🐴', 'caballos', 'm'], ['🐶', 'perritos', 'm'], ['🐱', 'gatitos', 'm'], ['🐰', 'conejos', 'm']];
+    const ANIMALS = Themes.set('contables');
     const NUM = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
     const ranges = { 1: [1, 3, 3], 2: [1, 5, 3], 3: [3, 10, 4] }; // [min, max, nº opciones]
 
@@ -28,7 +28,7 @@ Games.push({
           return {
             text: `¿${cuantos} ${plural} hay?`,
             say: `¿${cuantos} ${plural} hay? Cuenta con el dedo.`,
-            stage: emoji.repeat(count).replace(/(\p{Extended_Pictographic})/gu, '<span>$1</span>'),
+            stage: Array(count).fill(`<span>${emoji}</span>`).join(''),
             options: makeOptions(count, Math.max(max, 5), n),
             answer: count,
             explain: `Hay ${NUM[count]}.`

@@ -7,8 +7,7 @@ Games.push({
   learns: 'Memoria de trabajo, atención y vocabulario de animales.',
   maxLevel: 4,
   start(root, exit) {
-    const CARDS = [['🦁', 'el león'], ['🐘', 'el elefante'], ['🐸', 'la rana'], ['🦒', 'la jirafa'], ['🐵', 'el mono'], ['🐧', 'el pingüino'],
-                   ['🐢', 'la tortuga'], ['🦊', 'el zorro'], ['🐙', 'el pulpo'], ['🦋', 'la mariposa'], ['🐝', 'la abeja'], ['🐳', 'la ballena']];
+    const CARDS = Themes.set('parejas');
     const LEVELS = { 1: [3, 3], 2: [4, 4], 3: [6, 4], 4: [8, 4] }; // [parejas, columnas]
     const g = Core.gameState(this.id);
     const maxLevel = this.maxLevel, id = this.id;

@@ -19,6 +19,8 @@ Games.push({
       L: [['🌙', 'luna'], ['🦁', 'león'], ['🍋', 'limón'], ['✏️', 'lápiz']],
       T: [['🍅', 'tomate'], ['🐢', 'tortuga'], ['🚂', 'tren'], ['☕', 'taza']]
     };
+    // Palabras del tema actual (p. ej. espacio): se añaden y salen con más frecuencia.
+    Object.entries(Themes.set('letras')).forEach(([l, ws]) => { if (WORDS[l]) WORDS[l] = [...ws, ...ws, ...WORDS[l]]; });
     const NAME = { A: 'a', E: 'e', I: 'i', O: 'o', U: 'u', M: 'eme', P: 'pe', S: 'ese', L: 'ele', T: 'te' };
     const VOWELS = ['A', 'E', 'I', 'O', 'U'], CONS = ['M', 'P', 'S', 'L', 'T'];
     // Alarga la primera letra para que se oiga el sonido: "mmmono", "ooooso".

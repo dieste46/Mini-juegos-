@@ -2,10 +2,11 @@
    Objetivo: coger 15 estrellas. Chocar no quita nada: el coche da un bote, se frena un poco y seguimos. */
 Games.push({
   id: 'carrera', section: 'recreo',
-  name: 'Carrera', emoji: '🏎️', color: '#555b6e',
+  name: 'Carrera', emoji: t => t.sets.carrera.vehicle, color: '#555b6e',
   learns: 'Reflejos, anticipación y lateralidad (izquierda / derecha).',
   badge: s => s.wins ? `🏁 ${s.wins}` : '',
   start(root, exit) {
+    const T = Themes.set('carrera');
     const GOAL = 15, LANES = [1 / 6, 3 / 6, 5 / 6], BASE_SPEED = 220;
     let raf, alive = true, over = false, currentTap = null;
 
@@ -14,12 +15,12 @@ Games.push({
       let lane = 1, stars = 0, speed = BASE_SPEED, items = [], ghost = 0, spawnIn = 0.6;
       over = false;
       root.innerHTML = `<div class="hud"><span>⭐ <b id="st">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><span>🏁</span></div>
-        <div class="play road" id="road">
-          <div class="lane" style="left:calc(33.3% - 3px)"></div><div class="lane" style="left:calc(66.6% - 3px)"></div>
-          <div class="sprite car" id="car">🏎️</div></div>`;
+        <div class="play ${T.road ? 'road' : 'spaceway'}" id="road">
+          ${T.road ? '<div class="lane" style="left:calc(33.3% - 3px)"></div><div class="lane" style="left:calc(66.6% - 3px)"></div>' : '<div class="starfield"></div><div class="starfield s2"></div>'}
+          <div class="sprite car${T.road ? '' : ' ship'}" id="car">${T.vehicle}</div></div>`;
       const road = root.querySelector('#road'), car = root.querySelector('#car');
       const st = root.querySelector('#st'), bar = root.querySelector('#bar');
-      Core.say('Toca a la izquierda o a la derecha para mover el coche. ¡Coge quince estrellas!');
+      Core.say(`Toca a la izquierda o a la derecha para mover ${T.road ? 'el coche' : 'el cohete'}. ¡Coge quince estrellas!`);
 
       const W = () => road.clientWidth, H = () => road.clientHeight;
       const placeCar = () => { car.style.left = (LANES[lane] * W() - 34) + 'px'; car.style.top = (H() - 90) + 'px'; };
@@ -37,7 +38,7 @@ Games.push({
 
       function spawn() {
         const star = Math.random() < 0.5;
-        const ch = star ? '⭐' : Core.pick(['🪨', '🚧', '🐄', '🛢️']);
+        const ch = star ? T.collect : Core.pick(T.obstacles);
         const el = Core.el(`<div class="sprite" style="font-size:3rem">${ch}</div>`);
         const it = { el, lane: Core.rand(0, 2), y: -60, star };
         el.style.left = (LANES[it.lane] * W() - 24) + 'px';

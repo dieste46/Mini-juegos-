@@ -7,7 +7,7 @@ Games.push({
   learns: 'Reconocer y continuar patrones: razonamiento lógico y pensamiento computacional.',
   maxLevel: 3,
   start(root, exit) {
-    const SETS = [['🔴', '🔵', '🟡', '🟢'], ['🍎', '🍌', '🍇', '🍐'], ['🐷', '🐮', '🐔', '🐑'], ['⭐', '🌙', '☀️', '☁️'], ['🚗', '🚂', '✈️', '🚲']];
+    const SETS = Themes.set('series');
     const PATTERNS = { 1: ['AB'], 2: ['AAB', 'ABB', 'ABC'], 3: ['AABB', 'ABCB', 'ABAC', 'ABCD'] };
 
     Core.runQuiz(root, {

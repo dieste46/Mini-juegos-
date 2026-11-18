@@ -5,7 +5,7 @@ Games.push({
   learns: 'Creatividad y motricidad fina.',
   start(root, exit) {
     const COLORS = ['#e8323c', '#ff8a1c', '#ffd23f', '#2ebd6b', '#2f80ff', '#8e4ad8', '#ff6fa5', '#7a5230', '#2b2b3a'];
-    const STAMPS = ['⭐', '🐷', '❤️', '🌸', '🚗', '🦋', '☀️'];
+    const STAMPS = Themes.set('sellos');
     let tool = { kind: 'color', value: COLORS[0] }, size = 14, hue = 0;
 
     root.innerHTML = `<div class="paint-tools" id="tools"></div><div class="play paint"><canvas></canvas></div>`;

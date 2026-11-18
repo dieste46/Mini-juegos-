@@ -1,4 +1,4 @@
-/* Decorado común: cielo con colinas y nubes de fondo, sol con cara, escena de la granja y títulos de colores. */
+/* Piezas de decorado reutilizables (nubes, sol, colinas) y títulos de colores. Los temas las combinan. */
 const Decor = (() => {
   const RAINBOW = ['#ff5a5f', '#ff9f1c', '#ffcd3c', '#2ebd6b', '#2fa4ff', '#8e6cff', '#ff6fa5'];
 
@@ -32,19 +32,8 @@ const Decor = (() => {
     ${path ? `<path d="M44 100 Q49 ${horizon + 34} 61 ${horizon + 13} L65 ${horizon + 13} Q57 ${horizon + 36} 60 100 Z" fill="#ecd29b" opacity=".85"/>` : ''}
   </svg>`;
 
-  // Fondo fijo de toda la web.
-  function mount() {
-    const d = document.getElementById('decor');
-    if (!d) return;
-    d.innerHTML = cloud('c1') + cloud('c2') + cloud('c3') + hills(70);
-  }
+  // Fondo fijo de toda la web: lo dibuja el tema activo.
+  function mount() { Themes.apply(); }
 
-  // Escena de la granja (tarjeta del menú y pantalla completa).
-  function farmScene() {
-    return `<div class="farm-sky"></div>${hills(46, true)}${sun()}${cloud('c1')}${cloud('c2')}
-      <div class="flowers">${Array.from({ length: 14 }, (_, i) =>
-        `<span style="left:${(i * 37) % 100}%;top:${62 + ((i * 53) % 34)}%">${['🌼', '🌷', '🌱', '🌸'][i % 4]}</span>`).join('')}</div>`;
-  }
-
-  return { rainbow, mount, farmScene };
+  return { rainbow, mount, cloud, sun, hills };
 })();

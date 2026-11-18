@@ -1,25 +1,25 @@
-/* Súper Cerdito: un superhéroe propio. Vuela siguiendo el dedo y rescata a los pollitos que se han
-   escapado colgados de un globo. Las nubes de tormenta solo le hacen dar vueltas: no se pierde nada. */
+/* Súper Rescate: el héroe del tema (superhéroe en la granja, astronauta en el espacio) vuela siguiendo el dedo
+   y rescata a los que se han escapado. Lo que hay que esquivar solo le hace dar vueltas: no se pierde nada. */
 Games.push({
   id: 'super', section: 'recreo',
-  name: 'Súper Cerdito', emoji: '🦸', color: '#d7263d',
+  name: 'Súper Rescate', emoji: t => t.sets.rescate.hero, color: '#d7263d',
   learns: 'Seguimiento con el dedo, anticipación y control del movimiento.',
-  badge: s => s.total ? `🐥 ${s.total}` : '',
+  badge: s => s.total ? `🏅 ${s.total}` : '',
   start(root, exit) {
-    const GOAL = 10;
+    const GOAL = 10, T = Themes.set('rescate');
     let raf, alive = true, over = false;
 
     function play() {
       cancelAnimationFrame(raf); over = false;
       let saved = 0, speed = 130, items = [], spawnIn = 1, spin = 0, trail = [];
-      root.innerHTML = `<div class="hud"><span>🐥 <b id="n">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><button class="speak-btn" id="sp">🔊</button></div>
-        <div class="play sky" id="sky">
-          <span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><span class="cloud c3">☁️</span>
-          <div class="sprite hero" id="hero"><span class="cape"></span><span class="pig">🐷</span></div>
+      root.innerHTML = `<div class="hud"><span>${T.rescued} <b id="n">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><button class="speak-btn" id="sp">🔊</button></div>
+        <div class="play sky" id="sky" style="background:${T.bg}">
+          ${T.decor === '☁️' ? Decor.cloud('c1') + Decor.cloud('c2') + Decor.cloud('c3') : '<span class="twinkles"></span>'}
+          <div class="sprite hero" id="hero">${T.cape ? '<span class="cape"></span>' : ''}<span class="pig">${T.hero}</span></div>
         </div>`;
       const sky = root.querySelector('#sky'), hero = root.querySelector('#hero');
       const n = root.querySelector('#n'), bar = root.querySelector('#bar');
-      const intro = () => Core.say('¡Súper Cerdito al rescate! Mueve el dedo para volar y rescata a los diez pollitos. ¡Cuidado con las nubes de tormenta!');
+      const intro = () => Core.say(`¡${T.heroName} al rescate! Mueve el dedo para volar y rescata a los diez ${T.plural}. ¡Cuidado con ${T.hazardName}!`);
       root.querySelector('#sp').onclick = intro; intro();
 
       const W = () => sky.clientWidth, H = () => sky.clientHeight;
@@ -29,11 +29,11 @@ Games.push({
       sky.addEventListener('pointerdown', follow);
       sky.addEventListener('pointermove', follow);
 
-      const chicks = [0, 1, 2, 3].map(() => { const c = Core.el('<div class="sprite follower">🐥</div>'); c.style.display = 'none'; sky.appendChild(c); return c; });
+      const chicks = [0, 1, 2, 3].map(() => { const c = Core.el(`<div class="sprite follower">${T.rescued}</div>`); c.style.display = 'none'; sky.appendChild(c); return c; });
 
       function spawn() {
         const storm = Math.random() < 0.3;
-        const el = Core.el(storm ? '<div class="sprite storm">⛈️</div>' : '<div class="sprite lost"><span>🎈</span><span>🐥</span></div>');
+        const el = Core.el(storm ? `<div class="sprite storm">${T.hazard}</div>` : `<div class="sprite lost"><span>${T.carrier}</span><span>${T.rescued}</span></div>`);
         const it = { el, x: W() + 40, y: Core.rand(60, Math.max(61, H() - 70)), storm, wob: Math.random() * 6 };
         sky.appendChild(el); items.push(it);
       }
@@ -75,8 +75,8 @@ Games.push({
       function finish() {
         over = true; cancelAnimationFrame(raf);
         const g = Core.gameState('super'); g.played++; g.total = (g.total || 0) + GOAL; Core.addStar();
-        Core.endScreen(root, `🦸🐥🏆<span>¡Pollitos rescatados!</span><small>Llevas ${g.total} en total</small>`,
-          '¡Has rescatado a los diez pollitos! ¡Eres un superhéroe!', play, exit);
+        Core.endScreen(root, `${T.hero}${T.rescued}🏆<span>¡${T.plural[0].toUpperCase() + T.plural.slice(1)} rescatados!</span><small>Llevas ${g.total} en total</small>`,
+          `¡Has rescatado a los diez ${T.plural}! ¡Eres un héroe!`, play, exit);
       }
     }
     play();

@@ -1,13 +1,12 @@
-/* Piano de animales: tocar libre o escuchar una canción que se ilumina en las teclas para imitarla. */
+/* Piano (los dibujos de las teclas los pone el tema): tocar libre o escuchar una canción que se ilumina en las teclas para imitarla. */
 Games.push({
   id: 'piano', section: 'recreo',
   name: 'Piano', emoji: '🎹', color: '#2f80ff',
   learns: 'Música, ritmo y memoria auditiva.',
   start(root, exit) {
-    const KEYS = [
-      [262, '#e8323c', '🐷'], [294, '#ff8a1c', '🐮'], [330, '#ffd23f', '🐔'], [349, '#2ebd6b', '🐸'],
-      [392, '#00b4c6', '🐳'], [440, '#2f80ff', '🐦'], [494, '#8e4ad8', '🐱'], [523, '#ff6fa5', '🐶']
-    ];
+    const FREQ = [262, 294, 330, 349, 392, 440, 494, 523];
+    const COLORS = ['#e8323c', '#ff8a1c', '#ffd23f', '#2ebd6b', '#00b4c6', '#2f80ff', '#8e4ad8', '#ff6fa5'];
+    const KEYS = Themes.set('piano').map((e, i) => [FREQ[i], COLORS[i], e]);
     // Canciones como índices de tecla (0 = do ... 7 = do agudo)
     const SONGS = {
       '⭐': [0, 0, 4, 4, 5, 5, 4, -1, 3, 3, 2, 2, 1, 1, 0],          // Estrellita

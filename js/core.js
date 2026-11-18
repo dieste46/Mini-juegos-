@@ -1,22 +1,19 @@
 /* Núcleo compartido: voz, progreso, nivel adaptativo, celebración y motor de preguntas. */
 const Core = (() => {
-  const STORE_KEY = 'juegos-peque-v1';
   const ROUND_SIZE = 5;
 
-  // ---------- Persistencia (solo en este dispositivo) ----------
-  function load() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { stars: 0, games: {} }; }
-    catch { return { stars: 0, games: {} }; }
-  }
-  let state = load();
-  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {} }
+  // ---------- Persistencia: delega en Store (perfil activo + ajustes del dispositivo) ----------
+  const P = () => Store.profile;
+  function save() { Store.save(); }
 
   function gameState(id) {
+    const state = P();
     if (!state.games[id]) state.games[id] = { level: 1, streak: 0, misses: 0, played: 0, firstTry: 0, answered: 0 };
     return state.games[id];
   }
 
   function addStar() {
+    const state = P();
     state.stars++; save();
     document.getElementById('star-count').textContent = state.stars;
   }
@@ -49,9 +46,9 @@ const Core = (() => {
   }
   function pickVoice() {
     const vs = spanishVoices();
-    voice = vs.find(v => v.voiceURI === state.voiceURI) || vs[0] || null;
+    voice = vs.find(v => v.voiceURI === Store.device.voiceURI) || vs[0] || null;
   }
-  function setVoice(uri) { state.voiceURI = uri || ''; save(); pickVoice(); }
+  function setVoice(uri) { Store.device.voiceURI = uri || ''; save(); pickVoice(); }
   if ('speechSynthesis' in window) {
     pickVoice();
     speechSynthesis.onvoiceschanged = pickVoice;
@@ -75,8 +72,8 @@ const Core = (() => {
   }
 
   // Nombre del niño (opcional, se pone en la zona de padres).
-  const getName = () => (state.name || '').trim();
-  function setName(n) { state.name = (n || '').trim().slice(0, 20); save(); }
+  const getName = () => (P().name || '').trim();
+  function setName(n) { P().name = (n || '').trim().slice(0, 20); save(); }
   // Elogio, a veces con el nombre.
   const praise = () => { const n = getName(); return pick(PRAISE) + (n && Math.random() < 0.35 ? ` ¡${n}!` : ''); };
 
@@ -232,7 +229,7 @@ const Core = (() => {
   }
 
   return { say, spanishVoices, setVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
-           get state() { return state; }, reset() { state = { stars: 0, games: {}, voiceURI: state.voiceURI }; save(); } };
+           get state() { return P(); }, reset() { Store.resetProgress(); } };
 })();
 
 const Games = [];
