@@ -145,6 +145,7 @@ const Themes = (() => {
     const t = current();
     document.body.className = document.body.className.replace(/\btheme-\S+/g, '').trim();
     document.body.classList.add('theme-' + t.id);
+    document.body.classList.toggle('sticker', Store.profile.look === 'pegatina');   // contorno negro tipo pegatina
     const d = document.getElementById('decor');
     if (d) d.innerHTML = t.background();
   }

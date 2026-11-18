@@ -1,7 +1,7 @@
 /* Explota globos: suben globos y hay que tocarlos. Sin penalización por los que se escapan. */
 Games.push({
   id: 'globos', section: 'recreo',
-  name: 'Globos', emoji: '🎈', color: '#ff4f6d',
+  name: 'Globos', emoji: '🎈', art: () => 'globos', color: '#ff4f6d',
   learns: 'Coordinación ojo-mano y rapidez de reacción.',
   start(root, exit) {
     const GOAL = 25;

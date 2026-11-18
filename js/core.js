@@ -123,7 +123,7 @@ const Core = (() => {
     let qIndex = 0;
     const g = gameState(game.id);
 
-    const BLOCKS = ['#ec5b7c', '#f09a3e', '#5fbb6d', '#4f9bf5', '#9b6cf2'];
+    const BLOCKS = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6'];
     const isShort = h => typeof h === 'number' || (typeof h === 'string' && h.length <= 2 && !h.includes('<'));
 
     function next() {

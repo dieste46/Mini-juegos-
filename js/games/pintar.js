@@ -3,7 +3,7 @@
    Dos capas: la pintura debajo y las líneas de la lámina encima, para que el color nunca tape el dibujo. */
 Games.push({
   id: 'pintar', section: 'recreo',
-  name: 'Pintar', emoji: '🎨', color: '#ff8a1c',
+  name: 'Pintar', emoji: '🎨', art: () => 'pintar', color: '#ff8a1c',
   learns: 'Creatividad, motricidad fina y simetría.',
   start(root, exit) {
     const COLORS = ['#e8323c', '#ff8a1c', '#ffd23f', '#8bd450', '#2ebd6b', '#35c9d6', '#2f80ff', '#8e4ad8', '#ff6fa5', '#b9773f', '#2d2552', '#ffffff'];

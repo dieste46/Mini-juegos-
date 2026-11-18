@@ -3,7 +3,7 @@
    (control inhibitorio: si se toca, solo hace "bonk") y la estrella que vale tres. */
 Games.push({
   id: 'topo', section: 'recreo',
-  name: '¡Pilla, pilla!', emoji: t => t.sets.pilla.targets[0], color: '#c46a2b',
+  name: '¡Pilla, pilla!', art: t => (t.id === 'granja' ? 'cerdo' : null), emoji: t => t.sets.pilla.targets[0], color: '#c46a2b',
   learns: 'Reflejos y atención: tocar a los que asoman y no tocar al que no toca.',
   badge: s => s.total ? `🏅 ${s.total}` : '',
   start(root, exit) {

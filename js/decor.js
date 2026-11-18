@@ -22,9 +22,9 @@ const Decor = (() => {
   // Colinas en capas (se estiran al ancho; son curvas suaves y no se nota).
   const hills = (horizon, path = false) => `<svg class="hills" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
     <defs>
-      <linearGradient id="hFar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b7e48f"/><stop offset="1" stop-color="#94d26e"/></linearGradient>
-      <linearGradient id="hMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd567"/><stop offset="1" stop-color="#6cbd4c"/></linearGradient>
-      <linearGradient id="hNear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fcf58"/><stop offset="1" stop-color="#58a83c"/></linearGradient>
+      <linearGradient id="hFar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd47c"/><stop offset="1" stop-color="#4cc96b"/></linearGradient>
+      <linearGradient id="hMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46c665"/><stop offset="1" stop-color="#3fbf5f"/></linearGradient>
+      <linearGradient id="hNear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36b257"/><stop offset="1" stop-color="#2fa44e"/></linearGradient>
     </defs>
     <path d="M0 ${horizon - 4} Q14 ${horizon - 14} 30 ${horizon - 6} T62 ${horizon - 8} T100 ${horizon - 5} V100 H0 Z" fill="url(#hFar)"/>
     <path d="M0 ${horizon + 6} Q26 ${horizon - 6} 54 ${horizon + 4} T100 ${horizon + 1} V100 H0 Z" fill="url(#hMid)"/>

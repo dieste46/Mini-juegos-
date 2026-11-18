@@ -113,3 +113,10 @@ El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a
 - Inglés: colores, números y animales con audio.
 - Emociones: reconocer caras y situaciones.
 - Grabar la voz del padre para las instrucciones en lugar de la voz sintética.
+
+## Estilo visual
+
+- **Arcade**: la granja usa "Día arcade" (fondo azul, paneles blancos) y el espacio "Noche arcade" (fondo añil, paneles oscuros). Los dos comparten CSS; cada tema solo cambia variables (`--ground`, `--panel`, `--edge`, `--title`…) al final de `css/style.css`.
+- **Pegatina**: opción por jugador en la zona de padres (`profile.look = 'normal' | 'pegatina'`). Añade la clase `body.sticker`: contorno negro y sombra dura en ambos temas.
+- **Iconos**: `img/icons/<nombre>.webp` (256 px, fondo transparente). Un juego lo usa con `art: t => 'nombre'` (o `null` para caer al emoji del tema).
+- Tipografías locales: Lilita One (títulos) y Nunito (texto), en `fonts/`.

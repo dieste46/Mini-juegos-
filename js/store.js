@@ -12,7 +12,7 @@ const Store = (() => {
 
   const newProfile = (name = '') => ({
     id: 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-    name, avatar: '🙂', theme: 'granja',
+    name, avatar: '🙂', theme: 'granja', look: 'normal',
     stars: 0, games: {}, worlds: {},
     created: new Date().toISOString(), updated: new Date().toISOString()
   });
@@ -37,7 +37,7 @@ const Store = (() => {
     // if (d.v === 2) { ...cambios para v3...; d.v = 3; }
     d.device = d.device || {};
     d.profiles = d.profiles || {};
-    Object.values(d.profiles).forEach(p => { p.games = p.games || {}; p.worlds = p.worlds || {}; p.theme = p.theme || 'granja'; });
+    Object.values(d.profiles).forEach(p => { p.games = p.games || {}; p.worlds = p.worlds || {}; p.theme = p.theme || 'granja'; p.look = p.look || 'normal'; });
     return d;
   }
 

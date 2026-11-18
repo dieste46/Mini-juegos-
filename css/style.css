@@ -1,5 +1,6 @@
-@font-face { font-family: 'Baloo 2'; font-weight: 600; font-display: swap; src: url(../fonts/baloo-2-latin-600-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Baloo 2'; font-weight: 800; font-display: swap; src: url(../fonts/baloo-2-latin-800-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Lilita One'; font-weight: 400; font-display: swap; src: url(../fonts/lilita-one-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Nunito'; font-weight: 700; font-display: swap; src: url(../fonts/nunito-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Nunito'; font-weight: 900; font-display: swap; src: url(../fonts/nunito-latin-900-normal.woff2) format('woff2'); }
 :root {
   --bg: #fff8ec;
   --ink: #2b2b3a;
@@ -17,7 +18,7 @@ html, body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Baloo 2', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -501,3 +502,106 @@ body.theme-espacio .play { background: linear-gradient(#141640, #2a2370 60%, #4b
 .pkeys { height: 30%; min-height: 168px; }
 .pkey { justify-content: flex-start; gap: 6px; }
 .pkey svg { width: 100%; max-width: 60px; }
+
+/* =====================================================================
+   ESTILO ARCADE (definitivo): Día arcade en la granja, Noche arcade en el espacio.
+   Mismo lenguaje en los dos: fondo de color intenso, paneles, botones de color entero
+   con relieve y letra de videojuego. Cada tema solo cambia estas variables.
+   body.sticker añade el contorno negro tipo pegatina a cualquiera de los dos.
+   ===================================================================== */
+:root {
+  --ground: #2F8FEF; --ink: #14235A; --panel: #FFFFFF; --panel-ink: #14235A; --edge: #1F6FCC; --panel-line: transparent;
+  --chip: #14235A; --chip-ink: #FFFFFF; --title: #FFFFFF; --title-shadow: #14235A; --muted: #3A4A85; --track: #1F6FCC;
+  --line: #14122B; --radius: 24px; --shadow: 0 0 0 transparent;
+}
+body.theme-espacio {
+  --ground: #1B1846; --ink: #1B1846; --panel: #2A2666; --panel-ink: #FFFFFF; --edge: #4B45A3; --panel-line: #4B45A3;
+  --chip: #2A2666; --chip-ink: #FFFFFF; --title: #FFD23F; --title-shadow: transparent; --muted: #C9C5F2; --track: #2A2666;
+}
+html { background: #2F8FEF; }
+html:has(body.theme-espacio) { background: #1B1846; }
+body, body.theme-espacio { background: var(--ground); color: #FFFFFF; font-family: 'Nunito', system-ui, sans-serif; font-weight: 700; }
+button { font-family: inherit; }
+
+/* Cabecera */
+.topbar, body.theme-espacio .topbar { background: var(--ground); -webkit-backdrop-filter: none; backdrop-filter: none; color: #fff; }
+.topbar h1 { font-family: 'Lilita One', sans-serif; font-weight: 400; font-size: 2.1rem; letter-spacing: 0; color: var(--title); text-shadow: 0 3px 0 var(--title-shadow); }
+.topbar h1 span { color: inherit !important; }
+.stars, .icon-btn { background: var(--chip); color: var(--chip-ink); box-shadow: inset 0 0 0 2px var(--panel-line); font-weight: 900; }
+
+/* Paneles */
+.bubble, .world-banner, .prompt, .stage, .endcard, .hud > span, .progress {
+  background: var(--panel); color: var(--panel-ink); box-shadow: inset 0 0 0 2px var(--panel-line); }
+.bubble, .prompt, .stage { border-bottom: 6px solid var(--edge); }
+.bubble { font-family: 'Lilita One', sans-serif; font-weight: 400; }
+.bubble small { font-family: 'Nunito', sans-serif; font-weight: 700; color: var(--muted); }
+.bubble::before { border-right-color: var(--panel); }
+.world-banner, body.theme-espacio .world-banner { border-bottom: 7px solid var(--edge); }
+.farm-foot { color: var(--panel-ink); font-weight: 900; }
+.goalbar { background: rgba(120,140,200,.28); }
+.gift.bounce { color: #FF5FA2; }
+
+/* Selector de tema */
+.theme-pick { background: var(--track); border-radius: 999px; padding: 5px; gap: 6px; box-shadow: inset 0 0 0 2px var(--panel-line); }
+.theme-btn, .theme-btn.on { border: 0; outline: 0; background: transparent; color: #fff; font-weight: 900; padding: 7px 10px; }
+.theme-btn.on { background: #FFD23F; color: var(--ink); }
+
+/* Títulos de sección */
+.section-title { background: none; box-shadow: none; padding: 0; font-family: 'Lilita One', sans-serif; font-weight: 400; font-size: 1.6rem; color: var(--title); text-shadow: 0 2px 0 var(--title-shadow); }
+.section-title img { width: 38px; height: 38px; object-fit: contain; }
+
+/* Tarjetas de juego: color entero con relieve */
+.game-card { background: var(--c); color: var(--ink); border-bottom: 7px solid rgba(0,0,0,.24); box-shadow: none; padding: 12px 6px 10px; gap: 4px; border-radius: 24px; }
+.game-card .cover { background: none; height: 100px; overflow: visible; }
+.game-card .cover::after { display: none; }
+.game-card .emoji { font-size: 4.4rem; }
+.game-card .art { width: 104px; height: 104px; object-fit: contain; filter: drop-shadow(0 6px 4px rgba(0,0,0,.25)); transition: transform .2s; }
+.game-card:active .art { transform: scale(1.12); }
+.game-card .gname { font-weight: 900; font-size: 1.15rem; padding: 0 4px; }
+.game-card .lvl { background: rgba(20,20,60,.34); color: #fff; font-weight: 900; }
+.parents-link, body.theme-espacio .parents-link { color: rgba(255,255,255,.85); font-weight: 700; }
+.who-btn { background: var(--panel); }
+
+/* Preguntas */
+.progress { background: var(--chip); }
+.progress span { color: rgba(255,255,255,.22); }
+.progress span.on { color: #FFD23F; text-shadow: none; }
+.prompt { font-weight: 900; }
+.speak-btn { background: #FFD23F; box-shadow: 0 5px 0 #C79A0E; }
+.opt { background: var(--panel); color: var(--panel-ink); border-bottom-color: var(--edge); box-shadow: inset 0 0 0 2px var(--panel-line); }
+.opt.blk { color: var(--ink); text-shadow: none; font-family: 'Lilita One', sans-serif; font-weight: 400; border-bottom-color: rgba(0,0,0,.24); box-shadow: none; }
+.opt.right, .opt.blk.right { background: #5BE38C; color: var(--ink); border-bottom-color: #2FA75C; }
+.opt.wrong { background: var(--panel); opacity: .5; }
+
+/* Juegos */
+.hud > span { font-weight: 900; }
+.hud > .goalbar { border-color: var(--chip); background: rgba(255,255,255,.3); box-shadow: none; }
+.play { box-shadow: inset 0 0 0 2px var(--panel-line); }
+.endcard { border-bottom: 8px solid var(--edge); }
+.end-title { font-family: 'Lilita One', sans-serif; font-weight: 400; }
+.end-title small { font-family: 'Nunito', sans-serif; font-weight: 700; color: var(--muted); }
+.round.again { background: #5BE38C; } .round.home { background: #35D6E6; }
+.pbtn { background: var(--panel); border-bottom-color: var(--edge); box-shadow: inset 0 0 0 2px var(--panel-line); }
+.pbtn.on { background: #FFD23F; border-bottom-color: #C79A0E; }
+.pbtn .dot { background: var(--panel-ink); }
+.pbtn.on .dot { background: var(--ink); }
+.parents { background: #fff; color: #14235A; font-weight: 700; }
+.parents h3 { font-family: 'Lilita One', sans-serif; font-weight: 400; }
+.parents button { color: #14235A; font-weight: 700; }
+.profiles .look.on { outline: 3px solid var(--primary); background: #eef3ff; }
+
+/* ---------- Pegatina: contorno negro y sombra dura, en los dos temas ---------- */
+body.sticker .game-card, body.sticker .bubble, body.sticker .world-banner, body.sticker .prompt, body.sticker .stage, body.sticker .opt,
+body.sticker .endcard, body.sticker .pbtn, body.sticker .stars, body.sticker .icon-btn, body.sticker .hud > span, body.sticker .theme-pick,
+body.sticker .progress, body.sticker .pick, body.sticker .round, body.sticker .speak-btn, body.sticker .paper, body.sticker .play, body.sticker .who-btn {
+  border: 3px solid var(--line); box-shadow: 4px 4px 0 var(--line); }
+body.sticker .game-card, body.sticker .world-banner, body.sticker .endcard { box-shadow: 6px 6px 0 var(--line); }
+body.sticker .hud > .goalbar { border: 3px solid var(--line); box-shadow: 4px 4px 0 var(--line); background: #fff; }
+body.sticker .topbar h1 { -webkit-text-stroke: 6px var(--line); paint-order: stroke fill; text-shadow: none; transform: rotate(-2deg); transform-origin: left center; }
+body.sticker .section-title { -webkit-text-stroke: 5px var(--line); paint-order: stroke fill; text-shadow: none; }
+body.sticker .menu-grid .game-card:nth-child(odd) { transform: rotate(-1.3deg); }
+body.sticker .menu-grid .game-card:nth-child(even) { transform: rotate(1.3deg); }
+body.sticker .game-card:active, body.sticker .opt:active, body.sticker .pbtn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--line); }
+body.sticker .bubble::before { display: none; }
+body.sticker .fitem, body.sticker .game-card .art, body.sticker .game-card .emoji { filter: drop-shadow(2px 0 0 var(--line)) drop-shadow(-2px 0 0 var(--line)) drop-shadow(0 2px 0 var(--line)) drop-shadow(0 -2px 0 var(--line)); }
+body.sticker .pbtn.on { transform: translateY(-3px); }

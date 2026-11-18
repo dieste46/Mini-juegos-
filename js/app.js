@@ -43,6 +43,9 @@
 
   // ---------- Menú ----------
   const emojiOf = g => typeof g.emoji === 'function' ? g.emoji(Themes.current()) : g.emoji;
+  // Dibujo de la tarjeta: imagen si el juego la tiene para este tema; si no, su emoji.
+  const artOf = g => { const a = g.art && g.art(Themes.current()); return a ? `<img class="art" src="img/icons/${a}.webp" alt="">` : `<span class="emoji">${emojiOf(g)}</span>`; };
+  const TILES = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6', '#B79CFF'];
   let greeted = false;
   function menu() {
     window.speechSynthesis?.cancel();
@@ -57,13 +60,15 @@
         ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${Store.profile.avatar}</button>` : ''}</div>
       <div class="theme-pick">${themes.map(t => `<button class="theme-btn${t.id === Themes.current().id ? ' on' : ''}" data-t="${t.id}"><span>${t.emoji}</span>${t.name}</button>`).join('')}</div>
       <h2 class="section-title"><span>🎮</span> ¡A jugar!</h2><div class="menu-grid" id="recreo"></div>
-      <h2 class="section-title"><span>📚</span> Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
+      <h2 class="section-title"><img src="img/icons/libros.webp" alt=""> Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
       <button class="parents-link" id="parents">Zona de padres</button>`;
+    const nth = {};
     Games.forEach(g => {
-      const s = Core.gameState(g.id);
+      const s = Core.gameState(g.id), sec = g.section || 'aprende';
+      nth[sec] = (nth[sec] || 0) + 1;
       const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(s.level) + '☆'.repeat(g.maxLevel - s.level) : '';
-      const b = Core.el(`<button class="game-card" style="--c:${g.color}">
-          <span class="cover"><span class="emoji">${emojiOf(g)}</span></span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
+      const b = Core.el(`<button class="game-card" style="--c:${TILES[(nth[sec] - 1 + (sec === 'aprende' ? 3 : 0)) % TILES.length]}">
+          <span class="cover">${artOf(g)}</span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
       b.onclick = () => { Core.say(g.name); location.hash = g.id; };
       app.querySelector('#' + (g.section || 'aprende')).appendChild(b);
     });
@@ -123,6 +128,9 @@
         <button id="add-profile">＋ Otro jugador</button></p>
       ${Store.profiles().length > 1 ? '<button id="del-profile">Eliminar este jugador</button>' : ''}
 
+      <h3>Estilo</h3>
+      <p class="profiles"><button class="look${P.look !== 'pegatina' ? ' on' : ''}" data-l="normal">Normal</button><button class="look${P.look === 'pegatina' ? ' on' : ''}" data-l="pegatina">Pegatina (contorno negro)</button></p>
+
       <h3>Voz</h3>
       <label><select id="voice"></select> <button id="test-voice">Probar</button><br>
         <small>Si suena a robot, descarga una voz mejor en el dispositivo (iPhone: Ajustes → Accesibilidad → Contenido leído → Voces → Español) y elígela aquí.</small></label>
@@ -149,6 +157,7 @@
     sel.onchange = () => { Core.setVoice(sel.value); sample(); };
     app.querySelector('#test-voice').onclick = sample;
     app.querySelector('#save-name').onclick = () => { Core.setName(app.querySelector('#name').value); greeted = false; Core.say(`Hola, ${Core.getName() || 'campeón'}`); parents(); };
+    app.querySelectorAll('.look').forEach(b => b.onclick = () => { P.look = b.dataset.l; Store.save(); Themes.apply(); parents(); });
     app.querySelectorAll('.av').forEach(b => b.onclick = () => { P.avatar = b.dataset.a; Store.save(); parents(); });
     app.querySelectorAll('.pf').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; parents(); });
     app.querySelector('#add-profile').onclick = () => {

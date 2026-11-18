@@ -1,7 +1,7 @@
 /* Contar (los objetos los pone el tema): conteo 1-10, reconocer la cifra y, en el último nivel, sumar dos grupos. */
 Games.push({
   id: 'contar',
-  name: 'Cuenta',
+  name: 'Cuenta', art: t => (t.id === 'granja' ? 'vaca' : null),
   emoji: t => t.sets.contables[0][0],
   color: '#ff6fa5',
   learns: 'Contar del 1 al 10, asociar cantidad con cifra y primeras sumas.',

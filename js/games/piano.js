@@ -5,7 +5,7 @@
    - Oreja: la canción se toca sola para escucharla. */
 Games.push({
   id: 'piano', section: 'recreo',
-  name: 'Piano', emoji: '🎹', color: '#2f80ff',
+  name: 'Piano', emoji: '🎹', art: () => 'piano', color: '#2f80ff',
   learns: 'Música, memoria auditiva y seguir una secuencia.',
   badge: s => s.songs ? `🎵 ${s.songs}` : '',
   start(root, exit) {

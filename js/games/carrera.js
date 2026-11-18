@@ -2,7 +2,7 @@
    Objetivo: coger 15 estrellas. Chocar no quita nada: el coche da un bote, se frena un poco y seguimos. */
 Games.push({
   id: 'carrera', section: 'recreo',
-  name: 'Carrera', emoji: t => t.sets.carrera.vehicle, color: '#555b6e',
+  name: 'Carrera', art: t => (t.id === 'granja' ? 'coche' : null), emoji: t => t.sets.carrera.vehicle, color: '#555b6e',
   learns: 'Reflejos, anticipación y lateralidad (izquierda / derecha).',
   badge: s => s.wins ? `🏁 ${s.wins}` : '',
   start(root, exit) {

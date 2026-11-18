@@ -1,7 +1,7 @@
 /* Memoria de parejas: atención y memoria de trabajo. Cada pareja dice el nombre del animal (vocabulario). */
 Games.push({
   id: 'memoria',
-  name: 'Parejas',
+  name: 'Parejas', art: () => 'parejas',
   emoji: '🧠',
   color: '#8e6cff',
   learns: 'Memoria de trabajo, atención y vocabulario de animales.',
