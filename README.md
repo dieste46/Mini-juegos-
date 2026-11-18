@@ -22,7 +22,7 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 | 🐹 ¡Pilla, pilla! | Topo con un solo personaje (cerdito / marcianito): pillar 20. Desde la tercera partida aparecen el que no se toca (lobo / meteorito) y la estrella que vale tres. Sin reloj; cuenta el total acumulado |
 | 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
 | 🎨 Pintar | Hoja en blanco o 8 láminas propias para colorear (4 por tema). Bote de pintura, pincel, arcoíris, purpurina, rotulador de luz, sellos, goma, espejo, deshacer y música al pintar. Galería propia: cada dibujo se guarda solo |
-| 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
+| 🎹 Piano | Ocho teclas con cara que cantan. Cuatro canciones con notas que caen y esperan sobre su tecla hasta que la toca (sin ritmo ni fallo); botón de oreja para escucharla sola |
 
 Ningún juego castiga: no hay vidas, cronómetros ni cruces rojas; lo que se escapa no resta, chocar solo frena y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
 

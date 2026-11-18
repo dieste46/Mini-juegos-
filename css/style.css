@@ -476,3 +476,28 @@ body.theme-espacio .play { background: linear-gradient(#141640, #2a2370 60%, #4b
 .pick .del { position: absolute; top: 4px; right: 4px; width: 30px; height: 30px; border-radius: 50%; border: 0; background: rgba(45,37,82,.75); color: #fff; font-size: .9rem; }
 
 .play { background: linear-gradient(#7cc6ff, #d8f1ff); }
+
+/* ---------- Piano con notas que caen ---------- */
+.play.piano { display: flex; flex-direction: column; }
+.fall { position: relative; flex: 1; overflow: hidden; }
+.fall .lane { position: absolute; top: 0; bottom: 0; width: 12.5%; background: linear-gradient(transparent, var(--k)); opacity: .22; }
+.fnote { position: absolute; width: 40px; height: 48px; margin-left: -20px; border-radius: 14px; background: var(--k); color: #fff; font-size: 1.5rem; font-weight: 800;
+  display: grid; place-items: center; border-bottom: 5px solid rgba(0,0,0,.22); box-shadow: 0 4px 8px rgba(0,0,0,.18); }
+.fnote.wait { animation: notewait .55s ease-in-out infinite alternate; }
+@keyframes notewait { to { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(255,255,255,.8); } }
+.fnote.boom { animation: burst .35s forwards; }
+.rise { position: absolute; bottom: 0; margin-left: -12px; font-size: 2.1rem; font-weight: 800; pointer-events: none; text-shadow: 0 2px 0 #fff; animation: riseup 1.1s ease-out forwards; }
+@keyframes riseup { to { transform: translateY(-280px) rotate(24deg); opacity: 0; } }
+.pkeys { display: flex; gap: 4px; padding: 14px 4px 6px; height: 36%; min-height: 176px; }
+.pkey { flex: 1; min-width: 0; padding: 8px 0 10px; border: 0; border-radius: 20px 20px 12px 12px; background: var(--k); border-bottom: 8px solid rgba(0,0,0,.22);
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; transition: transform .08s; touch-action: none; }
+.pkey .ic { font-size: clamp(1.2rem, 5.4vw, 2.1rem); line-height: 1; filter: drop-shadow(0 2px 1px rgba(0,0,0,.25)); }
+.pkey svg { width: 88%; max-width: 54px; }
+.pkey .m-open { display: none; }
+.pkey.on .m-open { display: inline; } .pkey.on .m-closed { display: none; }
+.pkey.on { transform: translateY(-12px) scaleY(1.05); filter: brightness(1.12); }
+.pkey.hint { box-shadow: 0 0 0 4px #fff, 0 0 18px 8px var(--k); animation: hintk .55s ease-in-out infinite alternate; }
+@keyframes hintk { to { transform: translateY(-9px); } }
+.pkeys { height: 30%; min-height: 168px; }
+.pkey { justify-content: flex-start; gap: 6px; }
+.pkey svg { width: 100%; max-width: 60px; }
