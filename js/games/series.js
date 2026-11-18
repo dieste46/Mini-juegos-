@@ -2,7 +2,7 @@
 Games.push({
   id: 'series',
   name: 'Series',
-  emoji: '🧩',
+  emoji: '🧩', art: () => 'series',
   color: '#00b4c6',
   learns: 'Reconocer y continuar patrones: razonamiento lógico y pensamiento computacional.',
   maxLevel: 3,

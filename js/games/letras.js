@@ -2,7 +2,7 @@
 Games.push({
   id: 'letras',
   name: 'Letras',
-  emoji: '🔤',
+  emoji: '🔤', art: () => 'letras',
   color: '#2ebd6b',
   learns: 'Sonido inicial de las palabras, vocales y primeras consonantes (base de la lectura).',
   maxLevel: 3,

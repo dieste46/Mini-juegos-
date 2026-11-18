@@ -2,7 +2,7 @@
 Games.push({
   id: 'colores',
   name: 'Colores',
-  emoji: '🎨',
+  emoji: '🎨', art: () => 'colores',
   color: '#ffb000',
   learns: 'Colores, formas geométricas y seguir instrucciones con dos condiciones.',
   maxLevel: 3,

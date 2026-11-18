@@ -2,7 +2,7 @@
    y rescata a los que se han escapado. Lo que hay que esquivar solo le hace dar vueltas: no se pierde nada. */
 Games.push({
   id: 'super', section: 'recreo',
-  name: 'Súper Rescate', emoji: t => t.sets.rescate.hero, color: '#d7263d',
+  name: 'Súper Rescate', art: t => (t.id === 'granja' ? 'rescate' : null), emoji: t => t.sets.rescate.hero, color: '#d7263d',
   learns: 'Seguimiento con el dedo, anticipación y control del movimiento.',
   badge: s => s.total ? `🏅 ${s.total}` : '',
   start(root, exit) {
