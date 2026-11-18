@@ -19,7 +19,7 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 |---|---|
 | 🦸 Súper Rescate | El héroe del tema vuela siguiendo el dedo y rescata a 10 (pollitos en la granja, marcianitos en el espacio); lo que se esquiva solo le hace girar |
 | 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
-| 🐹 ¡Pilla, pilla! | Topo: pillar 20 y no tocar al que no toca (lobo / meteorito). Sin reloj; cuenta el total acumulado |
+| 🐹 ¡Pilla, pilla! | Topo con un solo personaje (cerdito / marcianito): pillar 20. Desde la tercera partida aparecen el que no se toca (lobo / meteorito) y la estrella que vale tres. Sin reloj; cuenta el total acumulado |
 | 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
 | 🎨 Pintar | Hoja en blanco o 8 láminas propias para colorear (4 por tema). Bote de pintura, pincel, arcoíris, purpurina, rotulador de luz, sellos, goma, espejo, deshacer y música al pintar. Galería propia: cada dibujo se guarda solo |
 | 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
