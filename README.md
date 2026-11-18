@@ -21,7 +21,7 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 | 🎈 Globos | Explotar 25 globos que suben; los dorados valen 3 |
 | 🐹 ¡Pilla, pilla! | Topo: pillar 20 y no tocar al que no toca (lobo / meteorito). Sin reloj; cuenta el total acumulado |
 | 🏎️ Carrera | Tocar a la izquierda o derecha de la pantalla para cambiar de carril y coger 15 estrellas. Chocar solo frena, no hay vidas |
-| 🖍️ Pintar | Dibujo libre con colores, pincel arcoíris, sellos y guardar el dibujo |
+| 🎨 Pintar | Hoja en blanco o 8 láminas propias para colorear (4 por tema). Bote de pintura, pincel, arcoíris, purpurina, rotulador de luz, sellos, goma, espejo, deshacer y música al pintar. Galería propia: cada dibujo se guarda solo |
 | 🎹 Piano | Piano de animales; tres canciones que se iluminan para imitarlas |
 
 Ningún juego castiga: no hay vidas, cronómetros ni cruces rojas; lo que se escapa no resta, chocar solo frena y la pantalla final siempre es positiva. Los sonidos se sintetizan con Web Audio, sin archivos.
@@ -51,6 +51,8 @@ js/mascot.js    Bip, la mascota (SVG)
 js/decor.js     Piezas de decorado (nubes, sol, colinas) y títulos de colores
 js/themes.js    Temas: fondo, mundo de recompensas y conjuntos de objetos (granja, espacio)
 js/world.js     Mundo de recompensas que crece con las estrellas (lo dibuja el tema)
+js/art.js       Galería de dibujos en IndexedDB (por jugador)
+js/laminas.js   Láminas para colorear: formas en un lienzo de 300 x 400, de atrás hacia delante
 js/games/*.js   Un archivo por juego
 js/app.js       Menú, navegación por #hash, zona de padres
 ```
@@ -69,7 +71,7 @@ js/app.js       Menú, navegación por #hash, zona de padres
 
 Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `Themes.set('<conjunto>')`. Guarda su progreso solo en `Core.gameState(id)` y llama a `Core.save()` (o `Core.addStar()`).
 
-**Contrato de un tema** (`themes.js`): `id`, `name`, `emoji`, `say`, `background()`, `world` (nombre, escena e `items`) y `sets` (`contables`, `parejas`, `pilla`, `rescate`, `carrera`, `series`, `piano`, `sellos`, `letras`). Si a un tema le falta un conjunto, se usa el de granja.
+**Contrato de un tema** (`themes.js`): `id`, `name`, `emoji`, `say`, `background()`, `world` (nombre, escena e `items`) y `sets` (`contables`, `parejas`, `pilla`, `rescate`, `carrera`, `series`, `piano`, `sellos`, `letras`, `laminas`, `escena`). Si a un tema le falta un conjunto, se usa el de granja.
 
 **Datos** (`localStorage`, clave `mini-juegos-store`):
 
@@ -80,7 +82,7 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 
 - Cambiar el formato = subir `v` y añadir el paso en `migrate()`. Lo antiguo (`juegos-peque-v1`) se migra solo y se deja como copia.
 - Guardado agrupado (400 ms) y forzado al salir de la app; `navigator.storage.persist()` para que el navegador no lo borre.
-- Copia de seguridad en la zona de padres (exportar / importar JSON).
+- Copia de seguridad en la zona de padres (exportar / importar JSON). Los dibujos de Pintar van aparte, en IndexedDB (`mini-juegos-arte`), y no entran en esa copia: se sacan con el botón de enviar.
 - Sincronizar en la nube más adelante = otro adaptador con `load()`/`save()` en `store.js` (p. ej. Supabase, una fila por perfil con `updated` para resolver conflictos). El resto del código no cambia.
 
 ## iPhone / iPad

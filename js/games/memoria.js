@@ -50,12 +50,8 @@ Games.push({
         g.played++;
         if (moves <= pairs * 2) for (let i = 0; i < 3; i++) Core.registerAnswer(id, true, maxLevel);
         else if (moves > pairs * 3) for (let i = 0; i < 2; i++) Core.registerAnswer(id, false, maxLevel);
-        Core.celebrate(true);
-        Core.say('¡Has encontrado todas las parejas!');
-        root.innerHTML = `<div class="prompt" style="flex-direction:column;font-size:2rem">🏆<span>¡Todas las parejas!</span></div>
-          <div class="options"><button class="opt" id="again">🔁</button><button class="opt" id="out">🏠</button></div>`;
-        root.querySelector('#again').onclick = play;
-        root.querySelector('#out').onclick = exit;
+        Core.save();
+        Core.endScreen(root, '<span>¡Todas las parejas!</span>', '¡Has encontrado todas las parejas!', play, exit);
       }
     }
     play();

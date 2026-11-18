@@ -32,8 +32,25 @@ const Decor = (() => {
     ${path ? `<path d="M44 100 Q49 ${horizon + 34} 61 ${horizon + 13} L65 ${horizon + 13} Q57 ${horizon + 36} 60 100 Z" fill="#ecd29b" opacity=".85"/>` : ''}
   </svg>`;
 
+  // Vehículos vistos desde arriba (dibujos propios) para la carrera.
+  const carTop = () => `<svg viewBox="0 0 60 104" aria-hidden="true">
+    <rect x="2" y="16" width="10" height="20" rx="4" fill="#2b2b3a"/><rect x="48" y="16" width="10" height="20" rx="4" fill="#2b2b3a"/>
+    <rect x="2" y="68" width="10" height="20" rx="4" fill="#2b2b3a"/><rect x="48" y="68" width="10" height="20" rx="4" fill="#2b2b3a"/>
+    <rect x="7" y="4" width="46" height="96" rx="18" fill="#ff5a4d" stroke="#c43a30" stroke-width="2.5"/>
+    <rect x="25" y="5" width="10" height="94" fill="#fff" opacity=".9"/>
+    <path d="M14 34 Q30 24 46 34 L43 48 Q30 43 17 48 Z" fill="#8fd8ff" stroke="#3a86c8" stroke-width="2"/>
+    <path d="M17 70 Q30 75 43 70 L45 82 Q30 88 15 82 Z" fill="#8fd8ff" stroke="#3a86c8" stroke-width="2"/>
+    <rect x="15" y="50" width="30" height="18" rx="5" fill="#ff7a6e"/>
+    <ellipse cx="16" cy="10" rx="5" ry="3.5" fill="#fff3a6"/><ellipse cx="44" cy="10" rx="5" ry="3.5" fill="#fff3a6"/></svg>`;
+  const rocketTop = () => `<svg viewBox="0 0 60 104" aria-hidden="true">
+    <path class="flame" d="M20 78 Q30 112 40 78 Z" fill="#ffb02e"/><path class="flame" d="M25 78 Q30 98 35 78 Z" fill="#fff3a6"/>
+    <path d="M14 56 L2 84 L18 76 Z" fill="#ff5a4d" stroke="#c43a30" stroke-width="2"/><path d="M46 56 L58 84 L42 76 Z" fill="#ff5a4d" stroke="#c43a30" stroke-width="2"/>
+    <path d="M30 2 C48 22 48 58 42 80 H18 C12 58 12 22 30 2 Z" fill="#f4f6ff" stroke="#b9c2e8" stroke-width="2.5"/>
+    <path d="M30 2 C38 11 42 20 44 30 H16 C18 20 22 11 30 2 Z" fill="#ff5a4d"/>
+    <circle cx="30" cy="46" r="9" fill="#8fd8ff" stroke="#3a86c8" stroke-width="2.5"/><circle cx="27" cy="43" r="2.5" fill="#fff"/></svg>`;
+
   // Fondo fijo de toda la web: lo dibuja el tema activo.
   function mount() { Themes.apply(); }
 
-  return { rainbow, mount, cloud, sun, hills };
+  return { rainbow, mount, cloud, sun, hills, carTop, rocketTop };
 })();

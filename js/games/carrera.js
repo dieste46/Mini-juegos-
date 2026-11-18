@@ -15,15 +15,18 @@ Games.push({
       let lane = 1, stars = 0, speed = BASE_SPEED, items = [], ghost = 0, spawnIn = 0.6;
       over = false;
       root.innerHTML = `<div class="hud"><span>⭐ <b id="st">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><span>🏁</span></div>
-        <div class="play ${T.road ? 'road' : 'spaceway'}" id="road">
-          ${T.road ? '<div class="lane" style="left:calc(33.3% - 3px)"></div><div class="lane" style="left:calc(66.6% - 3px)"></div>' : '<div class="starfield"></div><div class="starfield s2"></div>'}
-          <div class="sprite car${T.road ? '' : ' ship'}" id="car">${T.vehicle}</div></div>`;
+        <div class="play raceway ${T.road ? 'grass' : 'space'}">
+          ${T.road ? '' : '<div class="starfield"></div><div class="starfield s2"></div>'}
+          ${['l', 'r'].map((side, k) => `<div class="verge ${side}"><div>${[0, 1].map(() => T.verge.map((v, i) => (i % 2 === k ? `<span style="top:${i * 12.5 + 3}%;left:${(i * 23 + k * 11) % 30}%">${v}</span>` : '')).join('')).map((h, n) => `<div class="half" style="top:${n * 50}%">${h}</div>`).join('')}</div></div>`).join('')}
+          <div class="track ${T.road ? 'road' : 'spaceway'}" id="road">
+            ${T.road ? '<div class="lane" style="left:calc(33.3% - 3px)"></div><div class="lane" style="left:calc(66.6% - 3px)"></div>' : ''}
+            <div class="sprite car" id="car">${T.sprite ? T.sprite() : T.vehicle}</div></div></div>`;
       const road = root.querySelector('#road'), car = root.querySelector('#car');
       const st = root.querySelector('#st'), bar = root.querySelector('#bar');
       Core.say(`Toca a la izquierda o a la derecha para mover ${T.road ? 'el coche' : 'el cohete'}. ¡Coge quince estrellas!`);
 
       const W = () => road.clientWidth, H = () => road.clientHeight;
-      const placeCar = () => { car.style.left = (LANES[lane] * W() - 34) + 'px'; car.style.top = (H() - 90) + 'px'; };
+      const placeCar = () => { car.style.left = (LANES[lane] * W() - 34) + 'px'; car.style.top = (H() - 124) + 'px'; };
       placeCar();
 
       // Se puede tocar en cualquier parte de la pantalla, no solo en la carretera.
@@ -52,7 +55,7 @@ Games.push({
         spawnIn -= dt; if (spawnIn <= 0) { spawn(); spawnIn = Math.max(0.5, 1.1 - stars * 0.03); }
         ghost = Math.max(0, ghost - dt);
         car.style.opacity = ghost > 0 ? (Math.floor(ghost * 10) % 2 ? .35 : 1) : 1;
-        const carY = H() - 90;
+        const carY = H() - 110;
         items = items.filter(it => {
           it.y += speed * dt; it.el.style.transform = `translateY(${it.y}px)`;
           if (it.lane === lane && it.y > carY - 40 && it.y < carY + 50) {

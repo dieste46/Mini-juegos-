@@ -15,6 +15,7 @@ Games.push({
       root.innerHTML = `<div class="hud"><span>${T.rescued} <b id="n">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><button class="speak-btn" id="sp">🔊</button></div>
         <div class="play sky" id="sky" style="background:${T.bg}">
           ${T.decor === '☁️' ? Decor.cloud('c1') + Decor.cloud('c2') + Decor.cloud('c3') : '<span class="twinkles"></span>'}
+          ${Themes.set('escena')()}
           <div class="sprite hero" id="hero">${T.cape ? '<span class="cape"></span>' : ''}<span class="pig">${T.hero}</span></div>
         </div>`;
       const sky = root.querySelector('#sky'), hero = root.querySelector('#hero');

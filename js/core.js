@@ -123,16 +123,15 @@ const Core = (() => {
     let qIndex = 0;
     const g = gameState(game.id);
 
-    function renderProgress() {
-      return `<div class="progress">${Array.from({ length: ROUND_SIZE }, (_, i) => `<span class="${i < qIndex ? 'on' : ''}"></span>`).join('')}</div>`;
-    }
+    const BLOCKS = ['#ec5b7c', '#f09a3e', '#5fbb6d', '#4f9bf5', '#9b6cf2'];
+    const isShort = h => typeof h === 'number' || (typeof h === 'string' && h.length <= 2 && !h.includes('<'));
 
     function next() {
       if (qIndex >= ROUND_SIZE) return finish();
       const q = game.makeQuestion(gameState(game.id).level);
       let errors = 0, locked = false;
 
-      root.innerHTML = '';
+      root.innerHTML = `<div class="progress">${Array.from({ length: ROUND_SIZE }, (_, i) => `<span class="${i < qIndex ? 'on' : ''}">★</span>`).join('')}</div>`;
       const prompt = el(`<div class="prompt"><button class="speak-btn" aria-label="Repetir">🔊</button><span>${q.text}</span></div>`);
       prompt.querySelector('button').onclick = () => say(q.say);
       root.appendChild(prompt);
@@ -141,9 +140,11 @@ const Core = (() => {
       if (typeof q.stage === 'string') stage.innerHTML = q.stage; else if (q.stage) stage.appendChild(q.stage);
       if (q.stage) root.appendChild(stage);
 
+      const buddy = el(`<div class="buddy">${Mascot.svg()}</div>`);
       const opts = el('<div class="options"></div>');
-      q.options.forEach(o => {
-        const b = el(`<button class="opt">${o.html}</button>`);
+      const off = rand(0, 4);
+      q.options.forEach((o, i) => {
+        const b = el(`<button class="opt${isShort(o.html) ? ' blk' : ''}" style="--b:${BLOCKS[(i + off) % 5]}">${o.html}</button>`);
         b.onclick = () => {
           if (locked || b.classList.contains('wrong')) return;
           if (o.value === q.answer) {
@@ -151,13 +152,14 @@ const Core = (() => {
             b.classList.add('right');
             registerAnswer(game.id, errors === 0, game.maxLevel);
             if (errors === 0) addStar();
-            celebrate(); sfx.ding();
+            celebrate(); sfx.ding(); Mascot.mood(buddy, 'joy');
+            const st = root.querySelectorAll('.progress span')[qIndex]; if (st) st.classList.add('on', 'new');
             say(praise() + (q.explain ? ' ' + q.explain : ''));
             qIndex++;
             setTimeout(next, q.explain ? 2600 : 1500);
           } else {
             errors++;
-            b.classList.add('wrong');
+            b.classList.add('wrong'); Mascot.mood(buddy, 'wow', 1300);
             if (o.sayLabel) say(`Eso es ${o.sayLabel}. ${pick(RETRY)}`); else say(pick(RETRY));
             // Tras dos fallos, se ilumina la correcta: nunca se queda atascado.
             if (errors >= 2) [...opts.children].forEach((btn, i) => { if (q.options[i].value === q.answer) btn.classList.add('hint'); });
@@ -166,22 +168,13 @@ const Core = (() => {
         opts.appendChild(b);
       });
       root.appendChild(opts);
-      root.insertAdjacentHTML('beforeend', renderProgress());
+      root.appendChild(buddy);
       setTimeout(() => say(q.say), 250);
     }
 
     function finish() {
       g.played++; save();
-      celebrate(true); sfx.fanfare();
-      say('¡Has terminado! ¿Jugamos otra vez?');
-      root.innerHTML = `
-        <div class="prompt" style="flex-direction:column;font-size:2rem">🏆<span>¡Has terminado!</span></div>
-        <div class="options">
-          <button class="opt" id="again">🔁</button>
-          <button class="opt" id="out">🏠</button>
-        </div>`;
-      root.querySelector('#again').onclick = () => { qIndex = 0; next(); };
-      root.querySelector('#out').onclick = onExit;
+      endScreen(root, '<span>¡Has terminado!</span>', '¡Has terminado! ¿Jugamos otra vez?', () => { qIndex = 0; next(); }, onExit);
     }
 
     next();
@@ -222,8 +215,11 @@ const Core = (() => {
   // Pantalla de fin reutilizable para los juegos de recreo.
   function endScreen(root, html, phrase, again, exit) {
     celebrate(true); sfx.fanfare(); say(phrase);
-    root.innerHTML = `<div class="prompt" style="flex-direction:column;font-size:2rem">${html}</div>
-      <div class="options"><button class="opt" id="again">🔁</button><button class="opt" id="out">🏠</button></div>`;
+    root.innerHTML = `<div class="endcard">
+        <div class="end-stars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+        <div class="end-mascot">${Mascot.svg('joy')}</div>
+        <div class="end-title">${html}</div>
+        <div class="end-btns"><button class="round again" id="again" aria-label="Otra vez">🔁</button><button class="round home" id="out" aria-label="Salir">🏠</button></div></div>`;
     root.querySelector('#again').onclick = again;
     root.querySelector('#out').onclick = exit;
   }

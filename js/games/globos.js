@@ -10,7 +10,7 @@ Games.push({
 
     function play() {
       let popped = 0, speed = 110, items = [];
-      root.innerHTML = `<div class="hud"><span>🎈 <b id="n">0</b> / ${GOAL}</span><button class="speak-btn" id="sp">🔊</button></div><div class="play" id="area"></div>`;
+      root.innerHTML = `<div class="hud"><span>🎈 <b id="n">0</b> / ${GOAL}</span><button class="speak-btn" id="sp">🔊</button></div><div class="play" id="area">${Themes.set('escena')()}</div>`;
       const area = root.querySelector('#area'), n = root.querySelector('#n');
       const intro = () => Core.say('¡Explota los globos! Si sale uno dorado, vale tres.');
       root.querySelector('#sp').onclick = intro; intro();

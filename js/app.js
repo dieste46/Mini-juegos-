@@ -63,7 +63,7 @@
       const s = Core.gameState(g.id);
       const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(s.level) + '☆'.repeat(g.maxLevel - s.level) : '';
       const b = Core.el(`<button class="game-card" style="--c:${g.color}">
-          <span class="emoji"><span>${emojiOf(g)}</span></span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
+          <span class="cover"><span class="emoji">${emojiOf(g)}</span></span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
       b.onclick = () => { Core.say(g.name); location.hash = g.id; };
       app.querySelector('#' + (g.section || 'aprende')).appendChild(b);
     });
@@ -86,7 +86,7 @@
     title.textContent = '¿Quién juega?';
     btnHome.hidden = false;
     app.innerHTML = `<div class="who-grid">${Store.profiles().map(p =>
-      `<button class="game-card who-card" data-id="${p.id}" style="--c:#3d7bff"><span class="emoji"><span>${p.avatar}</span></span><span class="gname">${p.name || 'Sin nombre'}</span><span class="lvl">⭐ ${p.stars}</span></button>`).join('')}</div>`;
+      `<button class="game-card who-card" data-id="${p.id}" style="--c:#3d7bff"><span class="cover"><span class="emoji">${p.avatar}</span></span><span class="gname">${p.name || 'Sin nombre'}</span><span class="lvl">⭐ ${p.stars}</span></button>`).join('')}</div>`;
     Core.say('¿Quién juega?');
     app.querySelectorAll('.who-card').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; location.hash = ''; });
   }
