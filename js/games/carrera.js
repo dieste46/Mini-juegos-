@@ -22,7 +22,7 @@ Games.push({
             ${T.road ? '<div class="lane" style="left:calc(33.3% - 3px)"></div><div class="lane" style="left:calc(66.6% - 3px)"></div>' : ''}
             <div class="sprite car" id="car">${T.sprite ? T.sprite() : T.vehicle}</div></div></div>`;
       const road = root.querySelector('#road'), car = root.querySelector('#car');
-      const st = root.querySelector('#st'), bar = root.querySelector('#bar');
+      const st = root.querySelector('#st'), bar = root.querySelector('#bar'), fxo = Fx.overlay(road);
       Core.say(`Toca a la izquierda o a la derecha para mover ${T.road ? 'el coche' : 'el cohete'}. ¡Coge quince estrellas!`);
 
       const W = () => road.clientWidth, H = () => road.clientHeight;
@@ -61,12 +61,14 @@ Games.push({
           if (it.lane === lane && it.y > carY - 40 && it.y < carY + 50) {
             if (it.star) {
               stars++; st.textContent = stars; bar.style.width = (100 * stars / GOAL) + '%';
-              Core.sfx.ding(); speed += 8;
+              Core.sfx.ding(); speed += 8; fxo.ring(LANES[lane] * W(), carY, '#FFE98A', 12, 240, 0.3);
+              fxo.burst(LANES[lane] * W(), carY, { n: 10, shape: 'star', colors: ['#FFD23F', '#FFE98A', '#FFFFFF'], speed: 260, gravity: 200, size: 9, life: 0.55 });
               it.el.remove(); if (stars >= GOAL) finish(); return false;
             }
             if (ghost <= 0) {
               // Choque: bote, sonido y se pierde la velocidad extra. Nada más.
-              Core.sfx.bonk(); ghost = 1.2; speed = BASE_SPEED;
+              Core.sfx.bonk(); ghost = 1.2; speed = BASE_SPEED; fxo.shake(8);
+              fxo.burst(LANES[lane] * W(), carY - 20, { n: 9, shape: 'puff', colors: ['#d9d9de', '#a9abb6', '#FF8A3D'], speed: 150, gravity: -30, size: 12, grow: 26, life: 0.55 });
               car.classList.remove('crash'); void car.offsetWidth; car.classList.add('crash');
               it.el.remove(); return false;
             }

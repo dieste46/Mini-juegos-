@@ -19,7 +19,7 @@ Games.push({
       let score = 0, stayMs = Math.max(900, 1500 - g.played * 60), gapMs = 900, seq = 0, done = false;
       root.innerHTML = `<div class="hud"><span>${T.targets[0]} <b id="sc">0</b> / ${GOAL}</span><div class="goalbar"><div id="bar"></div></div><span>🏆</span></div>
         <div class="play" style="background:${T.bg};--hole:${T.hole}"><div class="holes"></div></div>`;
-      const holesEl = root.querySelector('.holes'), sc = root.querySelector('#sc'), bar = root.querySelector('#bar');
+      const holesEl = root.querySelector('.holes'), sc = root.querySelector('#sc'), bar = root.querySelector('#bar'), fxo = Fx.overlay(root.querySelector('.play'));
       Core.say(hard ? `¡Toca a los ${T.word} cuando asomen! Pero a ${T.avoidName} no. A ver si pillas veinte.` : `¡Toca a los ${T.word} cuando asomen! A ver si pillas veinte.`);
 
       const holes = Array.from({ length: 9 }, () => {
@@ -28,12 +28,14 @@ Games.push({
           e.preventDefault();
           if (done || !h.classList.contains('up') || h.dataset.hit) return;
           h.dataset.hit = '1'; h.classList.add('hit');
-          if (h.dataset.kind === 'wolf') { Core.sfx.bonk(); Core.say(`¡Uy, ${T.avoidName}! A ese no.`); }
+          const [fx0, fy0] = fxo.at(h);
+          if (h.dataset.kind === 'wolf') { Core.sfx.bonk(); Core.say(`¡Uy, ${T.avoidName}! A ese no.`); fxo.shake(7); fxo.burst(fx0, fy0, { n: 8, shape: 'puff', colors: ['#8a8f9c', '#b5bac6'], speed: 120, gravity: -20, size: 12, grow: 22, life: 0.5 }); }
           else {
             const pts = h.dataset.kind === 'gold' ? 3 : 1;
             score = Math.min(GOAL, score + pts); sc.textContent = score; bar.style.width = (100 * score / GOAL) + '%';
             g.total = (g.total || 0) + pts;
             pts > 1 ? (Core.sfx.ding(), Core.celebrate()) : Core.sfx.pop();
+            fxo.ring(fx0, fy0, '#FFFFFF', 12, 260, 0.3); fxo.burst(fx0, fy0 - 10, { n: pts > 1 ? 20 : 10, shape: 'star', colors: ['#FFD23F', '#FFFFFF', '#FF5FA2'], speed: 260, gravity: 420, size: 9, life: 0.6 });
             stayMs = Math.max(700, stayMs - 20); gapMs = Math.max(450, gapMs - 15);
             if (score >= GOAL) { done = true; timers.push(setTimeout(finish, 600)); }
           }

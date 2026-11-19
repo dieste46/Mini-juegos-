@@ -121,3 +121,8 @@ El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a
 - **Iconos**: `img/icons/<nombre>.webp` (256 px, fondo transparente). Un juego lo usa con `art: t => 'nombre'` (o `null` para caer al emoji del tema).
 - Tipografías locales: Lilita One (títulos) y Nunito (texto), en `fonts/`.
 - **Iconos dentro de los juegos**: `Core.pic(emoji)` devuelve el icono ilustrado si el emoji está en la tabla `PICS` de `js/core.js` (y vuelve al emoji si la imagen falla). `Core.pics(lista)` solo cambia si todos tienen icono, para no mezclar estilos. Añadir un dibujo = copiar el `.webp` a `img/icons/` y apuntarlo en `PICS`.
+
+## Efectos y juegos en canvas
+
+- `js/fx.js`: partículas y sacudida sin librerías. `Fx.system()` para juegos que pintan en su propio canvas; `Fx.overlay(host)` pone un canvas transparente encima de un juego hecho con DOM (lo usan Globos, ¡Pilla, pilla! y Carrera). Respeta "reducir movimiento".
+- **Súper Rescate** se pinta entero en canvas 2D: escenario por capas (`SCENES.campo`, `SCENES.espacio`), lo que se esquiva (`HAZARDS`) y el héroe con su cesta. Cada tema lo configura con datos en `sets.rescate` (`scene`, `hazardKind`, `carry`, `heroArt`). El helicóptero son dos imágenes alineadas (`heli-cuerpo.webp` y `heli-rotor.webp`) para poder girar las palas.
