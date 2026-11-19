@@ -85,6 +85,7 @@ const Themes = (() => {
   // =========================== ESPACIO ===========================
   list.espacio = {
     id: 'espacio', name: 'Espacio', emoji: '🚀', say: '¡Despegamos! ¡Nos vamos al espacio!',
+    cards: { contar: '🪐', laberinto: '🛸' },   // para que no haya tres tarjetas con el mismo cohete
     background: () => stars(60, 1) + planet('planet') + earth() + moonGround(86),
     world: {
       name: 'Mi base espacial', icon: '🛰️', full: '¡Tu base espacial está completa! ¡Eres un astronauta de verdad!',

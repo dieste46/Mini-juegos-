@@ -697,3 +697,7 @@ body.sticker .raya-skin.on { border: 3px solid var(--line); }
 .spad.nope { animation: snope .4s; }
 @keyframes snope { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
 body.sticker .spad { border: 3px solid var(--line); box-shadow: 5px 5px 0 var(--line); }
+
+/* La barra de arriba queda siempre por encima del juego: nada del juego puede tapar la casa */
+.topbar { z-index: 30; }
+.confetti { pointer-events: none; }

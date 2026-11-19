@@ -42,7 +42,8 @@
   document.addEventListener('touchend', unlock);
 
   // ---------- Menú ----------
-  const emojiOf = g => typeof g.emoji === 'function' ? g.emoji(Themes.current()) : g.emoji;
+  // Emoji de la tarjeta: el que el tema fije para ese juego (cards), o el del propio juego
+  const emojiOf = g => (Themes.current().cards || {})[g.id] || (typeof g.emoji === 'function' ? g.emoji(Themes.current()) : g.emoji);
   // Dibujo de la tarjeta: imagen si el juego la tiene para este tema; si no, su emoji.
   const artOf = g => { const a = g.art && g.art(Themes.current()); return a ? `<img class="art" src="img/icons/${a}.webp" alt="" data-e="${emojiOf(g)}" onerror="this.outerHTML='<span class=emoji>'+this.dataset.e+'</span>'">` : `<span class="emoji">${emojiOf(g)}</span>`; };
   const TILES = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6', '#B79CFF'];
@@ -205,10 +206,15 @@
     document.body.classList.toggle('in-game', game.section === 'recreo');
     app.innerHTML = '';
     window.scrollTo(0, 0);
-    cleanup = game.start(app, () => (location.hash = '')) || null;
+    cleanup = game.start(app, goHome) || null;
   }
 
-  btnHome.onclick = () => (location.hash = '');
+  // Volver al menú. Si la dirección ya está vacía (no habría cambio que detectar), se repinta igualmente.
+  function goHome() { if (location.hash.length > 1) location.hash = ''; else route(); }
+  // La casa responde al levantar el dedo, no solo al "clic": en iOS el clic no llega si hay otro dedo apoyado en la pantalla.
+  let homeAt = 0;
+  btnHome.addEventListener('pointerup', e => { e.preventDefault(); homeAt = Date.now(); goHome(); });
+  btnHome.onclick = () => { if (Date.now() - homeAt > 500) goHome(); };
   window.addEventListener('hashchange', route);
   route();
 
