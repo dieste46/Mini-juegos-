@@ -64,6 +64,7 @@
       <button class="parents-link" id="parents">Zona de padres</button>`;
     const nth = {};
     Games.forEach(g => {
+      if (g.hidden) return;   // se entra desde otro juego
       const s = Core.gameState(g.id), sec = g.section || 'aprende';
       nth[sec] = (nth[sec] || 0) + 1;
       const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(s.level) + '☆'.repeat(g.maxLevel - s.level) : '';

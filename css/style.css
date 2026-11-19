@@ -659,3 +659,41 @@ body.theme-espacio .rcell { background: rgba(255,255,255,.09); }
 body.sticker .raya-board, body.sticker .raya-mode, body.sticker .raya-score .side { border: 3px solid var(--line); box-shadow: 5px 5px 0 var(--line); }
 body.sticker .rcell { border: 3px solid var(--line); }
 @media (prefers-reduced-motion: reduce) { .raya-score .side.on, .rcell.hint, .rcell.danger { animation: none; } }
+
+/* Tres en raya: el tablero mantiene sus casillas iguales tengan ficha o no (antes crecía la fila con ficha) */
+.raya-board { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.rcell { min-width: 0; min-height: 0; overflow: hidden; }
+.rcell .pz { width: 74%; height: 74%; display: grid; place-items: center; }
+.rcell .pz > img, .rcell .pz > svg { width: 100%; height: 100%; object-fit: contain; display: block; }
+.raya-score .side { opacity: 1; }                       /* sin transparencia: se veía la nube del fondo a través */
+.raya-score .side:not(.on) > * { opacity: .55; }
+.raya-score .pc { display: grid; place-items: center; width: 1.15em; height: 1.15em; }
+.raya-score .pc > svg, .raya-score .pc > img { width: 100%; height: 100%; }
+.xo { width: 1em; height: 1em; display: block; }
+.raya-skins { display: flex; justify-content: center; gap: 12px; margin-top: 12px; }
+.raya-skin { border: 0; border-radius: 999px; padding: 8px 16px; display: flex; gap: 6px; align-items: center; font-size: 2rem; line-height: 1; background: var(--track); cursor: pointer; opacity: .7; }
+.raya-skin.on { background: #FFD23F; opacity: 1; box-shadow: 0 4px 0 #C79A0E; }
+.raya-mode .me { display: grid; place-items: center; width: 1.1em; height: 1.1em; } .raya-mode .me > * { width: 100%; height: 100%; }
+.raya-mode.simon { background: #B79CFF; }
+.simon-ico { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; width: 1.05em; height: 1.05em; }
+.simon-ico i { border-radius: 30%; box-shadow: inset 0 -4px 0 rgba(0,0,0,.2); }
+body.sticker .raya-skin.on { border: 3px solid var(--line); }
+/* ---------- Repite con Bip (Simón) ---------- */
+.simon-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.simon-bip { width: 74px; flex: none; } .simon-bip svg { display: block; width: 100%; }
+.simon-say { font-size: 2.4rem; line-height: 1; }
+.simon-dots { flex: 1; display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; background: var(--chip); border-radius: 999px; padding: 10px 14px; min-height: 40px; box-shadow: inset 0 0 0 2px var(--panel-line); }
+.simon-dots i { width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.25); }
+.simon-dots i.on { background: #FFD23F; }
+.simon-wrap { display: grid; place-items: center; }
+.simon-pads { width: min(100%, 58vh, 520px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.spad { border: 0; border-radius: 34px; background: var(--c); border-bottom: 10px solid rgba(0,0,0,.24); cursor: pointer; display: grid; place-items: center; padding: 0;
+  transition: transform .08s, filter .08s; touch-action: manipulation; }
+.spad svg { width: 52%; height: 52%; fill: rgba(255,255,255,.55); stroke: rgba(255,255,255,.55); stroke-width: 6; }
+.simon-wrap.watch .spad { filter: saturate(.75) brightness(.82); }
+.simon-wrap .spad.on { filter: brightness(1.35) saturate(1.2); transform: scale(1.06); box-shadow: 0 0 0 7px #fff; }
+.spad.on svg { fill: #fff; stroke: #fff; }
+.spad.next { box-shadow: 0 0 0 7px #FFD23F; animation: rhint .5s ease-in-out infinite alternate; }
+.spad.nope { animation: snope .4s; }
+@keyframes snope { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+body.sticker .spad { border: 3px solid var(--line); box-shadow: 5px 5px 0 var(--line); }

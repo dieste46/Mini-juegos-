@@ -42,6 +42,13 @@
     return Core.pick(cand);
   }
 
+  // Fichas clásicas, dibujadas con el estilo de la web
+  const XO = { a: ['x', 'las equis'], b: ['o', 'los círculos'] };
+  const XO_SVG = {
+    x: '<svg class="xo" viewBox="0 0 100 100" aria-hidden="true"><path d="M25 25 L75 75 M75 25 L25 75" stroke="#B8185F" stroke-width="27" stroke-linecap="round"/><path d="M25 25 L75 75 M75 25 L25 75" stroke="#FF5FA2" stroke-width="17" stroke-linecap="round"/></svg>',
+    o: '<svg class="xo" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="29" fill="none" stroke="#0E8FA0" stroke-width="27"/><circle cx="50" cy="50" r="29" fill="none" stroke="#35D6E6" stroke-width="17"/></svg>'
+  };
+
   Games.push({
     id: 'raya', section: 'recreo',
     name: 'Tres en raya', emoji: '⭕', color: '#35D6E6',
@@ -52,18 +59,24 @@
       let timers = [], alive = true, fxo = null, told = false;
       const later = (fn, ms) => { const id = setTimeout(() => alive && fn(), ms); timers.push(id); return id; };
       const clear = () => { timers.forEach(clearTimeout); timers = []; if (fxo) { fxo.destroy(); fxo = null; } };
-      const side = p => T[p === 1 ? 'a' : 'b'], piece = p => Core.pic(side(p)[0]);
+      // g.skin: 'xo' (equis y círculos) o 'tema' (los personajes del tema)
+      const themed = () => g.skin === 'tema', side = p => (themed() ? T : XO)[p === 1 ? 'a' : 'b'];
+      const piece = p => (themed() ? Core.pic(side(p)[0]) : XO_SVG[side(p)[0]]);
 
       // ---------- Elegir: contra Bip o dos jugadores ----------
-      function choose() {
+      function choose(quiet) {
         clear();
+        const skin = (id, a, b) => `<button class="raya-skin${(g.skin || 'xo') === id ? ' on' : ''}" data-s="${id}" aria-label="${id === 'xo' ? 'Equis y círculos' : 'Personajes'}">${a}${b}</button>`;
         root.innerHTML = `<div class="prompt"><button class="speak-btn">🔊</button><span>¿Cómo jugamos?</span></div>
+          <div class="raya-skins">${skin('xo', XO_SVG.x, XO_SVG.o)}${skin('tema', Core.pic(T.a[0]), Core.pic(T.b[0]))}</div>
           <div class="raya-modes">
             <button class="raya-mode" data-m="1" aria-label="Jugar contra Bip"><span class="me">${piece(1)}</span><i>⚡</i><span class="bip">${Mascot.svg()}</span></button>
-            <button class="raya-mode" data-m="2" aria-label="Dos jugadores"><span class="me">${piece(1)}</span><i>⚡</i><span class="me">${piece(2)}</span></button></div>`;
-        const say = () => Core.say(`Tres en raya. Toca el robot para jugar contra ${Mascot.NAME}, o las dos fichas para jugar dos.`);
-        root.querySelector('.speak-btn').onclick = say; say();
-        root.querySelectorAll('.raya-mode').forEach(b => b.onclick = () => { Core.sfx.pop(); play(+b.dataset.m); });
+            <button class="raya-mode" data-m="2" aria-label="Dos jugadores"><span class="me">${piece(1)}</span><i>⚡</i><span class="me">${piece(2)}</span></button>
+            <button class="raya-mode simon" data-go="simon" aria-label="Repite con Bip">${(Games.find(x => x.id === 'simon') || { icon: () => '🎵' }).icon()}<i>🎵</i><span class="bip">${Mascot.svg()}</span></button></div>`;
+        const say = () => Core.say(`Tres en raya. Toca el robot para jugar contra ${Mascot.NAME}, o las dos fichas para jugar dos. Y los colores, para repetir lo que hace ${Mascot.NAME}.`);
+        root.querySelector('.speak-btn').onclick = say; if (!quiet) say();
+        root.querySelectorAll('.raya-skin').forEach(b => b.onclick = () => { g.skin = b.dataset.s; Core.save(); Core.sfx.pop(); choose(true); Core.say(`Con ${side(1)[1]} y ${side(2)[1]}.`); });
+        root.querySelectorAll('.raya-mode').forEach(b => b.onclick = () => { Core.sfx.pop(); b.dataset.go ? (location.hash = b.dataset.go) : play(+b.dataset.m); });
       }
 
       function play(mode) {
