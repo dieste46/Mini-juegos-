@@ -13,7 +13,7 @@ Un niño de 5 años, en 3º de Infantil; el curso que viene empieza Primaria. To
 
 Objetivo de fondo: que llegue a Primaria con la base de lectura hecha, para que pueda hacer solo los deberes. Leer no es exigible para empezar Primaria (Orden ECD/853/2022 de Aragón, art. 4.7), así que no hay prisa de calendario: se trata de autonomía, no de un listón.
 
-El contexto personal (nombre, pautas de logopedia, etc.) no está en este repo, que es público. Va en `docs/privado/contexto.md`, que no se sube.
+El contexto personal no está en este repo, que es público. Va en `docs/privado/contexto.md`, que no se sube.
 
 ## 2. Qué hay hecho
 

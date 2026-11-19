@@ -23,7 +23,7 @@ Antes de tocar nada, lee `docs/PLAN.md` (estado, prioridades y reparto de trabaj
 - Escalera de pistas antes que dar la solución: repetir más despacio, marcar lo siguiente, mostrar un trozo del camino.
 - Personajes siempre originales: nada de personajes de series, películas o marcas (ni parecidos).
 - La granja y el espacio conviven como temas. No meter el cerdito en todo con calzador.
-- Lo que tenga que ver con pronunciación o logopedia sigue la pauta de su logopeda: no se inventa progresión de sonidos.
+- En pronunciación no se inventa progresión de sonidos: las pautas y las listas de palabras las da la familia.
 
 ## Arquitectura
 
