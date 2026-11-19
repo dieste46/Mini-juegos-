@@ -45,6 +45,21 @@ Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles co
 - **Arte**: faltan las hojas de iconos de granja (gallina, girasol, árbol, oveja, casa, perro, tractor, sol, caballo, gato, pato, pollito, nube de tormenta y un cerdito nuevo, que el actual no convence) y de espacio (astronauta, cohete, estrella, Tierra, Luna, satélite, marcianito, platillo, robot), más iconos de tarjeta para Tres en raya y Laberinto.
 - **CSS por capas**: `css/style.css` acumula reglas que se pisan. Limpieza pendiente, no urgente.
 
+### Mudanza de alojamiento (decidida, pendiente de ejecutar)
+
+Pasar de GitHub Pages a Cloudflare Pages, con la dirección gratuita `*.pages.dev`, para poder tener el repo privado y un enlace de prueba por cada cambio.
+
+Ya preparado en el repo: la web está en `web/` (los documentos no se publican) y la copia de seguridad de la zona de padres incluye los dibujos de Pintar.
+
+Pasos que faltan, en este orden:
+1. En Cloudflare: Workers y Pages → crear proyecto de Pages → conectar con el repo. Sin preset ni comando de compilación; directorio de salida `web`; rama de producción `main`.
+2. En el iPhone, en la web antigua: zona de padres → "Guardar copia".
+3. Abrir la dirección nueva, zona de padres → "Recuperar copia", y añadir el icono a la pantalla de inicio. Borrar el icono antiguo.
+4. Poner el repo en privado. GitHub Pages dejará de servir la dirección antigua.
+5. Actualizar la dirección en `CLAUDE.md` y quitar `.github/workflows/pages.yml`.
+
+Cambiar de dirección obliga a repetir los pasos 2 y 3, así que si algún día se quiere dominio propio, mejor conectarlo antes de la mudanza.
+
 ## 4. Línea a seguir
 
 Por orden. Los tres primeros son bloques grandes; el resto, mejoras sueltas.
@@ -130,3 +145,4 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 - Iconos 3D tipo juguete generados fuera; los packs de assets externos, descartados por choque de estilo.
 - Tres en raya: solo variante de tres fichas; X/O por defecto. Simón dentro de Tres en raya.
 - Registro de uso solo local; nada de analítica de terceros.
+- Alojamiento: mudanza a Cloudflare Pages con repo privado; la web en `web/` para no publicar los documentos.

@@ -3,6 +3,9 @@
 Web de minijuegos para un niño de 5 años (3º de Infantil, todavía no lee). Publicada con GitHub Pages desde `main`:
 https://dieste46.github.io/Mini-juegos-/
 
+**La web vive en `web/`** y es la única carpeta que se publica. Las rutas de esta guía (`js/...`, `css/...`, `img/...`, `sw.js`) son relativas a `web/`.
+La documentación (`CLAUDE.md`, `README.md`, `docs/`) queda fuera de lo publicado.
+
 Antes de tocar nada, lee `docs/PLAN.md` (estado, prioridades y reparto de trabajo). Si existe `docs/privado/contexto.md`
 (no se sube al repo), léelo también: tiene el contexto personal del niño.
 
@@ -94,13 +97,14 @@ Todo el estilo "arcade" está al final de `css/style.css` y se gobierna con vari
 ## Publicar
 
 - **`main` es producción: es la versión con la que juega el niño.** Trabaja en una rama, prueba en el iPhone y solo entonces lleva a `main`.
+- Se publica el contenido de `web/` (`.github/workflows/pages.yml`). Está prevista la mudanza a Cloudflare Pages con el mismo directorio: ver `docs/PLAN.md`, apartado 3.
 - En cada publicación sube la versión de la caché en `sw.js` (`mini-juegos-vN`). **Hazlo con `sed -i`**, nunca reescribiendo el archivo sobre sí mismo: ya se publicó una vez vacío por eso.
 - El service worker es "red primero" y solo borra cachés que empiezan por `mini-juegos-` (el dominio de GitHub Pages se comparte con otros proyectos).
 
 ## Probar
 
 ```bash
-python3 -m http.server 8800        # desde la raíz del repo
+python3 -m http.server 8800 --directory web        # desde la raíz del repo
 ```
 
 - En el iPhone, por la wifi: `http://<ip-del-ordenador>:8800`. Para ver errores del móvil, inspector web de Safari desde un Mac.

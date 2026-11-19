@@ -4,6 +4,8 @@ Web de minijuegos para niños de 4–6 años, inspirada en juegapop.com. Lo prin
 
 Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se instala como app en la tablet o el móvil (PWA) y funciona offline tras la primera visita.
 
+> La web está en la carpeta `web/`, que es lo único que se publica. Las rutas de este documento son relativas a ella.
+
 ## Principios de diseño
 
 - **No hace falta saber leer.** Todas las instrucciones se dicen en voz alta (Web Speech API, voz es-ES) y el botón 🔊 las repite. Las respuestas son dibujos, cifras o letras grandes.

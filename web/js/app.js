@@ -168,8 +168,12 @@
     };
     const del = app.querySelector('#del-profile');
     if (del) del.onclick = () => { if (confirm(`¿Eliminar a ${P.name || 'este jugador'} y todo su progreso?`)) { Store.removeProfile(P.id); Themes.apply(); parents(); } };
+    // Los dibujos de Pintar viajan en la misma copia. Se preparan al abrir esta pantalla para que, al pulsar,
+    // compartir sea inmediato (en iOS, si se espera entre el toque y el "compartir", el sistema lo bloquea).
+    let arte = null; Art.exportAll().then(a => (arte = a));
     app.querySelector('#export').onclick = async () => {
-      const blob = new Blob([Store.exportJSON()], { type: 'application/json' });
+      const copy = JSON.parse(Store.exportJSON()); copy.arte = arte || await Art.exportAll();
+      const blob = new Blob([JSON.stringify(copy)], { type: 'application/json' });
       const file = new File([blob], `mini-juegos-copia-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
       if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Copia de Mini Juegos' }); } catch {} return; }
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
@@ -179,7 +183,9 @@
     app.querySelector('#import').onclick = () => fileIn.click();
     fileIn.onchange = async () => {
       const f = fileIn.files[0]; if (!f) return;
-      try { if (!confirm('¿Sustituir los datos de este dispositivo por los de la copia?')) return; Store.importJSON(await f.text()); Themes.apply(); alert('Copia recuperada'); parents(); }
+      try { if (!confirm('¿Sustituir los datos de este dispositivo por los de la copia?')) return; const copy = JSON.parse(await f.text()), dibujos = copy.arte; delete copy.arte;
+        Store.importJSON(JSON.stringify(copy)); const n = dibujos ? await Art.importAll(dibujos) : 0;
+        Themes.apply(); alert(n ? `Copia recuperada, con ${n} dibujos` : 'Copia recuperada'); parents(); }
       catch { alert('Ese archivo no es una copia válida de Mini Juegos.'); }
     };
     app.querySelector('#reset').onclick = () => { if (confirm(`¿Borrar todo el progreso de ${P.name || 'este jugador'}?`)) { Core.reset(); document.getElementById('star-count').textContent = 0; location.hash = ''; } };
