@@ -126,3 +126,5 @@ El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a
 
 - `js/fx.js`: partículas y sacudida sin librerías. `Fx.system()` para juegos que pintan en su propio canvas; `Fx.overlay(host)` pone un canvas transparente encima de un juego hecho con DOM (lo usan Globos, ¡Pilla, pilla! y Carrera). Respeta "reducir movimiento".
 - **Súper Rescate** se pinta entero en canvas 2D: escenario por capas (`SCENES.campo`, `SCENES.espacio`), lo que se esquiva (`HAZARDS`) y el héroe con su cesta. Cada tema lo configura con datos en `sets.rescate` (`scene`, `hazardKind`, `carry`, `heroArt`). El helicóptero son dos imágenes alineadas (`heli-cuerpo.webp` y `heli-rotor.webp`) para poder girar las palas.
+- **Carrera** también va en canvas 2D, vista desde detrás: la pista sale del horizonte y todo crece al acercarse (`sc(z) = 1 / (1 + K·z)`). Cada pista (`TRACKS.campo`, `TRACKS.espacio`) define colores, cielo, obstáculos y adornos; el tema la elige con `sets.carrera.scene`. Los obstáculos y la estrella están en `OBJ`.
+- `js/scene.js`: utilidades de dibujo compartidas por los juegos en canvas (nubes, árboles, casas, colinas, azar repetible).
