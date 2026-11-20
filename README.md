@@ -101,6 +101,7 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 - Safari ignora `user-scalable=no`, así que el zoom por pellizco (dos pulgares jugando) se bloquea por JS en `app.js` (`gesturestart`, `touchmove` multitáctil, doble toque) y, si aun así la página queda ampliada, se fuerza la vuelta a escala 1 tocando el `meta viewport`.
 - El audio y la voz solo arrancan tras el primer toque (`Core.unlockAudio`). Si no suena, revisar el interruptor de silencio del iPhone.
 - Icono de pantalla de inicio: `apple-touch-icon.png` (iOS no usa el SVG del manifest). Añadir a pantalla de inicio para ir a pantalla completa.
+- El icono es Bip sobre el cielo del espacio, dibujo propio. `icon.svg` es la fuente; los PNG (`icon-512.png`, `icon-192.png` y `apple-touch-icon.png`, de 180 px) son ese mismo dibujo a sangre, sin el recorte redondeado y sin transparencia: las esquinas las recorta el sistema.
 - Guardar dibujo: en iOS se usa la hoja de compartir (`navigator.share`), porque el atributo `download` no guarda en Fotos.
 
 ## Probar en local

@@ -135,6 +135,7 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
 - **Importar no debe guardar nada después**: `Store.save()` sella el perfil activo con la fecha del momento, y una copia tiene que entrar con sus fechas (la sincronización prevista decide por fecha). Por eso tras importar se usa `Core.refreshVoice()` y no `Core.setVoice()`.
 - **Lo que viene de fuera se valida y se escapa**: una copia importada (y, cuando exista, lo que baje de la nube) pasa por `Store.readBackup()`, y los nombres se pintan con `esc()`.
 - **Cambiar de dirección es cambiar de datos**: `localStorage` e IndexedDB van por origen, y en iOS la app instalada en la pantalla de inicio tiene además su almacén propio, separado de Safari. Importar hay que hacerlo desde el icono instalado.
+- **iOS fija el dibujo del icono al añadirlo a la pantalla de inicio.** Para que cambie hay que borrar el icono y volver a añadirlo, y al borrarlo se van sus datos: exportar antes e importar después.
 - **La barra superior** va por encima del juego (`z-index`), para que nada tape la casa.
 - **Timers y bucles**: todo `setTimeout` de un juego debe comprobar que el juego sigue vivo, y la función de limpieza debe pararlo todo. Si no, un juego cerrado repinta encima del menú.
 

@@ -298,6 +298,7 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 - Sin motor de juegos: canvas 2D propio para la acción, DOM para la interfaz.
 - Estilo: Día arcade en la granja, Noche arcade en el espacio, opción Pegatina por jugador.
 - Iconos 3D tipo juguete generados fuera; los packs de assets externos, descartados por choque de estilo.
+- Icono de la app: Bip sobre el cielo del espacio, dibujo propio. Sustituye al emoji del cerdito, que no era arte nuestro.
 - Tres en raya: solo variante de tres fichas; X/O por defecto. Simón dentro de Tres en raya.
 - Registro de uso solo local; nada de analítica de terceros.
 - Alojamiento: Cloudflare Pages en `mundojoor.pages.dev`, con repo privado al acabar la mudanza; la web en `web/` para no publicar los documentos. Rutas siempre relativas.
