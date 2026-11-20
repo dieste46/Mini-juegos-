@@ -60,7 +60,7 @@ Estado comprobado el 20/11/2026:
 - La vista previa de una rama está en `https://<alias>.mundojoor.pages.dev`, donde el alias es el nombre de la rama en minúsculas, con guiones en lugar de lo que no sea letra o número y recortado a 28 caracteres.
 
 Pasos que faltan, en este orden:
-1. En Cloudflare (Workers y Pages → mundojoor → Configuración → Compilación): directorio de salida `web`, directorio raíz vacío, sin comando de compilación, rama de producción `main`. Después, volver a desplegar. Web Analytics, desactivado: inyecta un script de terceros. No instalar el icono desde `/web/`: al corregir el directorio esa dirección deja de existir, y sería repetir lo del renombrado.
+1. En Cloudflare (Workers y Pages → mundojoor → Configuración → Compilación): directorio de salida `web`, directorio raíz vacío, sin comando de compilación, rama de producción `main`. El cambio solo vale para los despliegues nuevos: hace falta un push a la rama o "Reintentar implementación" en el panel. Está bien cuando `/` abre el juego y `/README.md` da 404. Web Analytics, desactivado: inyecta un script de terceros. No instalar el icono desde `/web/`: al corregir el directorio esa dirección deja de existir, y sería repetir lo del renombrado.
 2. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
 3. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
 4. Fusionar a `main`.
