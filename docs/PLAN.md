@@ -298,7 +298,7 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 - Sin motor de juegos: canvas 2D propio para la acción, DOM para la interfaz.
 - Estilo: Día arcade en la granja, Noche arcade en el espacio, opción Pegatina por jugador.
 - Iconos 3D tipo juguete generados fuera; los packs de assets externos, descartados por choque de estilo.
-- Nombres: la app es "Mundo Joor"; en el menú el título es "Mundo" y el nombre del jugador, y el saludo ya no lo repite (la voz sí le saluda por su nombre). Las secciones son "Minijuegos" (antes "¡A jugar!") y "Pequesabios". Los identificadores internos (`recreo`, `aprende`, `mini-juegos-*`) no cambian.
+- Nombres: la app y el título del menú son "Mundo Joor"; el nombre del jugador solo sale en el saludo. Se probó "Mundo" y el nombre del jugador como título y se descartó. Las secciones son "Minijuegos" (antes "¡A jugar!") y "Pequesabios". Los identificadores internos (`recreo`, `aprende`, `mini-juegos-*`) no cambian.
 - Icono de la app: Bip sobre el cielo del espacio, dibujo propio. Sustituye al emoji del cerdito, que no era arte nuestro.
 - Tres en raya: solo variante de tres fichas; X/O por defecto. Simón dentro de Tres en raya.
 - Registro de uso solo local; nada de analítica de terceros.

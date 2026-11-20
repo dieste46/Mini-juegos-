@@ -13,7 +13,7 @@ Antes de tocar nada, lee `docs/PLAN.md` (estado, prioridades y reparto de trabaj
 (no se sube al repo), léelo también: tiene el contexto personal del niño.
 
 **El repo es público.** No escribas en él nombres, fechas de nacimiento, datos del colegio ni nada de salud. Eso va en `docs/privado/`.
-Por eso el título del menú se compone en el dispositivo ("Mundo" y el nombre del jugador, que solo está en su guardado) y el nombre fijo de la app es "Mundo Joor". Las claves internas siguen siendo `mini-juegos-*`: no se renombran.
+El nombre de la app y el título del menú son "Mundo Joor"; el nombre del jugador solo aparece en el saludo y sale de su guardado, nunca del código. Las claves internas siguen siendo `mini-juegos-*`: no se renombran.
 
 ## Cómo trabajar con el autor
 

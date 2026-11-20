@@ -3,9 +3,8 @@
   const app = document.getElementById('app');
   const titleEl = document.getElementById('title');
   // Título con letras de colores (estilo cartel infantil).
-  const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); titleEl.classList.toggle('long', t.length > 16); } };
-  // Nombre de la app. En el menú el título es "Mundo" y el nombre del jugador; sin nombre, este.
-  const APP_NAME = 'Mundo Joor';
+  const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); } };
+  const APP_NAME = 'Mundo Joor';   // nombre de la app y título del menú
   Decor.mount();
   const btnHome = document.getElementById('btn-home');
 
@@ -38,6 +37,22 @@
     window.visualViewport.addEventListener('resize', () => { clearTimeout(unzoomTimer); unzoomTimer = setTimeout(unzoom, 250); });
   }
 
+  // ---------- PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada ----------
+  // Solo existe en las vistas previas (y en local). Se elige en la zona de padres. Quitar cuando se decida.
+  const BAR_TEST = /\.mundojoor\.pages\.dev$|^localhost$|^127\./.test(location.hostname);
+  const BAR_MODES = { normal: 'Como ahora', fija: 'Barra fija', quieta: 'Página quieta' };
+  const barMode = () => { try { return localStorage.getItem('mj-prueba-barra') || 'normal'; } catch { return 'normal'; } };
+  function applyBarMode() {
+    const m = BAR_TEST ? barMode() : 'normal';
+    document.body.classList.toggle('barra-fija', m === 'fija');
+    document.documentElement.classList.toggle('pagina-quieta', m === 'quieta');
+  }
+  if (BAR_TEST) {
+    const tb = document.querySelector('.topbar');
+    new ResizeObserver(() => document.documentElement.style.setProperty('--topbar-h', tb.offsetHeight + 'px')).observe(tb);
+    applyBarMode();
+  }
+
   // El audio (efectos y voz) en iOS solo arranca dentro de un toque del usuario.
   const unlock = () => { Core.unlockAudio(); document.removeEventListener('pointerdown', unlock); document.removeEventListener('touchend', unlock); };
   document.addEventListener('pointerdown', unlock);
@@ -53,13 +68,13 @@
   function menu() {
     window.speechSynthesis?.cancel();
     const name = Core.getName(), multi = Store.profiles().length > 1;
-    title.textContent = name ? `Mundo ${name}` : APP_NAME;
+    title.textContent = APP_NAME;
     btnHome.hidden = true;
     document.body.classList.remove('in-game');
     const themes = Object.values(Themes.list);
     app.innerHTML = `
       <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div>
-        <div class="bubble">¡Hola!<br><small>¿A qué jugamos?</small></div>
+        <div class="bubble">${name ? `¡Hola, ${esc(name)}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div>
         ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${esc(Store.profile.avatar)}</button>` : ''}</div>
       <div class="theme-pick">${themes.map(t => `<button class="theme-btn${t.id === Themes.current().id ? ' on' : ''}" data-t="${t.id}"><span>${t.emoji}</span>${t.name}</button>`).join('')}</div>
       <h2 class="section-title"><span>🎮</span> Minijuegos</h2><div class="menu-grid" id="recreo"></div>
@@ -145,6 +160,10 @@
       <table><tr><th>Juego</th><th>Nivel / marca</th><th>Acierto a la 1ª</th><th>Partidas</th></tr>${rows}</table>
       <p>⭐ Estrellas: ${P.stars}</p>
 
+      ${BAR_TEST ? `<h3>Prueba de la franja de arriba</h3>
+      <p><small>Solo en la vista previa. Instala esta dirección en la pantalla de inicio, ábrela desde el icono y mira en el menú con cuál se ve nítido el título.</small></p>
+      <p class="profiles">${Object.entries(BAR_MODES).map(([k, v]) => `<button class="barm${k === barMode() ? ' on' : ''}" data-m="${k}">${v}</button>`).join('')}</p>` : ''}
+
       <h3>Datos</h3>
       <p><small>Todo se guarda solo en este dispositivo. Exporta las partidas de vez en cuando: si se borran los datos del navegador o cambias de móvil o de tablet, las recuperas importando ese archivo.
         La copia lleva los jugadores, sus estrellas, el progreso de cada juego, los ajustes y los dibujos de Pintar. Importar sustituye las partidas que haya en este dispositivo.</small></p>
@@ -163,6 +182,7 @@
     sel.onchange = () => { Core.setVoice(sel.value); sample(); };
     app.querySelector('#test-voice').onclick = sample;
     app.querySelector('#save-name').onclick = () => { Core.setName(app.querySelector('#name').value); greeted = false; Core.say(`Hola, ${Core.getName() || 'campeón'}`); parents(); };
+    app.querySelectorAll('.barm').forEach(b => b.onclick = () => { try { localStorage.setItem('mj-prueba-barra', b.dataset.m); } catch {} applyBarMode(); parents(); });
     app.querySelectorAll('.look').forEach(b => b.onclick = () => { P.look = b.dataset.l; Store.save(); Themes.apply(); parents(); });
     app.querySelectorAll('.av').forEach(b => b.onclick = () => { P.avatar = b.dataset.a; Store.save(); parents(); });
     app.querySelectorAll('.pf').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; parents(); });
@@ -233,7 +253,7 @@
     btnHome.hidden = false;
     document.body.classList.toggle('in-game', game.section === 'recreo');
     app.innerHTML = '';
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0); app.scrollTop = 0;
     cleanup = game.start(app, goHome) || null;
   }
 
