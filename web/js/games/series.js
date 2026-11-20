@@ -10,7 +10,7 @@ Games.push({
     const SETS = Themes.set('series');
     const PATTERNS = { 1: ['AB'], 2: ['AAB', 'ABB', 'ABC'], 3: ['AABB', 'ABCB', 'ABAC', 'ABCD'] };
 
-    Core.runQuiz(root, {
+    return Core.runQuiz(root, {
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
         const set = Core.shuffle(Core.pics(Core.pick(SETS)));

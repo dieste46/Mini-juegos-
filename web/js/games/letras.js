@@ -26,7 +26,7 @@ Games.push({
     // Alarga la primera letra para que se oiga el sonido: "mmmono", "ooooso".
     const stretch = w => w[0].repeat(3) + w.slice(1);
 
-    Core.runQuiz(root, {
+    return Core.runQuiz(root, {
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
         if (level <= 2) {

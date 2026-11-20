@@ -17,7 +17,7 @@ Games.push({
       return Core.shuffle([...set]).map(v => ({ html: v, value: v, sayLabel: NUM[v] }));
     };
 
-    Core.runQuiz(root, {
+    return Core.runQuiz(root, {
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
         const [emoji, plural, gen] = Core.pick(ANIMALS);

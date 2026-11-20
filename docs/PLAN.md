@@ -38,7 +38,7 @@ Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles co
 
 ## 3. Pendiente conocido
 
-- **Casa que no respondía en iPhone** tras un juego. No se pudo reproducir en Chromium. Se blindó (responde a `pointerup`, barra por encima del juego, repinta si la dirección ya está vacía), pero la causa no está confirmada. Verificar en el iPhone con el inspector de Safari.
+- **Casa que no respondía en iPhone** tras un juego. Encontrada una causa, reproducible en Chromium: en Cuenta, Colores, Letras y Series, al pulsar la casa en el segundo y medio que sigue a un acierto, la siguiente pregunta se pintaba encima del menú, ya sin botón de casa (el motor de preguntas no tenía limpieza). Arreglado en `Core.runQuiz`, que ahora devuelve su función de limpieza. Falta confirmar en el iPhone que era esto y que no hay otra causa.
 - **Service worker**: tras actualizarse, la caché nueva queda vacía hasta la siguiente carga con red. Sin conexión justo después de una actualización, puede faltar algún archivo.
 - **Nada de lo hecho en canvas está probado a fondo en iPhone.** En Carrera hay que validar la dificultad de la vista desde detrás: se ajusta con `BASE` (velocidad) y `Z0` (distancia de aparición).
 - **Repite con Bip sin tarjeta propia**: decidir tras observar si lo encuentra. Sacarlo al menú es quitar `hidden`.

@@ -23,7 +23,7 @@ Games.push({
     };
     const colorWord = (c, shape) => shape && shape[2] === 'f' ? c[1] : c[0];
 
-    Core.runQuiz(root, {
+    return Core.runQuiz(root, {
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
         if (level === 1) {

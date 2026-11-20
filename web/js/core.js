@@ -126,9 +126,13 @@ const Core = (() => {
 
   // ---------- Motor genérico de preguntas de opción múltiple ----------
   // game = { id, maxLevel, makeQuestion(level) -> { say, text, stage (html|node), options:[{html, value, sayLabel}], answer } }
+  // Devuelve la función de limpieza: el juego tiene que devolverla desde start().
   function runQuiz(root, game, onExit) {
-    let qIndex = 0;
+    let qIndex = 0, alive = true;
     const g = gameState(game.id);
+    // Tras un acierto se espera antes de la siguiente pregunta. Si en ese rato se sale con la casa,
+    // lo pendiente no debe ejecutarse: repintaría la pregunta encima del menú, ya sin botón de casa.
+    const later = (fn, ms) => setTimeout(() => { if (alive) fn(); }, ms);
 
     const BLOCKS = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6'];
     const isShort = h => typeof h === 'number' || (typeof h === 'string' && h.length <= 2 && !h.includes('<'));
@@ -163,7 +167,7 @@ const Core = (() => {
             const st = root.querySelectorAll('.progress span')[qIndex]; if (st) st.classList.add('on', 'new');
             say(praise() + (q.explain ? ' ' + q.explain : ''));
             qIndex++;
-            setTimeout(next, q.explain ? 2600 : 1500);
+            later(next, q.explain ? 2600 : 1500);
           } else {
             errors++;
             b.classList.add('wrong'); Mascot.mood(buddy, 'wow', 1300);
@@ -176,7 +180,7 @@ const Core = (() => {
       });
       root.appendChild(opts);
       root.appendChild(buddy);
-      setTimeout(() => say(q.say), 250);
+      later(() => say(q.say), 250);
     }
 
     function finish() {
@@ -185,6 +189,7 @@ const Core = (() => {
     }
 
     next();
+    return () => { alive = false; };
   }
 
   // ---------- Efectos de sonido sintetizados (sin archivos de audio) ----------
