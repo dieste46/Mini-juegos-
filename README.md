@@ -1,6 +1,6 @@
-# Mini Juegos
+# Mundo Joor
 
-Web de minijuegos para niños de 4–6 años, inspirada en juegapop.com. Lo principal es pasarlo bien (sección **¡A jugar!**); hay además una sección **Aprende jugando** con juegos educativos que se adaptan a su nivel.
+Web de minijuegos para niños de 4–6 años, inspirada en juegapop.com. Lo principal es pasarlo bien (sección **Minijuegos**); hay además una sección **Pequesabios** con juegos educativos que se adaptan a su nivel.
 
 Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se instala como app en la tablet o el móvil (PWA) y funciona offline tras la primera visita.
 
@@ -15,7 +15,7 @@ Sin registro, sin anuncios, sin dependencias ni build: HTML + CSS + JS plano. Se
 - **Rondas cortas** (5 preguntas), pensadas para sesiones de 5–10 minutos.
 - **Zona de padres** (protegida con una multiplicación) con nivel, % de acierto a la primera y partidas por juego, y el nombre del niño para que la voz le salude y le anime. Los datos se guardan solo en el dispositivo (localStorage).
 
-## ¡A jugar! (recreo)
+## Minijuegos (recreo)
 
 | Juego | Cómo se juega |
 |---|---|
@@ -32,7 +32,7 @@ Ningún juego castiga: no hay vidas, cronómetros ni cruces rojas; lo que se esc
 
 Tarjeta fija arriba del menú (`js/farm.js`). Las estrellas de cualquier juego hacen crecer la granja: 18 amigos y edificios que llegan a las 0, 3, 6, 10, 14, 19, 24, 30, 36, 43, 50, 58, 66, 75, 85, 95, 106 y 118 estrellas. Al tocar cada uno salta, suena y la voz dice su nombre. Cuando hay regalo nuevo la tarjeta late y la voz avisa. Nunca se pierde nada.
 
-## Aprende jugando
+## Pequesabios (aprende)
 
 | Juego | Qué trabaja | Niveles |
 |---|---|---|

@@ -1,6 +1,6 @@
 {
-  "name": "Mini Juegos",
-  "short_name": "Juegos",
+  "name": "Mundo Joor",
+  "short_name": "Mundo Joor",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

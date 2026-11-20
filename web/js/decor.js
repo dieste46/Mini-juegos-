@@ -4,7 +4,8 @@ const Decor = (() => {
 
   function rainbow(text) {
     let i = 0;
-    return [...text].map(ch => ch === ' ' ? ' ' : `<span style="color:${RAINBOW[i++ % RAINBOW.length]}">${ch}</span>`).join('');
+    const esc = ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch] || ch);   // el título puede llevar el nombre del jugador
+    return [...text].map(ch => ch === ' ' ? ' ' : `<span style="color:${RAINBOW[i++ % RAINBOW.length]}">${esc(ch)}</span>`).join('');
   }
 
   const cloud = (cls) => `<svg class="cloud ${cls}" viewBox="0 0 120 60" aria-hidden="true">

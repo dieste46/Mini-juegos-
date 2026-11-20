@@ -1,4 +1,4 @@
-/* Bip: la mascota de Mini Juegos, un robot redondo dibujado en SVG (personaje propio).
+/* Bip: la mascota de Mundo Joor, un robot redondo dibujado en SVG (personaje propio).
    Sirve para cualquier tema: granja, espacio o los que vengan. */
 const Mascot = (() => {
   const NAME = 'Bip';

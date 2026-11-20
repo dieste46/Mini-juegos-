@@ -620,6 +620,8 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 /* Los títulos largos (Súper Rescate, Mi base espacial) caben en una línea */
 .topbar h1 { font-size: clamp(1.35rem, 6.6vw, 2.1rem); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-bottom: 3px; }
 body.sticker .topbar h1 { overflow: visible; }
+/* "Mundo" + un nombre largo: letra más pequeña antes que cortarlo */
+.topbar h1.long { font-size: clamp(1.05rem, 5vw, 1.6rem); }
 
 /* ---------- Tres en raya ---------- */
 .raya-modes { display: grid; gap: 18px; margin-top: 16px; }

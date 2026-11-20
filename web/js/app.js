@@ -3,7 +3,9 @@
   const app = document.getElementById('app');
   const titleEl = document.getElementById('title');
   // Título con letras de colores (estilo cartel infantil).
-  const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); } };
+  const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); titleEl.classList.toggle('long', t.length > 16); } };
+  // Nombre de la app. En el menú el título es "Mundo" y el nombre del jugador; sin nombre, este.
+  const APP_NAME = 'Mundo Joor';
   Decor.mount();
   const btnHome = document.getElementById('btn-home');
 
@@ -50,18 +52,18 @@
   let greeted = false;
   function menu() {
     window.speechSynthesis?.cancel();
-    title.textContent = 'Mini Juegos';
+    const name = Core.getName(), multi = Store.profiles().length > 1;
+    title.textContent = name ? `Mundo ${name}` : APP_NAME;
     btnHome.hidden = true;
     document.body.classList.remove('in-game');
-      const name = Core.getName(), multi = Store.profiles().length > 1;
     const themes = Object.values(Themes.list);
     app.innerHTML = `
       <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div>
-        <div class="bubble">${name ? `¡Hola, ${esc(name)}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div>
+        <div class="bubble">¡Hola!<br><small>¿A qué jugamos?</small></div>
         ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${esc(Store.profile.avatar)}</button>` : ''}</div>
       <div class="theme-pick">${themes.map(t => `<button class="theme-btn${t.id === Themes.current().id ? ' on' : ''}" data-t="${t.id}"><span>${t.emoji}</span>${t.name}</button>`).join('')}</div>
-      <h2 class="section-title"><span>🎮</span> ¡A jugar!</h2><div class="menu-grid" id="recreo"></div>
-      <h2 class="section-title"><img src="img/icons/libros.webp" alt=""> Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
+      <h2 class="section-title"><span>🎮</span> Minijuegos</h2><div class="menu-grid" id="recreo"></div>
+      <h2 class="section-title"><img src="img/icons/libros.webp" alt=""> Pequesabios</h2><div class="menu-grid" id="aprende"></div>
       <button class="parents-link" id="parents">Zona de padres</button>`;
     const nth = {};
     Games.forEach(g => {
@@ -176,8 +178,8 @@
     app.querySelector('#export').onclick = async () => {
       const copy = Store.exportBackup(arte || await Art.exportAll());
       const blob = new Blob([JSON.stringify(copy)], { type: 'application/json' });
-      const file = new File([blob], `mini-juegos-partidas-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Partidas de Mini Juegos' }); } catch {} return; }
+      const file = new File([blob], `mundojoor-partidas-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: `Partidas de ${APP_NAME}` }); } catch {} return; }
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     };
@@ -191,8 +193,8 @@
       try { copy = Store.readBackup(JSON.parse(await f.text())); }
       catch (e) {
         alert(e && e.code === 'nueva'
-          ? 'Esa copia está hecha con una versión más nueva de Mini Juegos. Abre la app con conexión para que se actualice y vuelve a probar.'
-          : 'Ese archivo no es una copia válida de Mini Juegos.');
+          ? `Esa copia está hecha con una versión más nueva de ${APP_NAME}. Abre la app con conexión para que se actualice y vuelve a probar.`
+          : `Ese archivo no es una copia válida de ${APP_NAME}.`);
         return;
       }
       // Un nivel por encima del máximo que esta versión conoce para ese juego se queda en el máximo.

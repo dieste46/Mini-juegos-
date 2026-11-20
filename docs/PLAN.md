@@ -1,4 +1,4 @@
-# Plan de Mini Juegos
+# Plan de Mundo Joor
 
 Actualizado: 20/11/2026. Quien cierre algo actualiza los apartados 2, 3 y 6.
 
@@ -241,7 +241,7 @@ Sustituye con el tiempo al juego Letras. Copia la ficha semanal del colegio, que
 4. **Construyo**: formar la letra con materiales (cuerda, limpiapipas).
 5. **Escribo palabras**: palabras que empiezan por esa letra, en mayúsculas.
 
-En la web, un juego `abecedario` en "Aprende jugando":
+En la web, un juego `abecedario` en "Pequesabios":
 
 - **Entrada**: rejilla del abecedario. La "letra de la semana" (se fija en la zona de padres) aparece destacada; las demás están abiertas. Cada letra completada gana un sello.
 - **Cinco estaciones cortas por letra**, todas acaban en acierto:
@@ -293,11 +293,12 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 ## 6. Decisiones tomadas
 
 - Primero entretenimiento; lo educativo va ganando peso con progresión real, no con más juegos sueltos.
-- Se amplía "Aprende jugando" en esta web. La app de aprendizaje aparte, descartada.
+- Se amplía "Pequesabios" (antes "Aprende jugando") en esta web. La app de aprendizaje aparte, descartada.
 - Lectoescritura antes que el resto, siguiendo el método del colegio (mayúscula de imprenta, minúscula ligada, una letra por semana).
 - Sin motor de juegos: canvas 2D propio para la acción, DOM para la interfaz.
 - Estilo: Día arcade en la granja, Noche arcade en el espacio, opción Pegatina por jugador.
 - Iconos 3D tipo juguete generados fuera; los packs de assets externos, descartados por choque de estilo.
+- Nombres: la app es "Mundo Joor"; en el menú el título es "Mundo" y el nombre del jugador, y el saludo ya no lo repite (la voz sí le saluda por su nombre). Las secciones son "Minijuegos" (antes "¡A jugar!") y "Pequesabios". Los identificadores internos (`recreo`, `aprende`, `mini-juegos-*`) no cambian.
 - Icono de la app: Bip sobre el cielo del espacio, dibujo propio. Sustituye al emoji del cerdito, que no era arte nuestro.
 - Tres en raya: solo variante de tres fichas; X/O por defecto. Simón dentro de Tres en raya.
 - Registro de uso solo local; nada de analítica de terceros.
