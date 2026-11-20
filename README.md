@@ -84,8 +84,17 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 
 - Cambiar el formato = subir `v` y añadir el paso en `migrate()`. Lo antiguo (`juegos-peque-v1`) se migra solo y se deja como copia.
 - Guardado agrupado (400 ms) y forzado al salir de la app; `navigator.storage.persist()` para que el navegador no lo borre.
-- Copia de seguridad en la zona de padres (exportar / importar JSON). Los dibujos de Pintar van aparte, en IndexedDB (`mini-juegos-arte`), y no entran en esa copia: se sacan con el botón de enviar.
-- Sincronizar en la nube más adelante = otro adaptador con `load()`/`save()` en `store.js` (p. ej. Supabase, una fila por perfil con `updated` para resolver conflictos). El resto del código no cambia.
+- Copia de seguridad en la zona de padres: "Exportar partidas" e "Importar partidas". El archivo lleva su propia versión de formato, distinta de la del guardado:
+
+```
+{ app: 'mini-juegos', format: 1, exportedAt, origin,
+  store: { v, active, device, profiles },      // el guardado entero
+  arte:  [ { id, profile, page, w, h, updated, paint, thumb } ] }   // dibujos de Pintar (IndexedDB `mini-juegos-arte`), con la imagen como data URL
+```
+
+- Importar (`Store.readBackup` → confirmación → `Store.importBackup`): primero se valida y se limpia el archivo sin tocar nada, luego se enseña qué trae y solo al aceptar se sustituye lo guardado. Lo anterior queda en `mini-juegos-store-anterior`. Los dibujos se añaden por `id`; no se borran los que hubiera. También se aceptan las copias antiguas, que eran el guardado sin sobre con `arte` dentro.
+- Cambiar el formato del archivo = subir `FORMAT` en `store.js` y añadir el paso en `readBackup()`. Una copia con un formato o un guardado más nuevo que el de la app se rechaza con un aviso.
+- Sincronizar en la nube: diseñado en `docs/PLAN.md`, apartado 4.0 (un Worker aparte, `mundo-api`, y un módulo `js/sync.js`). `store.js` seguirá siendo la única puerta al guardado.
 
 ## iPhone / iPad
 
@@ -97,13 +106,15 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 ## Probar en local
 
 ```bash
-python3 -m http.server 8000
-# abre http://localhost:8000
+python3 -m http.server 8800 --directory web     # desde la raíz del repo
+# abre http://localhost:8800
 ```
 
 ## Publicar
 
-El workflow `.github/workflows/pages.yml` publica en GitHub Pages en cada push a `main`. En el repo: *Settings → Pages → Source: GitHub Actions*.
+Cloudflare Pages publica la carpeta `web/` en cada push a `main` (https://mundojoor.pages.dev), sin compilación, y crea una vista previa por cada rama. Todas las rutas de la web son relativas, para que funcione servida desde la raíz o desde una subcarpeta.
+
+Mientras dure la mudanza, el workflow `.github/workflows/pages.yml` sigue publicando lo mismo en GitHub Pages (https://dieste46.github.io/mundojoor/).
 
 ## Ideas siguientes
 

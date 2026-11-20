@@ -1,6 +1,6 @@
 # Plan de Mini Juegos
 
-Actualizado: 19/11/2026. Quien cierre algo actualiza los apartados 2, 3 y 6.
+Actualizado: 20/11/2026. Quien cierre algo actualiza los apartados 2, 3 y 6.
 
 ## 1. Para quién y para qué
 
@@ -34,7 +34,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Letras | `letras` | aprende | preguntas | Sonido inicial con 10 letras (3 niveles). Se queda corto: ver 4.2 |
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
 
-Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, exportar e importar), PWA sin conexión.
+Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, exportar e importar partidas con formato versionado), PWA sin conexión.
 
 ## 3. Pendiente conocido
 
@@ -45,24 +45,177 @@ Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles co
 - **Arte**: faltan las hojas de iconos de granja (gallina, girasol, árbol, oveja, casa, perro, tractor, sol, caballo, gato, pato, pollito, nube de tormenta y un cerdito nuevo, que el actual no convence) y de espacio (astronauta, cohete, estrella, Tierra, Luna, satélite, marcianito, platillo, robot), más iconos de tarjeta para Tres en raya y Laberinto.
 - **CSS por capas**: `css/style.css` acumula reglas que se pisan. Limpieza pendiente, no urgente.
 
-### Mudanza de alojamiento (decidida, pendiente de ejecutar)
+### Mudanza de alojamiento (en marcha)
 
-Pasar de GitHub Pages a Cloudflare Pages, con la dirección gratuita `*.pages.dev`, para poder tener el repo privado y un enlace de prueba por cada cambio.
+De GitHub Pages a Cloudflare Pages, con la dirección gratuita `https://mundojoor.pages.dev`, para poder tener el repo privado y un enlace de prueba por cada rama.
 
-Ya preparado en el repo: la web está en `web/` (los documentos no se publican) y la copia de seguridad de la zona de padres incluye los dibujos de Pintar.
+Hecho:
+- El repo se llama `mundojoor` (antes `Mini-juegos-`).
+- La web funciona igual desde la raíz y desde una subcarpeta: todas las rutas son relativas, el manifest declara `scope` y hay `404.html`.
+- Exportar e importar partidas con formato versionado. El importador acepta también las copias de la versión anterior, que es como salen de la web antigua.
+
+Configuración del proyecto en Cloudflare Pages (comprobar en el panel): sin compilación, rama de producción `main`, directorio raíz vacío y directorio de salida `web`. Con la salida en la raíz del repo la web quedaría en `/web/`, la portada daría 404 y se publicarían los documentos. Web Analytics, desactivado: inyecta un script de terceros.
+
+Qué cambia al renombrar el repo: GitHub no redirige las direcciones de Pages. La web de GitHub pasa a `https://dieste46.github.io/mundojoor/` y `/Mini-juegos-/` deja de responder. El icono ya instalado apunta a la dirección antigua: con conexión enseñará un 404, porque el service worker solo recurre a la caché cuando no hay red. Los datos siguen dentro de ese icono. (Pendiente de confirmar en el móvil.)
 
 Pasos que faltan, en este orden:
-1. En Cloudflare: Workers y Pages → crear proyecto de Pages → conectar con el repo. Sin preset ni comando de compilación; directorio de salida `web`; rama de producción `main`.
-2. En el iPhone, en la web antigua: zona de padres → "Guardar copia".
-3. Abrir la dirección nueva, zona de padres → "Recuperar copia", y añadir el icono a la pantalla de inicio. Borrar el icono antiguo.
-4. Poner el repo en privado. GitHub Pages dejará de servir la dirección antigua.
-5. Actualizar la dirección en `CLAUDE.md` y quitar `.github/workflows/pages.yml`.
+1. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
+2. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
+3. Fusionar a `main`.
+4. En cada dispositivo: abrir `https://mundojoor.pages.dev` en Safari → Compartir → "Añadir a pantalla de inicio" → abrir desde el icono nuevo → zona de padres → "Importar partidas". En este orden: la app instalada no ve lo que se haya importado en Safari. Borrar el icono antiguo.
+5. Pasados unos días con las dos versiones en paralelo: quitar `.github/workflows/pages.yml`, desactivar Pages en GitHub, poner el repo en privado y quitar de `CLAUDE.md` la mención a GitHub Pages.
 
-Cambiar de dirección obliga a repetir los pasos 2 y 3, así que si algún día se quiere dominio propio, mejor conectarlo antes de la mudanza.
+Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir los pasos 1 y 4, hasta que exista la sincronización de 4.0: con ella bastará teclear el código de familia en la dirección nueva.
 
 ## 4. Línea a seguir
 
-Por orden. Los tres primeros son bloques grandes; el resto, mejoras sueltas.
+Por orden. De 4.0 a 4.3 son bloques grandes; el resto, mejoras sueltas. 4.0 va delante de 4.1 porque cambia el esquema del guardado, y conviene que el registro de uso nazca ya sobre él.
+
+### 4.0 Sincronización en la nube: `mundo-api` (diseñado, sin implementar)
+
+Para que el iPhone y el iPad compartan el progreso y para que cambiar de aparato o de dirección no dependa de acordarse de exportar. Una sola API para todos los juegos de la familia: mundojoor, mundobloque y los que vengan.
+
+**Principios**
+
+- Local primero: el juego lee y escribe siempre en el dispositivo y nunca espera a la red. Sincronizar es un trabajo de fondo que puede fallar sin que se note.
+- Sin cuentas ni correo: un "código de familia" une los dispositivos.
+- Perfiles por niño. Un registro por perfil y juego, con `updatedAt`. Gana el más reciente.
+- La API no sabe nada de cada juego: guarda JSON opaco. Un juego nuevo no obliga a tocarla.
+
+**Piezas**
+
+| Pieza | Dónde vive | Qué hace |
+|---|---|---|
+| `mundo-api` | Worker de Cloudflare con D1, en su propio repo | Guarda y reparte registros. Es lo único que toca la base de datos |
+| `js/sync.js` (`Sync`) | Cliente; el mismo archivo en todos los juegos | Cola de pendientes, llamadas a la API, reintentos. No conoce los juegos |
+| `js/store.js` (`Store`) | Cliente; propio de cada juego | Sigue siendo la única puerta al guardado local. Dice qué ha cambiado y aplica lo que llega |
+
+Es un Worker aparte y no funciones dentro de cada web porque lo comparten varios juegos, cada uno en su dominio: una base de datos, un despliegue, y las webs siguen siendo estáticas. El precio es que las llamadas cruzan de dominio (CORS).
+
+**Código de familia**
+
+- Lo genera el servidor al crear la familia: 12 caracteres en tres grupos (`K7QM-2XHD-9TFP`), con un alfabeto sin letras que se confunden (sin I, L, O ni U). Son 60 bits.
+- Es la única credencial: quien lo tiene lee y escribe los datos de esa familia. Se enseña en la zona de padres para teclearlo en el otro dispositivo. Tiene que poder teclearse: en iOS la app instalada no comparte datos con Safari, así que un enlace no sirve.
+- El servidor guarda solo su SHA-256, que hace de `family_id`. El código en claro vive en los dispositivos, en los ajustes del aparato, y no entra en la copia exportada.
+- Viaja en la cabecera `Authorization: Bearer`, nunca en la dirección.
+
+**Datos (D1)**
+
+```sql
+CREATE TABLE families (
+  id         TEXT PRIMARY KEY,           -- SHA-256 del código de familia
+  created_at INTEGER NOT NULL,
+  seq        INTEGER NOT NULL DEFAULT 0  -- contador de cambios aceptados: es el cursor de sincronización
+);
+CREATE TABLE profiles (                  -- el niño: común a todos los juegos
+  family_id  TEXT NOT NULL,
+  profile_id TEXT NOT NULL,
+  data       TEXT NOT NULL,              -- JSON: { name, avatar }
+  updated_at INTEGER NOT NULL,           -- ms, reloj del dispositivo que hizo el cambio
+  deleted    INTEGER NOT NULL DEFAULT 0,
+  seq        INTEGER NOT NULL,
+  PRIMARY KEY (family_id, profile_id)
+);
+CREATE TABLE records (                   -- un registro por perfil y juego
+  family_id  TEXT NOT NULL,
+  profile_id TEXT NOT NULL,
+  app        TEXT NOT NULL,              -- 'mundojoor', 'mundobloque'…
+  game       TEXT NOT NULL,              -- 'contar', 'laberinto'…; '_app' para lo general del perfil en esa app
+  data       TEXT NOT NULL,              -- JSON opaco para el servidor
+  updated_at INTEGER NOT NULL,
+  deleted    INTEGER NOT NULL DEFAULT 0,
+  seq        INTEGER NOT NULL,
+  PRIMARY KEY (family_id, profile_id, app, game)
+);
+CREATE INDEX records_pull ON records (family_id, app, seq);
+```
+
+- En mundojoor, cada minijuego es un registro con lo que hoy es `profile.games[id]`. El registro `_app` lleva lo general del perfil en esta web: tema, estilo y mundos vistos.
+- `updated_at` decide quién gana. Lo pone el dispositivo; el servidor lo recorta a su propia hora si llega del futuro, para que un aparato con la fecha mal no gane siempre.
+- `seq` decide qué hay nuevo ("dame lo cambiado desde el 41"). Lo pone el servidor, así que saber qué falta por bajar no depende del reloj de nadie.
+- Los borrados son una marca (`deleted`), no quitar la fila: el borrado también tiene que propagarse.
+- Límites: 64 KB por registro y 1 MB por petición.
+
+**API (v1)**
+
+| Ruta | Qué hace |
+|---|---|
+| `POST /v1/families` | Crea una familia y devuelve su código. Sin credencial; muy limitada por IP |
+| `POST /v1/sync` | Con el código. Sube los cambios pendientes y baja lo nuevo, en una sola llamada |
+| `DELETE /v1/family` | Con el código. Borra todo lo de esa familia |
+| `GET /v1/health` | Para comprobar despliegues |
+
+```
+POST /v1/sync
+→ { app: "mundojoor", since: 41,
+    profiles: [ { id, updatedAt, deleted, data: { name, avatar } } ],
+    records:  [ { profile, game, updatedAt, deleted, data: { … } } ] }
+← { cursor: 57,
+    profiles: [ … ],      // perfiles cambiados desde `since`
+    records:  [ … ] }     // registros de esta app cambiados desde `since`, incluidos los que han ganado a lo enviado
+```
+
+- Cada cambio entra con `INSERT … ON CONFLICT DO UPDATE … WHERE excluded.updated_at > updated_at`: solo si es más reciente que lo que hay. A igualdad de fecha se queda el que estaba.
+- Es idempotente: repetir la misma petición no cambia nada, así que el cliente reintenta sin miedo.
+- Toda la petición va en una transacción.
+- Un código desconocido responde 401. No se crean familias por el mero hecho de sincronizar, para que un error al teclear no abra una familia vacía.
+
+**CORS y abuso**
+
+- Lista de orígenes permitidos en una variable del Worker: `https://mundojoor.pages.dev`, el de mundobloque y el de cada juego nuevo. Se responde con el origen concreto, nunca con `*`, y con `Vary: Origin`.
+- La petición previa (`OPTIONS`) se contesta con los métodos y cabeceras justos (`authorization`, `content-type`) y un día de validez.
+- Una petición con un `Origin` que no esté en la lista recibe un 403.
+- Las vistas previas de las ramas (`https://<rama>.mundojoor.pages.dev`) hablan con un Worker y una base de datos de pruebas aparte. Nunca con los datos de verdad.
+- CORS solo frena a otras webs dentro de un navegador; un programa cualquiera puede mandar el `Origin` que quiera. La protección real es el código (60 bits) más el límite de intentos: del orden de 10 códigos fallidos por IP y hora, y 5 familias nuevas por IP y día.
+- En los registros del Worker no se escribe ni el código ni el contenido.
+
+**Cliente**
+
+- `Store` ya es la única puerta al guardado y lo sigue siendo. Pasa al esquema v3: cada registro lleva su `updatedAt` y una marca de pendiente de subir. Los juegos no se tocan: al guardar, `Store` compara cada `games[id]` con lo último guardado y sella los que han cambiado. Ofrece dos funciones nuevas: `Store.changes()`, lo pendiente, y `Store.apply(remotos)`, que aplica lo que llega si es más reciente que lo local.
+- `Sync` es un módulo nuevo, `js/sync.js`, idéntico en todos los juegos: `Sync.init({ api, app, store })`. Guarda en los ajustes del dispositivo el código, el cursor y la fecha de la última sincronización.
+- Cuándo sincroniza: al abrir la app, al volver al menú después de un juego, al pasar a segundo plano, al recuperar la conexión y con el botón de la zona de padres. Nunca en mitad de una partida.
+- Si falla (sin red, API caída): lo pendiente se queda en la cola y se reintenta en la siguiente ocasión. Si el código deja de valer (401), se para y se avisa en la zona de padres.
+- El service worker no se toca: solo intercepta `GET`, y la API va por `POST` a otro dominio.
+- En la copia de GitHub Pages, mientras exista, la sincronización queda apagada: su origen no está en la lista.
+
+**Zona de padres**
+
+- "Sincronizar entre dispositivos": *Crear código de familia* o *Tengo un código*.
+- Ya vinculado: el código (oculto hasta tocarlo), "Última sincronización: hace 5 min", *Sincronizar ahora* y *Desvincular este dispositivo* (lo local se queda).
+- Al unirse un dispositivo que ya tiene partidas, los perfiles con el mismo `id` se mezclan registro a registro; los demás quedan como jugadores distintos. Para que el iPhone y el iPad compartan `id` basta con importar la misma copia en los dos, que es justo lo que se hace en la mudanza. Fusionar a mano dos perfiles distintos queda fuera de la primera versión.
+
+**Qué no se sincroniza en la primera versión**
+
+- Los ajustes del dispositivo (la voz).
+- Los dibujos de Pintar: son imágenes y no van en D1. Siguen viajando en la copia exportada.
+- El registro de uso (4.1): se queda local. Su `Usage.flush(destino)` es el enganche si algún día se quiere subir.
+
+**Lo que "gana el más reciente" no resuelve** (a validar antes de implementar)
+
+- Si se juega al mismo juego en dos dispositivos sin conexión entre medias, el registro más antiguo se pierde entero. Con un registro por juego el daño es pequeño: el nivel se reajusta solo en dos o tres partidas.
+- Las estrellas son el caso delicado. Hoy son un único contador por perfil que tocan todos los juegos: chocaría casi siempre y el niño vería bajar sus estrellas. Propuesta: guardar en el registro de cada juego las estrellas ganadas en él y que el total sea la suma (`app.js` ya sabe qué juego está abierto, no hay que tocar los juegos). Así solo chocan si es el mismo juego en los dos aparatos, y para ese campo `Store.apply` se queda con el mayor de los dos valores: las estrellas no bajan nunca. El servidor sigue siendo "gana el más reciente" a secas; la excepción vive en el cliente y solo para las estrellas.
+- Importar una copia con la sincronización activa: los registros entran con las fechas que tenían en la copia, así una copia vieja no pisa lo más nuevo de la nube. "Borrar progreso" sí sella con la fecha del momento: el borrado gana.
+
+**Privacidad**
+
+- Lo único personal que sube es el nombre que se le haya puesto al jugador, que es opcional, y su progreso. Queda en la cuenta de Cloudflare de la familia, con la base de datos ubicada en la UE.
+- Mientras lo use solo la familia es una actividad doméstica, fuera del RGPD (art. 2.2.c). Si algún día se abre a otras familias deja de serlo: habría que informar y contar con el consentimiento de los padres (menores de 14 años, art. 7 de la LOPDGDD). Decidirlo antes de pasarle a nadie la dirección de un juego con la sincronización puesta.
+
+**Fases**
+
+1. Cliente, sin red: `Store` v3 (fechas por registro, pendientes, `changes()` y `apply()`), estrellas por juego y `Sync` contra una API simulada en memoria. Prueba: dos "dispositivos" que juegan sin conexión y luego se cruzan.
+2. `mundo-api`: repo nuevo, esquema con migraciones, las cuatro rutas, CORS y límites. Pruebas en local y dos despliegues separados, pruebas y producción.
+3. Zona de padres: crear, unirse, estado, sincronizar ahora y desvincular. Prueba real con el iPhone y el iPad.
+4. mundobloque adopta `sync.js` con su propio `app`.
+5. Si hace falta: dibujos en R2, cambiar de código, fusionar perfiles.
+
+El plan gratuito de Workers y D1 debería sobrar para este uso; comprobar los límites vigentes al empezar la fase 2.
+
+**Abierto**
+
+- Validar la regla de las estrellas.
+- Dirección de mundobloque, para la lista de orígenes.
+- Dirección de la API: vale la de `workers.dev`. Cambiarla más adelante obliga a publicar los juegos con la nueva, no a mover datos.
 
 ### 4.1 Registro de uso (local)
 
@@ -132,7 +285,7 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 ## 5. Reparto del trabajo
 
 - **Chat (proyecto "Aprendizaje Jr" en Claude)**: ideas, mecánicas, contenido (listas de palabras, frases de voz, orden de letras), valorar propuestas, decisiones y arreglos pequeños desde el móvil. Lo que se decide allí se escribe en `docs/`, para que quede en el repo.
-- **Claude Code**: los bloques grandes de código (4.1 a 4.3), las pruebas en el iPhone real, las ramas y la limpieza técnica.
+- **Claude Code**: los bloques grandes de código (4.0 a 4.3), las pruebas en el iPhone real, las ramas y la limpieza técnica.
 - **El autor**: probar con el niño, generar las hojas de iconos y decir cada semana qué letra toca.
 
 ## 6. Decisiones tomadas
@@ -145,4 +298,7 @@ Invasores con números o colores (solo cuentan los que dice la voz), cuatro en r
 - Iconos 3D tipo juguete generados fuera; los packs de assets externos, descartados por choque de estilo.
 - Tres en raya: solo variante de tres fichas; X/O por defecto. Simón dentro de Tres en raya.
 - Registro de uso solo local; nada de analítica de terceros.
-- Alojamiento: mudanza a Cloudflare Pages con repo privado; la web en `web/` para no publicar los documentos.
+- Alojamiento: Cloudflare Pages en `mundojoor.pages.dev`, con repo privado al acabar la mudanza; la web en `web/` para no publicar los documentos. Rutas siempre relativas.
+- La copia exportada lleva su propia versión de formato (`format`), distinta de la del guardado (`v`). Importar sustituye lo que hay, previa confirmación con el contenido de la copia a la vista, y deja lo anterior en `mini-juegos-store-anterior`.
+- No se renombran las claves internas (`mini-juegos-store`, `mini-juegos-arte`, cachés `mini-juegos-vN`) ni el nombre visible: cambiarlas obligaría a migrar datos sin ganar nada.
+- Sincronización: un Worker aparte, `mundo-api`, con D1, común a todos los juegos; código de familia sin correo; gana el más reciente; local primero. Supabase y las funciones dentro de cada web, descartados.

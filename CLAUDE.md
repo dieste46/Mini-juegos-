@@ -1,7 +1,10 @@
 # Mini Juegos: guía de trabajo
 
-Web de minijuegos para un niño de 5 años (3º de Infantil, todavía no lee). Publicada con GitHub Pages desde `main`:
-https://dieste46.github.io/Mini-juegos-/
+Web de minijuegos para un niño de 5 años (3º de Infantil, todavía no lee). Publicada con Cloudflare Pages desde `main`:
+https://mundojoor.pages.dev/
+
+Mientras dure la mudanza se publica también en GitHub Pages (https://dieste46.github.io/mundojoor/). El repo se llamaba `Mini-juegos-`
+y GitHub no redirige las direcciones de Pages al renombrar: la antigua deja de responder. Estado y pasos en `docs/PLAN.md`, apartado 3.
 
 **La web vive en `web/`** y es la única carpeta que se publica. Las rutas de esta guía (`js/...`, `css/...`, `img/...`, `sw.js`) son relativas a `web/`.
 La documentación (`CLAUDE.md`, `README.md`, `docs/`) queda fuera de lo publicado.
@@ -36,7 +39,7 @@ HTML, CSS y JS plano, sin build ni dependencias. Los módulos se cargan con `<sc
 
 | Módulo | Qué hace |
 |---|---|
-| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,stars,games,worlds}`, migración desde v1, export/import JSON, guardado diferido |
+| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,stars,games,worlds}`, migración desde v1, guardado diferido y copia de seguridad con formato versionado (`exportBackup`, `readBackup`, `importBackup`). Es la única puerta al guardado |
 | `js/core.js` | Voz (`say`), sonidos (`sfx`, `tone`), nivel adaptativo (`registerAnswer`), motor de preguntas (`runQuiz`), pantalla final (`endScreen`), iconos (`pic`, `pics`, `picSrc`) |
 | `js/fx.js` | Partículas y sacudida: `Fx.system()` para canvas propio, `Fx.overlay(host)` para juegos DOM |
 | `js/scene.js` | Dibujo compartido para canvas: nubes, árboles, casas, colinas, azar repetible |
@@ -97,7 +100,10 @@ Todo el estilo "arcade" está al final de `css/style.css` y se gobierna con vari
 ## Publicar
 
 - **`main` es producción: es la versión con la que juega el niño.** Trabaja en una rama, prueba en el iPhone y solo entonces lleva a `main`.
-- Se publica el contenido de `web/` (`.github/workflows/pages.yml`). Está prevista la mudanza a Cloudflare Pages con el mismo directorio: ver `docs/PLAN.md`, apartado 3.
+- Cloudflare Pages publica el contenido de `web/` (sin compilación; directorio de salida `web`) y da una dirección de vista previa por rama: `https://<rama>.mundojoor.pages.dev`, con la rama en minúsculas y guiones en lugar de lo que no sea letra o número.
+- GitHub Pages publica lo mismo en paralelo (`.github/workflows/pages.yml`) hasta que se dé por cerrada la mudanza. No tocar ese workflow antes.
+- **Rutas siempre relativas** (`js/...`, `./`, `sw.js`), también en el manifest: la misma carpeta se sirve desde la raíz en Cloudflare y desde `/mundojoor/` en GitHub. Una ruta que empiece por `/` rompe una de las dos.
+- `404.html` tiene que existir: sin ella, Cloudflare Pages devuelve la portada con un 200 para cualquier archivo que falte.
 - En cada publicación sube la versión de la caché en `sw.js` (`mini-juegos-vN`). **Hazlo con `sed -i`**, nunca reescribiendo el archivo sobre sí mismo: ya se publicó una vez vacío por eso.
 - El service worker es "red primero" y solo borra cachés que empiezan por `mini-juegos-` (el dominio de GitHub Pages se comparte con otros proyectos).
 
@@ -109,7 +115,9 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
 
 - En el iPhone, por la wifi: `http://<ip-del-ordenador>:8800`. Para ver errores del móvil, inspector web de Safari desde un Mac.
 - Automático con Playwright, emulando móvil (390×844, táctil). Recetas que funcionan:
-  - Sembrar un perfil: `localStorage.setItem('juegos-peque-v1', JSON.stringify({stars:12, games:{}, name:'Prueba'}))` y recargar (se migra solo).
+  - Sembrar un perfil: `localStorage.clear(); localStorage.setItem('juegos-peque-v1', JSON.stringify({stars:12, games:{}, name:'Prueba'}))` y recargar (se migra solo; sin el `clear()` no, porque la primera carga ya crea un guardado vacío).
+  - Comparar lo guardado: llamar antes a `Store.flush()`. Abrir el menú o la zona de padres crea en memoria el estado inicial de cada juego y no lo guarda hasta el siguiente cambio.
+  - Zona de padres: responder al `prompt` de la multiplicación desde el manejador de diálogos; los `confirm` y `alert` de importar llegan por el mismo sitio.
   - Elementos de juego con animación: `dispatch_event('pointerdown')` (un `click()` falla por "elemento no estable").
   - Navegación (casa, tarjetas): `.tap()` real, que detecta si algo tapa el botón.
   - Forzar situaciones: sustituir `Math.random` por una constante (todo estrellas, todo obstáculos...).
@@ -124,6 +132,9 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
 - **Transparencia en paneles**: deja ver el decorado del fondo a través. Atenuar el contenido, no el panel.
 - **Audio en iOS**: solo arranca dentro de un toque del usuario (`Core.unlockAudio`). La voz elige la mejor voz es-ES instalada.
 - **`pagehide`** solo guarda si hay cambios pendientes; si no, pisa datos recién migrados.
+- **Importar no debe guardar nada después**: `Store.save()` sella el perfil activo con la fecha del momento, y una copia tiene que entrar con sus fechas (la sincronización prevista decide por fecha). Por eso tras importar se usa `Core.refreshVoice()` y no `Core.setVoice()`.
+- **Lo que viene de fuera se valida y se escapa**: una copia importada (y, cuando exista, lo que baje de la nube) pasa por `Store.readBackup()`, y los nombres se pintan con `esc()`.
+- **Cambiar de dirección es cambiar de datos**: `localStorage` e IndexedDB van por origen, y en iOS la app instalada en la pantalla de inicio tiene además su almacén propio, separado de Safari. Importar hay que hacerlo desde el icono instalado.
 - **La barra superior** va por encima del juego (`z-index`), para que nada tape la casa.
 - **Timers y bucles**: todo `setTimeout` de un juego debe comprobar que el juego sigue vivo, y la función de limpieza debe pararlo todo. Si no, un juego cerrado repinta encima del menú.
 

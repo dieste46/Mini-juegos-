@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Mini Juegos</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-content: center; gap: 16px; text-align: center;
+           font-family: system-ui, sans-serif; background: #2f8fef; color: #fff; }
+    p { font-size: 4rem; margin: 0; }
+    a { font-size: 1.4rem; font-weight: 700; color: #14235a; background: #fff; padding: 14px 28px; border-radius: 18px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <!-- Existe para que lo que falta dé un 404 de verdad. Sin esta página, Cloudflare Pages devuelve la portada
+       (con un 200) para cualquier archivo que no encuentre, y el service worker la guardaría con el nombre de ese archivo. -->
+  <p>🤖</p>
+  <a id="home" href="/">Ir a Mini Juegos</a>
+  <script>
+    // En GitHub Pages la web cuelga de /<repo>/; en Cloudflare Pages, de la raíz.
+    if (location.hostname.endsWith('.github.io')) document.getElementById('home').href = '/' + location.pathname.split('/')[1] + '/';
+  </script>
+</body>
+</html>

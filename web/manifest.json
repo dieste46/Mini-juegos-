@@ -2,6 +2,7 @@
   "name": "Mini Juegos",
   "short_name": "Juegos",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#fff8ec",

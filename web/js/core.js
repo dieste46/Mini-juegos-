@@ -231,7 +231,7 @@ const Core = (() => {
     root.querySelector('#out').onclick = exit;
   }
 
-  return { pic, pics, hasPic, picSrc, say, spanishVoices, setVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
+  return { pic, pics, hasPic, picSrc, say, spanishVoices, setVoice, refreshVoice: pickVoice, get voiceURI() { return voice ? voice.voiceURI : ''; }, save, praise, getName, setName, unlockAudio, rand, sfx, tone, endScreen, pick, shuffle, sample, el, celebrate, addStar, gameState, registerAnswer, runQuiz, PRAISE, RETRY,
            get state() { return P(); }, reset() { Store.resetProgress(); } };
 })();
 

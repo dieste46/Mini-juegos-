@@ -57,8 +57,8 @@
     const themes = Object.values(Themes.list);
     app.innerHTML = `
       <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div>
-        <div class="bubble">${name ? `¡Hola, ${name}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div>
-        ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${Store.profile.avatar}</button>` : ''}</div>
+        <div class="bubble">${name ? `¡Hola, ${esc(name)}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div>
+        ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${esc(Store.profile.avatar)}</button>` : ''}</div>
       <div class="theme-pick">${themes.map(t => `<button class="theme-btn${t.id === Themes.current().id ? ' on' : ''}" data-t="${t.id}"><span>${t.emoji}</span>${t.name}</button>`).join('')}</div>
       <h2 class="section-title"><span>🎮</span> ¡A jugar!</h2><div class="menu-grid" id="recreo"></div>
       <h2 class="section-title"><img src="img/icons/libros.webp" alt=""> Aprende jugando</h2><div class="menu-grid" id="aprende"></div>
@@ -68,7 +68,8 @@
       if (g.hidden) return;   // se entra desde otro juego
       const s = Core.gameState(g.id), sec = g.section || 'aprende';
       nth[sec] = (nth[sec] || 0) + 1;
-      const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(s.level) + '☆'.repeat(g.maxLevel - s.level) : '';
+      const lv = Math.max(0, Math.min(g.maxLevel || 0, Math.floor(s.level) || 0));
+      const badge = g.badge ? g.badge(s) : g.maxLevel ? '★'.repeat(lv) + '☆'.repeat(g.maxLevel - lv) : '';
       const b = Core.el(`<button class="game-card" style="--c:${TILES[(nth[sec] - 1 + (sec === 'aprende' ? 3 : 0)) % TILES.length]}">
           <span class="cover">${artOf(g)}</span><span class="gname">${g.name}</span>${badge ? `<span class="lvl">${badge}</span>` : ''}</button>`);
       b.onclick = () => { Core.say(g.name); location.hash = g.id; };
@@ -93,7 +94,7 @@
     title.textContent = '¿Quién juega?';
     btnHome.hidden = false;
     app.innerHTML = `<div class="who-grid">${Store.profiles().map(p =>
-      `<button class="game-card who-card" data-id="${p.id}" style="--c:#3d7bff"><span class="cover"><span class="emoji">${p.avatar}</span></span><span class="gname">${p.name || 'Sin nombre'}</span><span class="lvl">⭐ ${p.stars}</span></button>`).join('')}</div>`;
+      `<button class="game-card who-card" data-id="${p.id}" style="--c:#3d7bff"><span class="cover"><span class="emoji">${esc(p.avatar)}</span></span><span class="gname">${esc(p.name || 'Sin nombre')}</span><span class="lvl">⭐ ${p.stars}</span></button>`).join('')}</div>`;
     Core.say('¿Quién juega?');
     app.querySelectorAll('.who-card').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; location.hash = ''; });
   }
@@ -126,7 +127,7 @@
       <label>Nombre (la voz le saludará y le animará por su nombre)<br>
         <input id="name" type="text" maxlength="20" value="${esc(P.name)}" placeholder="Nombre"> <button id="save-name">Guardar</button></label>
       <div class="avatars">${AVATARS.map(a => `<button class="av${a === P.avatar ? ' on' : ''}" data-a="${a}">${a}</button>`).join('')}</div>
-      <p class="profiles">${Store.profiles().map(p => `<button class="pf${p.id === P.id ? ' on' : ''}" data-id="${p.id}">${p.avatar} ${esc(p.name || 'Sin nombre')}</button>`).join('')}
+      <p class="profiles">${Store.profiles().map(p => `<button class="pf${p.id === P.id ? ' on' : ''}" data-id="${p.id}">${esc(p.avatar)} ${esc(p.name || 'Sin nombre')}</button>`).join('')}
         <button id="add-profile">＋ Otro jugador</button></p>
       ${Store.profiles().length > 1 ? '<button id="del-profile">Eliminar este jugador</button>' : ''}
 
@@ -143,9 +144,10 @@
       <p>⭐ Estrellas: ${P.stars}</p>
 
       <h3>Datos</h3>
-      <p><small>Todo se guarda solo en este dispositivo. Haz una copia de vez en cuando: si se borran los datos del navegador o cambias de tablet, con la copia lo recuperas.
-        En iPhone o iPad, añádela a la pantalla de inicio (Compartir → "Añadir a pantalla de inicio"): así va a pantalla completa y Safari no borra los datos por no usarla unos días.</small></p>
-      <p><button id="export">Guardar copia</button> <button id="import">Recuperar copia</button> <input id="import-file" type="file" accept=".json,application/json" hidden></p>
+      <p><small>Todo se guarda solo en este dispositivo. Exporta las partidas de vez en cuando: si se borran los datos del navegador o cambias de móvil o de tablet, las recuperas importando ese archivo.
+        La copia lleva los jugadores, sus estrellas, el progreso de cada juego, los ajustes y los dibujos de Pintar. Importar sustituye las partidas que haya en este dispositivo.</small></p>
+      <p><small>En iPhone o iPad, añade la app a la pantalla de inicio (Compartir → "Añadir a pantalla de inicio") y haz la importación desde ese icono: va a pantalla completa, guarda sus datos aparte de Safari y no se borran por no usarla unos días.</small></p>
+      <p><button id="export">Exportar partidas</button> <button id="import">Importar partidas</button> <input id="import-file" type="file" accept=".json,application/json" hidden></p>
       <button id="reset">Borrar progreso de este jugador</button></div>`;
 
     const sel = app.querySelector('#voice');
@@ -172,21 +174,39 @@
     // compartir sea inmediato (en iOS, si se espera entre el toque y el "compartir", el sistema lo bloquea).
     let arte = null; Art.exportAll().then(a => (arte = a));
     app.querySelector('#export').onclick = async () => {
-      const copy = JSON.parse(Store.exportJSON()); copy.arte = arte || await Art.exportAll();
+      const copy = Store.exportBackup(arte || await Art.exportAll());
       const blob = new Blob([JSON.stringify(copy)], { type: 'application/json' });
-      const file = new File([blob], `mini-juegos-copia-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Copia de Mini Juegos' }); } catch {} return; }
+      const file = new File([blob], `mini-juegos-partidas-${new Date().toISOString().slice(0, 10)}.json`, { type: 'application/json' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: 'Partidas de Mini Juegos' }); } catch {} return; }
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     };
     const fileIn = app.querySelector('#import-file');
     app.querySelector('#import').onclick = () => fileIn.click();
     fileIn.onchange = async () => {
-      const f = fileIn.files[0]; if (!f) return;
-      try { if (!confirm('¿Sustituir los datos de este dispositivo por los de la copia?')) return; const copy = JSON.parse(await f.text()), dibujos = copy.arte; delete copy.arte;
-        Store.importJSON(JSON.stringify(copy)); const n = dibujos ? await Art.importAll(dibujos) : 0;
-        Themes.apply(); alert(n ? `Copia recuperada, con ${n} dibujos` : 'Copia recuperada'); parents(); }
-      catch { alert('Ese archivo no es una copia válida de Mini Juegos.'); }
+      const f = fileIn.files[0]; fileIn.value = '';   // vaciar: así se puede volver a elegir el mismo archivo
+      if (!f) return;
+      // Primero se lee y se valida; solo después se pregunta, enseñando qué trae la copia. Hasta el "Aceptar" no se toca nada.
+      let copy;
+      try { copy = Store.readBackup(JSON.parse(await f.text())); }
+      catch (e) {
+        alert(e && e.code === 'nueva'
+          ? 'Esa copia está hecha con una versión más nueva de Mini Juegos. Abre la app con conexión para que se actualice y vuelve a probar.'
+          : 'Ese archivo no es una copia válida de Mini Juegos.');
+        return;
+      }
+      // Un nivel por encima del máximo que esta versión conoce para ese juego se queda en el máximo.
+      Object.values(copy.store.profiles).forEach(p => Games.forEach(g => { const s = p.games[g.id]; if (s && g.maxLevel && s.level > g.maxLevel) s.level = g.maxLevel; }));
+      const { jugadores, dibujos } = copy.resumen;
+      const cuando = copy.exportedAt ? ` del ${new Date(copy.exportedAt).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}` : '';
+      const quien = jugadores.map(j => `· ${j.name || 'Sin nombre'}: ⭐ ${j.stars}`).join('\n');
+      const cuantos = n => (n === 1 ? '1 dibujo' : `${n} dibujos`);
+      if (!confirm(`Copia${cuando}\n${quien}\n${dibujos ? `· ${cuantos(dibujos)}\n` : ''}\n¿Sustituir las partidas de este dispositivo por las de la copia?`)) return;
+      if (!Store.importBackup(copy)) { alert('No se ha podido guardar la copia en este dispositivo.'); return; }
+      const n = await Art.importAll(copy.arte);
+      Core.refreshVoice(); Themes.apply(); greeted = false;   // sin guardar nada más: la copia entra tal cual, con sus fechas
+      alert(n ? `Partidas importadas, con ${cuantos(n)}.` : 'Partidas importadas.');
+      parents();
     };
     app.querySelector('#reset').onclick = () => { if (confirm(`¿Borrar todo el progreso de ${P.name || 'este jugador'}?`)) { Core.reset(); document.getElementById('star-count').textContent = 0; location.hash = ''; } };
   }
