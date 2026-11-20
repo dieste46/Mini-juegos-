@@ -100,7 +100,7 @@ Todo el estilo "arcade" está al final de `css/style.css` y se gobierna con vari
 ## Publicar
 
 - **`main` es producción: es la versión con la que juega el niño.** Trabaja en una rama, prueba en el iPhone y solo entonces lleva a `main`.
-- Cloudflare Pages publica el contenido de `web/` (sin compilación; directorio de salida `web`) y da una dirección de vista previa por rama: `https://<rama>.mundojoor.pages.dev`, con la rama en minúsculas y guiones en lugar de lo que no sea letra o número.
+- Cloudflare Pages publica el contenido de `web/` (sin compilación; directorio de salida `web`) y da una dirección de vista previa por rama: `https://<alias>.mundojoor.pages.dev`. El alias es la rama en minúsculas, con guiones en lugar de lo que no sea letra o número y recortada a 28 caracteres (`claude/dazzling-thompson-octlzr` → `claude-dazzling-thompson-oct`).
 - GitHub Pages publica lo mismo en paralelo (`.github/workflows/pages.yml`) hasta que se dé por cerrada la mudanza. No tocar ese workflow antes.
 - **Rutas siempre relativas** (`js/...`, `./`, `sw.js`), también en el manifest: la misma carpeta se sirve desde la raíz en Cloudflare y desde `/mundojoor/` en GitHub. Una ruta que empiece por `/` rompe una de las dos.
 - `404.html` tiene que existir: sin ella, Cloudflare Pages devuelve la portada con un 200 para cualquier archivo que falte.

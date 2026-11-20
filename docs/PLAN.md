@@ -54,18 +54,20 @@ Hecho:
 - La web funciona igual desde la raíz y desde una subcarpeta: todas las rutas son relativas, el manifest declara `scope` y hay `404.html`.
 - Exportar e importar partidas con formato versionado. El importador acepta también las copias de la versión anterior, que es como salen de la web antigua.
 
-Configuración del proyecto en Cloudflare Pages (comprobar en el panel): sin compilación, rama de producción `main`, directorio raíz vacío y directorio de salida `web`. Con la salida en la raíz del repo la web quedaría en `/web/`, la portada daría 404 y se publicarían los documentos. Web Analytics, desactivado: inyecta un script de terceros.
-
-Qué cambia al renombrar el repo: GitHub no redirige las direcciones de Pages. La web de GitHub pasa a `https://dieste46.github.io/mundojoor/` y `/Mini-juegos-/` deja de responder. El icono ya instalado apunta a la dirección antigua: con conexión enseñará un 404, porque el service worker solo recurre a la caché cuando no hay red. Los datos siguen dentro de ese icono. (Pendiente de confirmar en el móvil.)
+Estado comprobado el 20/11/2026:
+- El proyecto de Cloudflare Pages publica la raíz del repo, no `web/`: `https://mundojoor.pages.dev/` da 404, el juego está en `/web/` y `README.md` y `docs/` quedan a la vista. Hay que corregirlo antes de instalar nada (paso 1).
+- Al renombrar el repo, GitHub no redirige las direcciones de Pages: `https://dieste46.github.io/Mini-juegos-/` da 404 y la web está en `https://dieste46.github.io/mundojoor/`. El icono ya instalado apunta a la dirección antigua: con conexión enseñará ese 404, porque el service worker solo recurre a la caché cuando no hay red. Los datos siguen dentro de ese icono. Esto último falta verlo en el móvil.
+- La vista previa de una rama está en `https://<alias>.mundojoor.pages.dev`, donde el alias es el nombre de la rama en minúsculas, con guiones en lugar de lo que no sea letra o número y recortado a 28 caracteres.
 
 Pasos que faltan, en este orden:
-1. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
-2. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
-3. Fusionar a `main`.
-4. En cada dispositivo: abrir `https://mundojoor.pages.dev` en Safari → Compartir → "Añadir a pantalla de inicio" → abrir desde el icono nuevo → zona de padres → "Importar partidas". En este orden: la app instalada no ve lo que se haya importado en Safari. Borrar el icono antiguo.
-5. Pasados unos días con las dos versiones en paralelo: quitar `.github/workflows/pages.yml`, desactivar Pages en GitHub, poner el repo en privado y quitar de `CLAUDE.md` la mención a GitHub Pages.
+1. En Cloudflare (Workers y Pages → mundojoor → Configuración → Compilación): directorio de salida `web`, directorio raíz vacío, sin comando de compilación, rama de producción `main`. Después, volver a desplegar. Web Analytics, desactivado: inyecta un script de terceros. No instalar el icono desde `/web/`: al corregir el directorio esa dirección deja de existir, y sería repetir lo del renombrado.
+2. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
+3. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
+4. Fusionar a `main`.
+5. En cada dispositivo: abrir `https://mundojoor.pages.dev` en Safari → Compartir → "Añadir a pantalla de inicio" → abrir desde el icono nuevo → zona de padres → "Importar partidas". En este orden: la app instalada no ve lo que se haya importado en Safari. Borrar el icono antiguo.
+6. Pasados unos días con las dos versiones en paralelo: quitar `.github/workflows/pages.yml`, desactivar Pages en GitHub, poner el repo en privado y quitar de `CLAUDE.md` la mención a GitHub Pages.
 
-Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir los pasos 1 y 4, hasta que exista la sincronización de 4.0: con ella bastará teclear el código de familia en la dirección nueva.
+Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir los pasos 2 y 5, hasta que exista la sincronización de 4.0: con ella bastará teclear el código de familia en la dirección nueva.
 
 ## 4. Línea a seguir
 
