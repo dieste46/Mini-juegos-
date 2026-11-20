@@ -76,7 +76,7 @@ Estado por juego: `Core.gameState(id)` (`level`, `streak`, `misses`, `played` y 
 
 ### Dos formas de pintar
 
-- **DOM y CSS** para juegos de interfaz: preguntas, tableros, botones (Cuenta, Colores, Letras, Series, Parejas, Tres en raya, Simón, Piano, Pintar, Globos, Pilla).
+- **DOM y CSS** para juegos de interfaz: preguntas, tableros, botones (Cuenta, Colores, Letras, Series, Guía a Bip, Parejas, Tres en raya, Simón, Piano, Pintar, Globos, Pilla).
 - **Canvas 2D propio** para juegos de acción o con escenario (Súper Rescate, Carrera, Laberinto). Limitar `devicePixelRatio` a 2, usar `ResizeObserver`, parar el bucle en la limpieza.
 
 No se usa Phaser ni Pixi: se valoró y se descartó. El salto visual viene del arte y de la escena dibujada, no del motor.
@@ -123,6 +123,7 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
   - Navegación (casa, tarjetas): `.tap()` real, que detecta si algo tapa el botón.
   - Forzar situaciones: sustituir `Math.random` por una constante (todo estrellas, todo obstáculos...).
   - Laberinto: `document.querySelector('#maze')._lab.route()` da la ruta en píxeles para seguirla.
+  - Guía a Bip: `document.querySelector('#rb')._rb.solution()` da las flechas que faltan (`{d, n}`: dirección y veces) y `.state()` el estado; los botones responden a `pointerdown`.
 - Antes de dar algo por bueno: partida completa hasta la pantalla final, "otra vez", salir con la casa a mitad, y los dos temas.
 
 ## Trampas ya pisadas

@@ -702,6 +702,55 @@ body.sticker .spad { border: 3px solid var(--line); box-shadow: 5px 5px 0 var(--
 .topbar { z-index: 30; }
 .confetti { pointer-events: none; }
 
+/* ----- Guía a Bip: tablero, flechas puestas y botones ----- */
+.rb { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.rb-top { align-self: stretch; margin: 0; justify-content: space-between; padding: 6px 12px; }
+.rb-goal { display: flex; align-items: center; gap: 6px; font-size: 2rem; line-height: 1; }
+.rb-goal .pic { width: 1.15em; height: 1.15em; }
+.rb-mini { width: 46px; flex: none; }
+.rb-to { font-size: 1.3rem; opacity: .6; }
+.rb-count { display: flex; gap: 2px; font-size: 1.7rem; line-height: 1; }
+.rb-count i { font-style: normal; color: rgba(120,130,170,.35); }
+.rb-count i.on { color: #FFC21F; animation: pop .5s; }
+.rb-wrap { display: grid; place-items: center; align-self: stretch; }
+.rb-board { --bw: min(calc(100vw - 32px), 40vh, 440px); position: relative; width: var(--bw); height: var(--bw); display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr)); grid-template-rows: repeat(var(--n), minmax(0, 1fr));
+  border-radius: 22px; overflow: hidden; background: var(--f1); box-shadow: 0 0 0 5px var(--edge), 0 9px 0 5px rgba(0,0,0,.18); }
+.rb-cell { position: relative; display: grid; place-items: center; background: var(--f1); font-size: calc(var(--bw) / var(--n) * .58); line-height: 1; }
+.rb-cell.alt { background: var(--f2); }
+.rb-cell .pic { width: 82%; height: 82%; object-fit: contain; }
+.rb-cell.trail::after { content: ''; width: 26%; height: 26%; border-radius: 50%; background: rgba(255,255,255,.85); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+.rb-cell.way { box-shadow: inset 0 0 0 5px #FFD23F; animation: rhint .5s ease-in-out infinite alternate; }
+.rb-cell.way.trail::after { background: #FFD23F; }
+.rb-star { animation: pop 1.2s ease-in-out infinite; }
+.rb-cell.got .rb-star { visibility: hidden; }
+.rb-cell.got .rb-home { animation: pop .5s 2; }
+.rb-bip { position: absolute; left: 0; top: 0; width: calc(100% / var(--n)); height: calc(100% / var(--n)); display: grid; place-items: center; pointer-events: none; z-index: 2;
+  transform: translate(calc(var(--x, 0) * 100%), calc(var(--y, 0) * 100%)); transition: transform .34s cubic-bezier(.3, .9, .4, 1); }
+.rb-bip > span { display: block; width: 84%; }
+.rb-bip.bonk > span { animation: rbbonk .5s; }
+@keyframes rbbonk { 35% { transform: translate(calc(var(--bx, 0) * 24%), calc(var(--by, 0) * 24%)); } 70% { transform: translate(calc(var(--bx, 0) * -6%), calc(var(--by, 0) * -6%)); } }
+.rb-tray { display: grid; grid-template-columns: repeat(var(--slots, 4), minmax(0, 44px)); gap: 6px; justify-content: center; align-self: stretch; min-height: 44px; }
+.rb-slot { position: relative; aspect-ratio: 1; border-radius: 12px; border: 3px dashed rgba(255,255,255,.55); box-sizing: border-box; display: grid; place-items: center; }
+.rb-slot.full { border: 0; background: var(--c); border-bottom: 5px solid rgba(0,0,0,.24); }
+.rb-slot.now { transform: scale(1.14); box-shadow: 0 0 0 4px #fff; }
+.rb-slot b { position: absolute; right: -5px; top: -7px; min-width: 20px; padding: 0 3px; box-sizing: border-box; border-radius: 999px; background: #FFD23F; color: #14235A; font-size: .85rem; line-height: 20px; text-align: center; }
+.rb-ar { width: 72%; height: 72%; display: block; }
+.rb-keys, .rb-acts { display: grid; gap: 10px; width: min(100%, 440px); }
+.rb-keys { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.rb-acts { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); }
+.rb-key { height: 62px; border: 0; border-radius: 20px; background: var(--c); border-bottom: 7px solid rgba(0,0,0,.24); padding: 0; display: grid; place-items: center; cursor: pointer; touch-action: manipulation; }
+.rb-key svg { width: 42px; height: 42px; display: block; }
+.rb-key:active { transform: translateY(4px); border-bottom-width: 3px; }
+.rb-key.next { box-shadow: 0 0 0 6px #FFD23F; animation: rhint .5s ease-in-out infinite alternate; }
+.rb-go { --c: #5BE38C; }
+.rb-del { --c: var(--panel); color: var(--panel-ink); box-shadow: inset 0 0 0 2px var(--panel-line); }
+.rb-rep { --c: #FFD23F; color: #14235A; }
+.rb-board.running ~ * { pointer-events: none; }
+body.sticker .rb-key, body.sticker .rb-slot.full { border: 3px solid var(--line); box-shadow: 4px 4px 0 var(--line); }
+body.sticker .rb-board { box-shadow: 0 0 0 4px var(--line), 7px 7px 0 4px var(--line); }
+@media (prefers-reduced-motion: reduce) { .rb-bip { transition: none; } .rb-star, .rb-cell.way, .rb-key.next { animation: none; } }
+
 /* ===== PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada =====
    Solo se activa en las vistas previas, desde la zona de padres (ver BAR_TEST en app.js). Quitar cuando se decida. */
 /* "Barra fija": la barra deja de irse con el contenido y se queda pegada arriba, opaca. */

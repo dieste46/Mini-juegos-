@@ -41,6 +41,9 @@ Tarjeta fija arriba del menú (`js/farm.js`). Las estrellas de cualquier juego h
 | 🎨 Colores | Colores, formas, instrucciones con dos condiciones | color · forma · forma + color |
 | 🔤 Letras | Sonido inicial (conciencia fonológica), vocales y consonantes | vocales · consonantes · letra → dibujo |
 | 🧩 Series | Patrones lógicos (base del pensamiento computacional) | AB · AAB/ABB/ABC · AABB/ABCB/ABAC/ABCD |
+| 🤖 Guía a Bip | Planificar una secuencia de pasos con flechas, lateralidad y corregir sobre la marcha | en línea recta · un giro · rodear obstáculos · pasar por la estrella · ficha de repetir |
+
+**Guía a Bip** (`js/games/robot.js`): se ponen las flechas del camino y Bip las ejecuta una a una. Las flechas son de dirección fija (arriba, abajo, izquierda, derecha), no giros. Si choca o se queda corto, se para ahí y se sigue desde ese punto. La estrella solo se gana llegando a la primera. Tras dos tropiezos brilla la flecha que toca; tras tres, se marca un trozo del camino. Los tableros se generan solos (`gen(nivel)`) y se comprueba que tienen solución; en el nivel 5 hay menos huecos que pasos, para que haga falta repetir.
 
 ## Arquitectura (para crecer sin rehacer)
 
@@ -73,7 +76,7 @@ js/app.js       Menú, navegación por #hash, zona de padres
 
 Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `Themes.set('<conjunto>')`. Guarda su progreso solo en `Core.gameState(id)` y llama a `Core.save()` (o `Core.addStar()`).
 
-**Contrato de un tema** (`themes.js`): `id`, `name`, `emoji`, `say`, `background()`, `world` (nombre, escena e `items`) y `sets` (`contables`, `parejas`, `pilla`, `rescate`, `carrera`, `series`, `piano`, `sellos`, `letras`, `laminas`, `escena`). Si a un tema le falta un conjunto, se usa el de granja.
+**Contrato de un tema** (`themes.js`): `id`, `name`, `emoji`, `say`, `background()`, `world` (nombre, escena e `items`) y `sets` (`contables`, `parejas`, `pilla`, `rescate`, `carrera`, `robot`, `series`, `piano`, `sellos`, `letras`, `laminas`, `escena`). Si a un tema le falta un conjunto, se usa el de granja.
 
 **Datos** (`localStorage`, clave `mini-juegos-store`):
 

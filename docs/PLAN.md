@@ -33,6 +33,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Colores | `colores` | aprende | preguntas | 3 niveles |
 | Letras | `letras` | aprende | preguntas | Sonido inicial con 10 letras (3 niveles). Se queda corto: ver 4.2 |
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
+| Guía a Bip | `robot` | aprende | DOM | Programar el camino de Bip con flechas y verlo ejecutarse (5 niveles; el último, con ficha de repetir) |
 
 Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, exportar e importar partidas con formato versionado), PWA sin conexión.
 
@@ -71,7 +72,16 @@ Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir
 
 ## 4. Línea a seguir
 
-Por orden. De 4.0 a 4.3 son bloques grandes; el resto, mejoras sueltas. 4.0 va delante de 4.1 porque cambia el esquema del guardado, y conviene que el registro de uso nazca ya sobre él.
+Los apartados conservan su número, pero el orden de trabajo se revisó el 20/11/2026. El objetivo es la base de lectura, y eso lo mueve el abecedario; la sincronización no enseña nada y puede esperar ahora que hay exportar e importar.
+
+1. Guía a Bip, el robot con flechas (hecho; ver 4.6).
+2. Mi abecedario, primer corte: "Escucho" y "Escribo palabras" (4.2). Pendiente de que la familia valide `docs/contenido/abecedario.md`.
+3. Misión del día (4.8).
+4. Marco de diez y amigos del 10 (lo primero de 4.3).
+5. Registro de uso, lo justo para que la misión elija qué reforzar (4.1).
+6. Sincronización (4.0).
+
+Confirmado por el autor solo el punto 1; el resto es la propuesta sobre la mesa.
 
 ### 4.0 Sincronización en la nube: `mundo-api` (diseñado, sin implementar)
 
@@ -276,13 +286,34 @@ Material: ábaco de dos filas (cinco bolas de un color y cinco de otro) hasta 20
 - Obstáculo nuevo que cruza los tres carriles: valla baja en la granja, aro de energía en el espacio.
 - Las primeras partidas no tienen vallas. La voz lo explica la primera vez que aparecen.
 
-### 4.6 Laberinto con flechas
+### 4.6 Guía a Bip (hecho) y sus ampliaciones
 
-Mini-programación sobre el laberinto actual: se colocan las flechas por adelantado y luego el personaje las ejecuta. Si choca, se para ahí y se corrige desde ese punto. Empieza con caminos de tres pasos.
+Sustituye al "Laberinto con flechas" que había aquí. Está en `js/games/robot.js`: se colocan las flechas por adelantado y Bip las ejecuta; si choca, se para ahí y se corrige desde ese punto. Flechas de dirección fija, porque a los 5 años "gira a la izquierda" es bastante más difícil que "ve a la izquierda".
+
+Falta probarlo con el niño. Según cómo le vaya:
+- Si el nivel 5 (repetir) le queda lejos, partirlo en dos: primero repetir con huecos de sobra, luego con los justos.
+- Más adelante: repetir un grupo de flechas, giros relativos (el robot mira hacia donde anda) y tableros hechos a mano para la misión del día.
 
 ### 4.7 Más adelante
 
 Invasores con números o colores (solo cuentan los que dice la voz), cuatro en raya, rompeladrillos, pong para dos, el que sobra, clasificar, juego de escenario propio para Globos y Pilla.
+
+### 4.8 Misión del día (propuesta)
+
+Una sesión corta que mezcla juegos, para que haya rutina sin tener que elegir.
+
+- Tres actividades cortas, una de letras, una de números y una de lógica, y después un rato libre de premio. Unos diez minutos, con final claro.
+- Semanal: una tira de siete sellos y la letra de la semana, que elige la familia en la zona de padres.
+- Sin rachas ni castigo por saltarse un día: si no, deja de ser un reto y pasa a ser deberes.
+- Técnicamente barato: todos los juegos menos Piano y Pintar acaban en `Core.endScreen`, así que la misión puede encadenarlos desde ahí sin tocarlos.
+- Con cinco o seis juegos de aprender la mezcla se repite pronto. Tiene sentido cuando exista el primer corte del abecedario.
+
+### 4.9 Sonidos antes que letras (propuesta)
+
+Conciencia fonológica, todo de oído: palmadas por sílabas, "¿empiezan igual?", juntar sílabas para formar la palabra.
+
+- Las listas de palabras las da la familia, como en todo lo de pronunciación.
+- La voz sintética es mala para sonidos sueltos. Alternativa: grabar la voz de la familia desde la zona de padres (se guardaría en el dispositivo y viajaría en la copia exportada).
 
 ## 5. Reparto del trabajo
 
