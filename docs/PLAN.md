@@ -53,21 +53,21 @@ Hecho:
 - El repo se llama `mundojoor` (antes `Mini-juegos-`).
 - La web funciona igual desde la raíz y desde una subcarpeta: todas las rutas son relativas, el manifest declara `scope` y hay `404.html`.
 - Exportar e importar partidas con formato versionado. El importador acepta también las copias de la versión anterior, que es como salen de la web antigua.
+- Cloudflare Pages publica solo `web/`: sin compilación, rama de producción `main`, directorio de salida `web`. Comprobado el 20/11/2026 en la vista previa de la rama (`/` abre el juego; `/README.md` y `/web/` dan 404). Ese ajuste solo vale para los despliegues nuevos: producción lo aplica en el siguiente, que será la fusión a `main`; hasta entonces sigue con el juego en `/web/`.
 
-Estado comprobado el 20/11/2026:
-- El proyecto de Cloudflare Pages publica la raíz del repo, no `web/`: `https://mundojoor.pages.dev/` da 404, el juego está en `/web/` y `README.md` y `docs/` quedan a la vista. Hay que corregirlo antes de instalar nada (paso 1).
-- Al renombrar el repo, GitHub no redirige las direcciones de Pages: `https://dieste46.github.io/Mini-juegos-/` da 404 y la web está en `https://dieste46.github.io/mundojoor/`. El icono ya instalado apunta a la dirección antigua: con conexión enseñará ese 404, porque el service worker solo recurre a la caché cuando no hay red. Los datos siguen dentro de ese icono. Esto último falta verlo en el móvil.
+A tener en cuenta:
+- Al renombrar el repo, GitHub no redirige las direcciones de Pages: `https://dieste46.github.io/Mini-juegos-/` da 404 y la web está en `https://dieste46.github.io/mundojoor/` (comprobado el 20/11/2026). El icono ya instalado apunta a la dirección antigua: con conexión enseñará ese 404, porque el service worker solo recurre a la caché cuando no hay red. Los datos siguen dentro de ese icono. Esto último falta verlo en el móvil.
 - La vista previa de una rama está en `https://<alias>.mundojoor.pages.dev`, donde el alias es el nombre de la rama en minúsculas, con guiones en lugar de lo que no sea letra o número y recortado a 28 caracteres.
+- Web Analytics de Cloudflare, desactivado: inyecta un script de terceros.
 
 Pasos que faltan, en este orden:
-1. En Cloudflare (Workers y Pages → mundojoor → Configuración → Compilación): directorio de salida `web`, directorio raíz vacío, sin comando de compilación, rama de producción `main`. El cambio solo vale para los despliegues nuevos: hace falta un push a la rama o "Reintentar implementación" en el panel. Está bien cuando `/` abre el juego y `/README.md` da 404. Web Analytics, desactivado: inyecta un script de terceros. No instalar el icono desde `/web/`: al corregir el directorio esa dirección deja de existir, y sería repetir lo del renombrado.
-2. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
-3. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
-4. Fusionar a `main`.
-5. En cada dispositivo: abrir `https://mundojoor.pages.dev` en Safari → Compartir → "Añadir a pantalla de inicio" → abrir desde el icono nuevo → zona de padres → "Importar partidas". En este orden: la app instalada no ve lo que se haya importado en Safari. Borrar el icono antiguo.
-6. Pasados unos días con las dos versiones en paralelo: quitar `.github/workflows/pages.yml`, desactivar Pages en GitHub, poner el repo en privado y quitar de `CLAUDE.md` la mención a GitHub Pages.
+1. En cada dispositivo, desde el icono antiguo: zona de padres → "Guardar copia" → guardar en Archivos. Si sale el 404, poner el modo avión y volver a abrirlo.
+2. Probar la rama en su dirección de vista previa, en el iPhone, importando esa copia. La vista previa es otro origen: empieza vacía y no hay que instalarla.
+3. Fusionar a `main` y comprobar que `https://mundojoor.pages.dev/` abre el juego. No instalar el icono antes: hasta ese despliegue el juego está en `/web/`, una dirección que desaparece.
+4. En cada dispositivo: abrir `https://mundojoor.pages.dev` en Safari → Compartir → "Añadir a pantalla de inicio" → abrir desde el icono nuevo → zona de padres → "Importar partidas". En este orden: la app instalada no ve lo que se haya importado en Safari. Borrar el icono antiguo.
+5. Pasados unos días con las dos versiones en paralelo: quitar `.github/workflows/pages.yml`, desactivar Pages en GitHub, poner el repo en privado y quitar de `CLAUDE.md` la mención a GitHub Pages.
 
-Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir los pasos 2 y 5, hasta que exista la sincronización de 4.0: con ella bastará teclear el código de familia en la dirección nueva.
+Cambiar otra vez de dirección (un dominio propio, por ejemplo) obliga a repetir los pasos 1 y 4, hasta que exista la sincronización de 4.0: con ella bastará teclear el código de familia en la dirección nueva.
 
 ## 4. Línea a seguir
 
