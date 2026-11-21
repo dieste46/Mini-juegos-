@@ -152,6 +152,10 @@
       <h3>Estilo</h3>
       <p class="profiles"><button class="look${P.look !== 'pegatina' ? ' on' : ''}" data-l="normal">Normal</button><button class="look${P.look === 'pegatina' ? ' on' : ''}" data-l="pegatina">Pegatina (contorno negro)</button></p>
 
+      <h3>Letra de la semana</h3>
+      <p><small>La que estén trabajando en clase. En el juego Letras saldrá más veces, sea cual sea su nivel.</small></p>
+      <p class="profiles">${(Games.find(g => g.id === 'letras').letters || []).map(l => `<button class="wk${P.letter === l ? ' on' : ''}" data-l="${l}">${l}</button>`).join('')}<button class="wk${P.letter ? '' : ' on'}" data-l="">Ninguna</button></p>
+
       <h3>Voz</h3>
       <label><select id="voice"></select> <button id="test-voice">Probar</button><br>
         <small>Si suena a robot, descarga una voz mejor en el dispositivo (iPhone: Ajustes → Accesibilidad → Contenido leído → Voces → Español) y elígela aquí.</small></label>
@@ -184,6 +188,7 @@
     app.querySelector('#test-voice').onclick = sample;
     app.querySelector('#save-name').onclick = () => { Core.setName(app.querySelector('#name').value); greeted = false; Core.say(`Hola, ${Core.getName() || 'campeón'}`); parents(); };
     app.querySelectorAll('.barm').forEach(b => b.onclick = () => { try { localStorage.setItem('mj-prueba-barra', b.dataset.m); } catch {} applyBarMode(); parents(); });
+    app.querySelectorAll('.wk').forEach(b => b.onclick = () => { if (b.dataset.l) P.letter = b.dataset.l; else delete P.letter; Store.save(); parents(); });
     app.querySelectorAll('.look').forEach(b => b.onclick = () => { P.look = b.dataset.l; Store.save(); Themes.apply(); parents(); });
     app.querySelectorAll('.av').forEach(b => b.onclick = () => { P.avatar = b.dataset.a; Store.save(); parents(); });
     app.querySelectorAll('.pf').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; parents(); });

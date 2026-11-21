@@ -588,7 +588,8 @@ button { font-family: inherit; }
 .parents { background: #fff; color: #14235A; font-weight: 700; }
 .parents h3 { font-family: 'Lilita One', sans-serif; font-weight: 400; }
 .parents button { color: #14235A; font-weight: 700; }
-.profiles .look.on { outline: 3px solid var(--primary); background: #eef3ff; }
+.profiles .look.on, .profiles .wk.on, .profiles .barm.on { outline: 3px solid var(--primary); background: #eef3ff; }
+.profiles .wk { min-width: 44px; }
 
 /* ---------- Pegatina: contorno negro y sombra dura, en los dos temas ---------- */
 body.sticker .game-card, body.sticker .bubble, body.sticker .world-banner, body.sticker .prompt, body.sticker .stage, body.sticker .opt,

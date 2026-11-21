@@ -7,6 +7,7 @@ Games.push({
   learns: 'Sonido inicial de las palabras, vocales y primeras consonantes (base de la lectura).',
   how: ['Escucha la palabra y fíjate en cómo empieza.', 'Toca la letra por la que empieza.', 'En el nivel más alto es al revés: sale una letra y hay que tocar el dibujo que empieza por ella.'],
   maxLevel: 3,
+  letters: ['A', 'E', 'I', 'O', 'U', 'M', 'P', 'L', 'S', 'D', 'T'],   // las que tienen palabras: entre ellas se elige la letra de la semana
   start(root, exit) {
     const WORDS = {
       A: [['🐝', 'abeja'], ['🌳', 'árbol'], ['✈️', 'avión'], ['🕷️', 'araña']],
@@ -26,6 +27,8 @@ Games.push({
     const NAME = { A: 'a', E: 'e', I: 'i', O: 'o', U: 'u', M: 'eme', P: 'pe', S: 'ese', L: 'ele', D: 'de', T: 'te' };
     // Solo las letras que ya han trabajado en clase, en su orden (lo dice la familia). La T tiene sus palabras listas para cuando toque.
     const VOWELS = ['A', 'E', 'I', 'O', 'U'], CONS = ['M', 'P', 'L', 'S', 'D'];
+    // La letra de la semana (zona de padres) sale más veces, en cualquier nivel.
+    const WEEK = WORDS[Core.state.letter] ? Core.state.letter : null, weekTurn = () => WEEK && Math.random() < 0.4;
     // Alarga la primera letra para que se oiga el sonido: "mmmono", "ooooso".
     const stretch = w => w[0].repeat(3) + w.slice(1);
 
@@ -34,7 +37,7 @@ Games.push({
       makeQuestion(level) {
         if (level <= 2) {
           const pool = level === 1 ? VOWELS : [...VOWELS, ...CONS];
-          const letter = level === 1 ? Core.pick(VOWELS) : Core.pick(CONS);
+          const letter = weekTurn() ? WEEK : level === 1 ? Core.pick(VOWELS) : Core.pick(CONS);
           const [emoji, word] = Core.pick(WORDS[letter]);
           const opts = Core.shuffle([letter, ...Core.sample(pool.filter(l => l !== letter), 2)]);
           return {
@@ -47,7 +50,8 @@ Games.push({
           };
         }
         // Nivel 3: al revés, letra -> dibujo.
-        const [letter, ...others] = Core.sample([...VOWELS, ...CONS], 3);
+        const all = [...VOWELS, ...CONS];
+        const [letter, ...others] = weekTurn() ? [WEEK, ...Core.sample(all.filter(l => l !== WEEK), 2)] : Core.sample(all, 3);
         const target = Core.pick(WORDS[letter]);
         const opts = Core.shuffle([target, ...others.map(l => Core.pick(WORDS[l]))]);
         return {

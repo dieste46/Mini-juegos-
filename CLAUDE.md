@@ -40,7 +40,7 @@ HTML, CSS y JS plano, sin build ni dependencias. Los módulos se cargan con `<sc
 
 | Módulo | Qué hace |
 |---|---|
-| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,stars,games,worlds}`, migración desde v1, guardado diferido y copia de seguridad con formato versionado (`exportBackup`, `readBackup`, `importBackup`). Es la única puerta al guardado |
+| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,letter,stars,games,worlds}`, migración desde v1, guardado diferido y copia de seguridad con formato versionado (`exportBackup`, `readBackup`, `importBackup`). Es la única puerta al guardado |
 | `js/core.js` | Voz (`say`), sonidos (`sfx`, `tone`), nivel adaptativo (`registerAnswer`), motor de preguntas (`runQuiz`), pantalla final (`endScreen`), iconos (`pic`, `pics`, `picSrc`) |
 | `js/fx.js` | Partículas y sacudida: `Fx.system()` para canvas propio, `Fx.overlay(host)` para juegos DOM |
 | `js/scene.js` | Dibujo compartido para canvas: nubes, árboles, casas, colinas, azar repetible |

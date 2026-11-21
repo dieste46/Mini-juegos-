@@ -83,7 +83,8 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 
 ```
 { v: 2, active: 'p…', device: { voiceURI },
-  profiles: { 'p…': { id, name, avatar, theme, stars, games: { <id>: {...} }, worlds: { granja: { seen } }, created, updated } } }
+  profiles: { 'p…': { id, name, avatar, theme, look, letter, stars, games: { <id>: {...} }, worlds: { granja: { seen } }, created, updated } } }
+// letter: la letra de la semana (opcional). Se elige en la zona de padres y en el juego Letras sale en torno al 40 % de las preguntas.
 ```
 
 - Cambiar el formato = subir `v` y añadir el paso en `migrate()`. Lo antiguo (`juegos-peque-v1`) se migra solo y se deja como copia.

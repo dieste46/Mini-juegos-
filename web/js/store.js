@@ -121,6 +121,7 @@ const Store = (() => {
       id, name: txt(p.name, 20), avatar: txt(p.avatar, 8, '🙂') || '🙂',
       theme: isId(p.theme) ? p.theme : 'granja', look: p.look === 'pegatina' ? 'pegatina' : 'normal',
       stars: count(p.stars), games, worlds: isObj(p.worlds) ? clean(p.worlds) : {},
+      ...(typeof p.letter === 'string' && /^[A-ZÑ]$/.test(p.letter) ? { letter: p.letter } : {}),   // letra de la semana
       created: date(p.created, now), updated: date(p.updated, now)
     };
   }

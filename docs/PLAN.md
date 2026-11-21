@@ -31,7 +31,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Cuenta | `contar` | aprende | preguntas | Hasta 10 y sumas con dibujos (4 niveles) |
 | Parejas | `memoria` | aprende | DOM | |
 | Colores | `colores` | aprende | preguntas | 3 niveles |
-| Letras | `letras` | aprende | preguntas | Sonido inicial con las 10 letras trabajadas en clase: vocales y M, P, L, S, D (3 niveles). Se queda corto: ver 4.2 |
+| Letras | `letras` | aprende | preguntas | Sonido inicial con las 10 letras trabajadas en clase: vocales y M, P, L, S, D (3 niveles). La letra de la semana, que se elige en la zona de padres, sale más veces. Se queda corto: ver 4.2 |
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
 | Guía a Bip | `robot` | aprende | DOM | Programar el camino de Bip con flechas y verlo ejecutarse (5 niveles; el último, con ficha de repetir) |
 
@@ -254,7 +254,7 @@ Sustituye con el tiempo al juego Letras. Copia la ficha semanal del colegio, que
 
 En la web, un juego `abecedario` en "Pequesabios":
 
-- **Entrada**: rejilla del abecedario. La "letra de la semana" (se fija en la zona de padres) aparece destacada; las demás están abiertas. Cada letra completada gana un sello.
+- **Entrada**: rejilla del abecedario. La "letra de la semana" (ya se fija en la zona de padres y la usa el juego Letras) aparece destacada; las demás están abiertas. Cada letra completada gana un sello.
 - **Cinco estaciones cortas por letra**, todas acaban en acierto:
   1. *Repaso*: trazar con el dedo sobre la guía punteada, con punto de inicio y flecha de dirección. Primero mayúscula, luego minúscula ligada. Tolerante: avanza al cubrir la guía; salirse no penaliza. En la primera versión basta con medir cuánto de la letra se ha cubierto, sin exigir orden de trazos.
   2. *Escribo*: lienzo libre junto al modelo. No se evalúa; se puede guardar en la galería.
