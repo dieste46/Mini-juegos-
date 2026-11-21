@@ -136,12 +136,12 @@
         // Huecos para flechas: los del camino más corto y un par de sobra; con la ficha de repetir, los justos y uno más.
         function resize() {
           const path = route(P.n, P.walls, pos, targets()) || [];
-          slots = P.repeat ? runsOf(path).length + 1 : Math.min(path.length + 2, 9);
+          slots = P.repeat ? runsOf(path).length + 1 : path.length + 2;   // siempre caben todos los pasos que faltan, aunque haya dado un rodeo
         }
 
         function paint() {
           const a = ahead();
-          tray.style.setProperty('--slots', slots);
+          tray.style.setProperty('--slots', Math.min(slots, 9));   // más de nueve huecos pasan a una segunda fila
           tray.innerHTML = Array.from({ length: slots }, (_, i) => {
             const t = prog[i];
             return t ? `<span class="rb-slot full" style="--c:${COLOR[t.d]}">${arrow(t.d)}${t.n > 1 ? `<b>${t.n}</b>` : ''}</span>` : '<span class="rb-slot"></span>';
