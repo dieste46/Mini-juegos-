@@ -35,7 +35,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
 | Guía a Bip | `robot` | aprende | DOM | Programar el camino de Bip con flechas y verlo ejecutarse (5 niveles; el último, con ficha de repetir) |
 
-Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, cómo se juega cada juego, exportar e importar partidas con formato versionado), botón "?" en cada juego con la explicación y un altavoz que la lee, PWA sin conexión.
+Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, letras del cole, qué juegos salen en el menú y en qué orden, nivel a mano, cómo se juega cada juego, exportar e importar partidas con formato versionado), "Mi Bip" para que el niño elija el color de Bip y le ponga un complemento, botón "?" en cada juego con la explicación y un altavoz que la lee, PWA sin conexión.
 
 ## 3. Pendiente conocido
 
@@ -315,6 +315,29 @@ Conciencia fonológica, todo de oído: palmadas por sílabas, "¿empiezan igual?
 
 - Las listas de palabras las da la familia, como en todo lo de pronunciación.
 - La voz sintética es mala para sonidos sueltos. Alternativa: grabar la voz de la familia desde la zona de padres (se guardaría en el dispositivo y viajaría en la copia exportada).
+
+### 4.10 Personalización (ronda del 21/11/2026)
+
+La razón de fondo: poder seguir añadiendo juegos sin que el menú se haga interminable, y que la familia ajuste lo que el nivel automático no sabe.
+
+Hecho:
+- Minijuegos que se pueden quitar del menú, por jugador. Los de aprender se ven siempre.
+- Favoritos: los marcados salen los primeros de su sección.
+- Mi Bip: color libre y complementos que se abren con las estrellas (5, 15, 30, 50 y 80). No se gastan.
+- Nivel de cada juego a mano, con − y +. Desde ahí sigue ajustándose solo.
+- Letras trabajadas en clase, además de la letra de la semana.
+
+Sobre la mesa, sin decidir:
+- Duración de la partida (preguntas por ronda).
+- Ritmo de los juegos de acción: tranquilo, normal o rápido.
+- Tope de números en Cuenta y si hay sumas.
+- Velocidad de la voz y efectos aparte de la voz. Apodo para la voz.
+- La voz de la familia para felicitar.
+- Las letras de su nombre, como juego. Palabras de la familia con foto.
+- Meta a medida al llegar a un número de estrellas.
+- Si los juegos siguen creciendo: enseñar solo los favoritos y un botón de "más juegos".
+
+Descartado: bloquear los minijuegos hasta hacer los de aprender (convierte aprender en un peaje) y un límite de tiempo con cuenta atrás a la vista.
 
 ## 5. Reparto del trabajo
 

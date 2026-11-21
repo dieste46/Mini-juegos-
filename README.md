@@ -83,8 +83,12 @@ Reglas: un juego nunca escribe emojis ni frases del tema a mano; los pide con `T
 
 ```
 { v: 2, active: 'p…', device: { voiceURI },
-  profiles: { 'p…': { id, name, avatar, theme, look, letter, stars, games: { <id>: {...} }, worlds: { granja: { seen } }, created, updated } } }
-// letter: la letra de la semana (opcional). Se elige en la zona de padres y en el juego Letras sale en torno al 40 % de las preguntas.
+  profiles: { 'p…': { id, name, avatar, theme, look, letter, letters, hide, fav, bip, stars, games: { <id>: {...} }, worlds: { granja: { seen } }, created, updated } } }
+// Personalización por jugador, toda opcional:
+//   letters: letras trabajadas en clase (el juego Letras solo pregunta por esas) · letter: la de la semana, que sale más veces
+//   hide: minijuegos que no se enseñan en el menú (los de aprender no se pueden ocultar) · fav: juegos que van primero en su sección
+//   bip: { color, item }, el Bip del jugador. Lo elige el niño en "Mi Bip"; los complementos se abren con las estrellas y no se gastan
+// El nivel de cada juego (games.<id>.level) se puede mover a mano en la zona de padres.
 ```
 
 - Cambiar el formato = subir `v` y añadir el paso en `migrate()`. Lo antiguo (`juegos-peque-v1`) se migra solo y se deja como copia.

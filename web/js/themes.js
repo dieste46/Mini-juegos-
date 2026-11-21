@@ -153,6 +153,7 @@ const Themes = (() => {
     document.body.className = document.body.className.replace(/\btheme-\S+/g, '').trim();
     document.body.classList.add('theme-' + t.id);
     document.body.classList.toggle('sticker', Store.profile.look === 'pegatina');   // contorno negro tipo pegatina
+    Mascot.apply();   // el color del Bip de este jugador
     const d = document.getElementById('decor');
     if (d) d.innerHTML = t.background();
   }

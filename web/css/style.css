@@ -772,6 +772,38 @@ body.sticker .help-card { border: 3px solid var(--line); box-shadow: 6px 6px 0 v
 .parents details.how summary { cursor: pointer; color: #3A4A85; }
 .parents details.how ol { margin: 6px 0 2px; padding-left: 20px; font-weight: 600; }
 
+/* ----- Mi Bip: el vestidor, y su botón en el menú ----- */
+.bip-edit { flex: none; align-self: flex-end; margin-left: -40px; margin-right: -6px; z-index: 1; width: 42px; height: 42px; border-radius: 50%; border: 0; padding: 0; font-size: 1.3rem; line-height: 1;
+  background: var(--panel); box-shadow: inset 0 0 0 2px var(--panel-line), 0 4px 0 var(--edge); cursor: pointer; }
+.dress { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.dress .prompt { align-self: stretch; margin: 0; }
+.dress-bip { width: min(46vw, 30vh, 220px); padding-top: 14px; }
+.dress-colors { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.dc { width: 46px; height: 46px; border-radius: 50%; border: 4px solid #fff; background: var(--c); padding: 0; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,.2); }
+.dc.on { box-shadow: 0 0 0 5px #FFD23F, 0 4px 0 rgba(0,0,0,.2); transform: scale(1.08); }
+.dress-items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 440px); }
+.di { position: relative; border: 0; border-radius: 22px; background: var(--panel); box-shadow: inset 0 0 0 2px var(--panel-line); border-bottom: 6px solid var(--edge); padding: 16px 8px 6px; cursor: pointer; }
+.di.on { box-shadow: 0 0 0 5px #FFD23F; }
+.di-bip { display: block; width: 78%; margin: 0 auto; }
+.di.locked .di-bip { opacity: .35; filter: grayscale(.6); }
+.di-lock { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); white-space: nowrap; background: #14235A; color: #fff; border-radius: 999px; padding: 2px 10px; font-weight: 900; font-size: .95rem; }
+.di.nope { animation: snope .4s; }
+body.sticker .di, body.sticker .bip-edit { border: 3px solid var(--line); box-shadow: 4px 4px 0 var(--line); }
+/* ----- Zona de padres: juegos del menú, letras y nivel a mano ----- */
+.profiles .wl.on { outline: 3px solid var(--primary); background: #eef3ff; }
+.profiles .wl { min-width: 44px; }
+.pick-games { display: grid; gap: 6px; margin-bottom: 14px; }
+.pg-sec { margin: 8px 0 0; font-weight: 900; }
+.pg { display: flex; align-items: center; gap: 8px; }
+.pg-name { flex: 1; min-width: 0; }
+.parents .pg button { min-width: 74px; }
+.parents .pg-fav { min-width: 54px; color: #9aa3c4; }
+.parents .pg-see.on { background: #e6f8ec; border-color: #5BE38C; }
+.parents .pg-fav.on { background: #fff4c9; border-color: #f0b400; color: #14235A; }
+.lv { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.parents .lvb { width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 1.2rem; line-height: 1; }
+.parents .lvb:disabled { opacity: .3; }
+
 /* ===== PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada =====
    Solo se activa en las vistas previas, desde la zona de padres (ver BAR_TEST en app.js). Quitar cuando se decida. */
 /* "Barra fija": la barra deja de irse con el contenido y se queda pegada arriba, opaca. */

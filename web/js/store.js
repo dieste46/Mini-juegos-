@@ -122,6 +122,10 @@ const Store = (() => {
       theme: isId(p.theme) ? p.theme : 'granja', look: p.look === 'pegatina' ? 'pegatina' : 'normal',
       stars: count(p.stars), games, worlds: isObj(p.worlds) ? clean(p.worlds) : {},
       ...(typeof p.letter === 'string' && /^[A-ZÑ]$/.test(p.letter) ? { letter: p.letter } : {}),   // letra de la semana
+      ...(Array.isArray(p.letters) ? { letters: [...new Set(p.letters.filter(l => typeof l === 'string' && /^[A-ZÑ]$/.test(l)))] } : {}),   // letras trabajadas
+      ...(Array.isArray(p.hide) ? { hide: [...new Set(p.hide.filter(isId))].slice(0, 60) } : {}),    // minijuegos que no se enseñan
+      ...(Array.isArray(p.fav) ? { fav: [...new Set(p.fav.filter(isId))].slice(0, 60) } : {}),       // juegos que van primero
+      ...(isObj(p.bip) ? { bip: { ...(isId(p.bip.color) ? { color: p.bip.color } : {}), ...(isId(p.bip.item) ? { item: p.bip.item } : {}) } } : {}),   // el Bip del jugador
       created: date(p.created, now), updated: date(p.updated, now)
     };
   }

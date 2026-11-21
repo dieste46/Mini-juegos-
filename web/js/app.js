@@ -64,7 +64,15 @@
   // Dibujo de la tarjeta: imagen si el juego la tiene para este tema; si no, su emoji.
   const artOf = g => { const a = g.art && g.art(Themes.current()); return a ? `<img class="art" src="img/icons/${a}.webp" alt="" data-e="${emojiOf(g)}" onerror="this.outerHTML='<span class=emoji>'+this.dataset.e+'</span>'">` : `<span class="emoji">${emojiOf(g)}</span>`; };
   const TILES = ['#FF5FA2', '#FFD23F', '#5BE38C', '#FF8A3D', '#35D6E6', '#B79CFF'];
-  let greeted = false;
+  let greeted = false, hello = 0;
+  // Juegos que salen en el menú de este jugador y en qué orden. Se decide en la zona de padres:
+  // los minijuegos se pueden apagar (los de aprender, no) y los favoritos van primero.
+  const section = g => g.section || 'aprende';
+  function menuGames() {
+    const P = Store.profile, hide = P.hide || [], fav = P.fav || [];
+    const rank = g => (fav.includes(g.id) ? fav.indexOf(g.id) : 1000 + Games.indexOf(g));
+    return Games.filter(g => !g.hidden && !(section(g) === 'recreo' && hide.includes(g.id))).sort((a, b) => rank(a) - rank(b));
+  }
   function menu() {
     window.speechSynthesis?.cancel();
     const name = Core.getName(), multi = Store.profiles().length > 1;
@@ -73,16 +81,15 @@
     document.body.classList.remove('in-game');
     const themes = Object.values(Themes.list);
     app.innerHTML = `
-      <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div>
+      <div class="hello"><div class="hello-mascot">${Mascot.svg()}</div><button class="bip-edit" id="bip-edit" aria-label="Cambiar a ${Mascot.NAME}">🎨</button>
         <div class="bubble">${name ? `¡Hola, ${esc(name)}!` : '¡Hola!'}<br><small>¿A qué jugamos?</small></div>
         ${multi ? `<button class="who-btn" id="who" aria-label="Cambiar de jugador">${esc(Store.profile.avatar)}</button>` : ''}</div>
       <div class="theme-pick">${themes.map(t => `<button class="theme-btn${t.id === Themes.current().id ? ' on' : ''}" data-t="${t.id}"><span>${t.emoji}</span>${t.name}</button>`).join('')}</div>
-      <h2 class="section-title"><span>🎮</span> Minijuegos</h2><div class="menu-grid" id="recreo"></div>
-      <h2 class="section-title"><img src="img/icons/libros.webp" alt=""> Pequesabios</h2><div class="menu-grid" id="aprende"></div>
+      <h2 class="section-title" data-s="recreo"><span>🎮</span> Minijuegos</h2><div class="menu-grid" id="recreo"></div>
+      <h2 class="section-title" data-s="aprende"><img src="img/icons/libros.webp" alt=""> Pequesabios</h2><div class="menu-grid" id="aprende"></div>
       <button class="parents-link" id="parents">Zona de padres</button>`;
     const nth = {};
-    Games.forEach(g => {
-      if (g.hidden) return;   // se entra desde otro juego
+    menuGames().forEach(g => {
       const s = Core.gameState(g.id), sec = g.section || 'aprende';
       nth[sec] = (nth[sec] || 0) + 1;
       const lv = Math.max(0, Math.min(g.maxLevel || 0, Math.floor(s.level) || 0));
@@ -92,7 +99,10 @@
       b.onclick = () => { Core.say(g.name); location.hash = g.id; };
       app.querySelector('#' + (g.section || 'aprende')).appendChild(b);
     });
+    // Una sección sin tarjetas (todos sus juegos apagados) no enseña ni el título
+    app.querySelectorAll('.section-title').forEach(h => { if (!nth[h.dataset.s]) { h.nextElementSibling.remove(); h.remove(); } });
     app.querySelector('#parents').onclick = () => (location.hash = 'padres');
+    app.querySelector('#bip-edit').onclick = () => (location.hash = 'bip');
     app.querySelectorAll('.theme-btn').forEach(b => b.onclick = () => {
       if (b.dataset.t === Themes.current().id) return;
       Themes.use(b.dataset.t); Core.sfx.whoosh(); greeted = true; menu(); Core.say(Themes.current().say);
@@ -102,8 +112,35 @@
     app.querySelector('.section-title').before(World.banner());
     const m = app.querySelector('.hello-mascot');
     m.onclick = () => { m.classList.remove('jump'); void m.offsetWidth; m.classList.add('jump'); Core.sfx.pop(); Core.say(`¡Hola${name ? ', ' + name : ''}! Soy ${Mascot.NAME}.`); };
-    if (World.hasNew() && Core.state.stars > 0) { greeted = true; setTimeout(() => Core.say(`¡Tienes un regalo nuevo en ${World.name.replace(/^Mi /, 'tu ')}! Tócalo.`), 300); }
-    else if (name && !greeted) { greeted = true; setTimeout(() => Core.say(`¡Hola, ${name}! ¿A qué jugamos?`), 300); }
+    // El saludo va con un pequeño retraso; si antes se sale del menú, se anula (pisaría la voz de la pantalla siguiente).
+    if (World.hasNew() && Core.state.stars > 0) { greeted = true; hello = setTimeout(() => Core.say(`¡Tienes un regalo nuevo en ${World.name.replace(/^Mi /, 'tu ')}! Tócalo.`), 300); }
+    else if (name && !greeted) { greeted = true; hello = setTimeout(() => Core.say(`¡Hola, ${name}! ¿A qué jugamos?`), 300); }
+  }
+
+  // ---------- Mi Bip: el niño elige su color y le pone un complemento ----------
+  // Los complementos se abren al llegar a un número de estrellas. No se gastan: lo abierto se queda abierto.
+  function dresser() {
+    title.textContent = `Mi ${Mascot.NAME}`;
+    btnHome.hidden = false;
+    document.body.classList.remove('in-game');
+    const P = Store.profile, look = P.bip || {}, color = Mascot.COLORS[look.color] ? look.color : 'azul', item = Mascot.ITEMS.some(i => i.id === look.item) ? look.item : 'nada';
+    const next = Mascot.ITEMS.find(i => i.stars > P.stars);
+    app.innerHTML = `<div class="dress">
+      <div class="prompt"><button class="speak-btn" id="sp" aria-label="Repetir">🔊</button><span>⭐ ${P.stars}</span></div>
+      <div class="dress-bip">${Mascot.svg('joy')}</div>
+      <div class="dress-colors">${Object.keys(Mascot.COLORS).map(c => `<button class="dc${c === color ? ' on' : ''}" data-c="${c}" style="--c:${Mascot.COLORS[c][0]}" aria-label="Color ${c}"></button>`).join('')}</div>
+      <div class="dress-items">${Mascot.ITEMS.map(i => `<button class="di${i.id === item ? ' on' : ''}${i.stars > P.stars ? ' locked' : ''}" data-i="${i.id}" aria-label="${i.id === 'nada' ? 'Sin nada' : i.name}">
+        <span class="di-bip">${Mascot.svg('happy', { item: i.id })}</span>${i.stars > P.stars ? `<span class="di-lock">⭐ ${i.stars}</span>` : ''}</button>`).join('')}</div></div>`;
+    const intro = () => Core.say(`Elige un color para ${Mascot.NAME} y ponle lo que más te guste.` + (next ? ` Con ${next.stars} estrellas se abre ${next.name}.` : ''));
+    app.querySelector('#sp').onclick = intro;
+    const wear = change => { P.bip = { color, item, ...change }; Store.save(); Mascot.apply(); Core.sfx.pop(); dresser(); };
+    app.querySelectorAll('.dc').forEach(b => b.onclick = () => { wear({ color: b.dataset.c }); Core.say(b.dataset.c); });
+    app.querySelectorAll('.di').forEach(b => b.onclick = () => {
+      const it = Mascot.ITEMS.find(i => i.id === b.dataset.i);
+      if (it.stars > P.stars) { Core.tone(330, 0.14, 'sine', 0.16); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); Core.say(`Para ${it.name} hacen falta ${it.stars} estrellas. Te faltan ${it.stars - P.stars}.`); return; }
+      wear({ item: it.id }); Core.say(it.id === 'nada' ? 'Sin nada.' : `¡Qué bien le queda ${it.name}!`);
+    });
+    return intro;
   }
 
   // ---------- ¿Quién juega? (solo si hay varios perfiles) ----------
@@ -131,12 +168,14 @@
     title.textContent = 'Zona de padres';
     btnHome.hidden = false;
     document.body.classList.remove('in-game');
-    const P = Store.profile;
+    const P = Store.profile, LETRAS = Games.find(g => g.id === 'letras'), worked = P.letters || LETRAS.worked;
+    // Favoritos de una sección, en su orden: el número que se enseña es el puesto dentro de ella
+    const favIn = sec => (P.fav || []).filter(id => { const g = Games.find(x => x.id === id); return g && section(g) === sec; });
     document.getElementById('star-count').textContent = P.stars;
     const rows = Games.map(g => {
       const s = Core.gameState(g.id);
       const pct = s.answered ? Math.round(100 * s.firstTry / s.answered) + ' %' : '—';
-      const lvl = g.maxLevel ? `${s.level}/${g.maxLevel}` : (g.badge ? g.badge(s) || '—' : '—');
+      const lvl = g.maxLevel ? `<span class="lv"><button class="lvb" data-g="${g.id}" data-d="-1" aria-label="Bajar el nivel de ${g.name}"${s.level <= 1 ? ' disabled' : ''}>−</button><b>${s.level}/${g.maxLevel}</b><button class="lvb" data-g="${g.id}" data-d="1" aria-label="Subir el nivel de ${g.name}"${s.level >= g.maxLevel ? ' disabled' : ''}>+</button></span>` : (g.badge ? g.badge(s) || '—' : '—');
       const how = howOf(g);
       return `<tr><td>${emojiOf(g)} ${g.name}<br><small>${g.learns}</small>${how.length ? `<details class="how"><summary>Cómo se juega</summary><ol>${how.map(t => `<li>${esc(t)}</li>`).join('')}</ol></details>` : ''}</td><td>${lvl}</td><td>${pct}</td><td>${s.played}</td></tr>`;
     }).join('');
@@ -152,16 +191,25 @@
       <h3>Estilo</h3>
       <p class="profiles"><button class="look${P.look !== 'pegatina' ? ' on' : ''}" data-l="normal">Normal</button><button class="look${P.look === 'pegatina' ? ' on' : ''}" data-l="pegatina">Pegatina (contorno negro)</button></p>
 
-      <h3>Letra de la semana</h3>
-      <p><small>La que estén trabajando en clase. En el juego Letras saldrá más veces, sea cual sea su nivel.</small></p>
-      <p class="profiles">${(Games.find(g => g.id === 'letras').letters || []).map(l => `<button class="wk${P.letter === l ? ' on' : ''}" data-l="${l}">${l}</button>`).join('')}<button class="wk${P.letter ? '' : ' on'}" data-l="">Ninguna</button></p>
+      <h3>Letras del cole</h3>
+      <p><small>Marca las que ya ha trabajado en clase: el juego Letras solo pregunta por esas.</small></p>
+      <p class="profiles">${LETRAS.letters.map(l => `<button class="wl${worked.includes(l) ? ' on' : ''}" data-l="${l}">${l}</button>`).join('')}</p>
+      <p><small>Letra de la semana: sale más veces, sea cual sea su nivel.</small></p>
+      <p class="profiles">${LETRAS.letters.map(l => `<button class="wk${P.letter === l ? ' on' : ''}" data-l="${l}">${l}</button>`).join('')}<button class="wk${P.letter ? '' : ' on'}" data-l="">Ninguna</button></p>
+
+      <h3>Juegos del menú</h3>
+      <p><small>Los minijuegos se pueden quitar del menú; los de aprender se ven siempre. Los marcados con ★ salen los primeros de su sección, en el orden en que los marques.</small></p>
+      <div class="pick-games">${['recreo', 'aprende'].map(sec => `<p class="pg-sec">${sec === 'recreo' ? 'Minijuegos' : 'Pequesabios'}</p>` + Games.filter(g => !g.hidden && section(g) === sec).map(g => `<div class="pg">
+        <span class="pg-name">${emojiOf(g)} ${g.name}</span>
+        ${sec === 'recreo' ? `<button class="pg-see${(P.hide || []).includes(g.id) ? '' : ' on'}" data-g="${g.id}" aria-pressed="${!(P.hide || []).includes(g.id)}">${(P.hide || []).includes(g.id) ? 'Oculto' : 'Se ve'}</button>` : ''}
+        <button class="pg-fav${(P.fav || []).includes(g.id) ? ' on' : ''}" data-g="${g.id}" aria-pressed="${(P.fav || []).includes(g.id)}" aria-label="${g.name}: primero en el menú">★${(P.fav || []).includes(g.id) ? ' ' + (favIn(sec).indexOf(g.id) + 1) : ''}</button></div>`).join('')).join('')}</div>
 
       <h3>Voz</h3>
       <label><select id="voice"></select> <button id="test-voice">Probar</button><br>
         <small>Si suena a robot, descarga una voz mejor en el dispositivo (iPhone: Ajustes → Accesibilidad → Contenido leído → Voces → Español) y elígela aquí.</small></label>
 
       <h3>Progreso de ${esc(P.name || 'este jugador')}</h3>
-      <p>El nivel se ajusta solo: sube tras 3 aciertos seguidos a la primera y baja si falla dos preguntas seguidas.</p>
+      <p>El nivel se ajusta solo: sube tras 3 aciertos seguidos a la primera y baja si falla dos preguntas seguidas. Con − y + lo pones tú donde quieras, y desde ahí sigue ajustándose.</p>
       <table><tr><th>Juego</th><th>Nivel / marca</th><th>Acierto a la 1ª</th><th>Partidas</th></tr>${rows}</table>
       <p>⭐ Estrellas: ${P.stars}</p>
 
@@ -188,7 +236,16 @@
     app.querySelector('#test-voice').onclick = sample;
     app.querySelector('#save-name').onclick = () => { Core.setName(app.querySelector('#name').value); greeted = false; Core.say(`Hola, ${Core.getName() || 'campeón'}`); parents(); };
     app.querySelectorAll('.barm').forEach(b => b.onclick = () => { try { localStorage.setItem('mj-prueba-barra', b.dataset.m); } catch {} applyBarMode(); parents(); });
-    app.querySelectorAll('.wk').forEach(b => b.onclick = () => { if (b.dataset.l) P.letter = b.dataset.l; else delete P.letter; Store.save(); parents(); });
+    // La letra de la semana cuenta como trabajada: al elegirla se marca también arriba.
+    app.querySelectorAll('.wk').forEach(b => b.onclick = () => { if (b.dataset.l) { P.letter = b.dataset.l; if (!worked.includes(P.letter)) P.letters = LETRAS.letters.filter(l => worked.includes(l) || l === P.letter); } else delete P.letter; Store.save(); parents(); });
+    app.querySelectorAll('.wl').forEach(b => b.onclick = () => { const l = b.dataset.l; P.letters = LETRAS.letters.filter(x => (x === l ? !worked.includes(l) : worked.includes(x))); Store.save(); parents(); });
+    const flip = (key, id) => { const list = P[key] || []; P[key] = list.includes(id) ? list.filter(x => x !== id) : [...list, id]; Store.save(); parents(); };
+    app.querySelectorAll('.pg-see').forEach(b => b.onclick = () => flip('hide', b.dataset.g));
+    app.querySelectorAll('.pg-fav').forEach(b => b.onclick = () => flip('fav', b.dataset.g));
+    app.querySelectorAll('.lvb').forEach(b => b.onclick = () => {
+      const g = Games.find(x => x.id === b.dataset.g), s = Core.gameState(g.id);
+      s.level = Math.max(1, Math.min(g.maxLevel, s.level + Number(b.dataset.d))); s.streak = 0; s.misses = 0; Core.save(); parents();
+    });
     app.querySelectorAll('.look').forEach(b => b.onclick = () => { P.look = b.dataset.l; Store.save(); Themes.apply(); parents(); });
     app.querySelectorAll('.av').forEach(b => b.onclick = () => { P.avatar = b.dataset.a; Store.save(); parents(); });
     app.querySelectorAll('.pf').forEach(b => b.onclick = () => { Store.switchProfile(b.dataset.id); Themes.apply(); greeted = false; parents(); });
@@ -264,12 +321,13 @@
   let cleanup = null;
   function route() {
     if (cleanup) { try { cleanup(); } catch {} cleanup = null; }
-    closeHelp(); helpGame = null; btnHelp.hidden = true;
+    closeHelp(); helpGame = null; btnHelp.hidden = true; clearTimeout(hello);
     unzoom();
     document.getElementById('star-count').textContent = Core.state.stars;
     const id = location.hash.slice(1);
     if (id === 'padres') return parents();
     if (id === 'quien') return who();
+    if (id === 'bip') { dresser()(); return; }
     if (id === 'mundo' || id === 'granja') {
       title.textContent = World.name; btnHome.hidden = false;
       document.body.classList.add('in-game'); app.innerHTML = ''; window.scrollTo(0, 0);

@@ -40,11 +40,11 @@ HTML, CSS y JS plano, sin build ni dependencias. Los módulos se cargan con `<sc
 
 | Módulo | Qué hace |
 |---|---|
-| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,letter,stars,games,worlds}`, migración desde v1, guardado diferido y copia de seguridad con formato versionado (`exportBackup`, `readBackup`, `importBackup`). Es la única puerta al guardado |
+| `js/store.js` | Guardado v2 en `localStorage` (`mini-juegos-store`): perfiles `{id,name,avatar,theme,look,letter,letters,hide,fav,bip,stars,games,worlds}`, migración desde v1, guardado diferido y copia de seguridad con formato versionado (`exportBackup`, `readBackup`, `importBackup`). Es la única puerta al guardado |
 | `js/core.js` | Voz (`say`), sonidos (`sfx`, `tone`), nivel adaptativo (`registerAnswer`), motor de preguntas (`runQuiz`), pantalla final (`endScreen`), iconos (`pic`, `pics`, `picSrc`) |
 | `js/fx.js` | Partículas y sacudida: `Fx.system()` para canvas propio, `Fx.overlay(host)` para juegos DOM |
 | `js/scene.js` | Dibujo compartido para canvas: nubes, árboles, casas, colinas, azar repetible |
-| `js/mascot.js` | Bip, el robot mascota (SVG con estados de ánimo) |
+| `js/mascot.js` | Bip, el robot mascota (SVG con estados de ánimo). Cada jugador elige su color y un complemento, que se abren con las estrellas (`profile.bip`) |
 | `js/themes.js` | Temas como datos: `Themes.list.granja`, `Themes.list.espacio`. Los juegos piden sus datos con `Themes.set('nombre')` |
 | `js/world.js` | Mundo de recompensas que crece con las estrellas (Mi granja / Mi base espacial) |
 | `js/app.js` | Menú, rutas por hash, zona de padres, protecciones táctiles de iOS |
@@ -136,7 +136,7 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
 - **Audio en iOS**: solo arranca dentro de un toque del usuario (`Core.unlockAudio`). La voz elige la mejor voz es-ES instalada.
 - **`pagehide`** solo guarda si hay cambios pendientes; si no, pisa datos recién migrados.
 - **Importar no debe guardar nada después**: `Store.save()` sella el perfil activo con la fecha del momento, y una copia tiene que entrar con sus fechas (la sincronización prevista decide por fecha). Por eso tras importar se usa `Core.refreshVoice()` y no `Core.setVoice()`.
-- **Lo que viene de fuera se valida y se escapa**: una copia importada (y, cuando exista, lo que baje de la nube) pasa por `Store.readBackup()`, y los nombres se pintan con `esc()`.
+- **Lo que viene de fuera se valida y se escapa**: una copia importada (y, cuando exista, lo que baje de la nube) pasa por `Store.readBackup()`, y los nombres se pintan con `esc()`. Un campo nuevo en el perfil hay que añadirlo a `cleanProfile()` en `store.js`, o se pierde al importar.
 - **Cambiar de dirección es cambiar de datos**: `localStorage` e IndexedDB van por origen, y en iOS la app instalada en la pantalla de inicio tiene además su almacén propio, separado de Safari. Importar hay que hacerlo desde el icono instalado.
 - **iOS fija el dibujo del icono al añadirlo a la pantalla de inicio.** Para que cambie hay que borrar el icono y volver a añadirlo, y al borrarlo se van sus datos: exportar antes e importar después.
 - **La barra superior** va por encima del juego (`z-index`), para que nada tape la casa.

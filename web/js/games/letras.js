@@ -7,7 +7,8 @@ Games.push({
   learns: 'Sonido inicial de las palabras, vocales y primeras consonantes (base de la lectura).',
   how: ['Escucha la palabra y fíjate en cómo empieza.', 'Toca la letra por la que empieza.', 'En el nivel más alto es al revés: sale una letra y hay que tocar el dibujo que empieza por ella.'],
   maxLevel: 3,
-  letters: ['A', 'E', 'I', 'O', 'U', 'M', 'P', 'L', 'S', 'D', 'T'],   // las que tienen palabras: entre ellas se elige la letra de la semana
+  letters: ['A', 'E', 'I', 'O', 'U', 'M', 'P', 'L', 'S', 'D', 'T'],   // las que tienen palabras: entre ellas se marcan las trabajadas y la de la semana
+  worked: ['A', 'E', 'I', 'O', 'U', 'M', 'P', 'L', 'S', 'D'],         // las trabajadas, si la familia no ha marcado otras
   start(root, exit) {
     const WORDS = {
       A: [['🐝', 'abeja'], ['🌳', 'árbol'], ['✈️', 'avión'], ['🕷️', 'araña'], ['💍', 'anillo'], ['🐿️', 'ardilla'], ['🦅', 'águila'], ['🌈', 'arcoíris']],
@@ -25,8 +26,13 @@ Games.push({
     // Palabras del tema actual (p. ej. espacio): se añaden y salen con más frecuencia.
     Object.entries(Themes.set('letras')).forEach(([l, ws]) => { if (WORDS[l]) WORDS[l] = [...ws, ...ws, ...WORDS[l]]; });
     const NAME = { A: 'a', E: 'e', I: 'i', O: 'o', U: 'u', M: 'eme', P: 'pe', S: 'ese', L: 'ele', D: 'de', T: 'te' };
-    // Solo las letras que ya han trabajado en clase, en su orden (lo dice la familia). La T tiene sus palabras listas para cuando toque.
-    const VOWELS = ['A', 'E', 'I', 'O', 'U'], CONS = ['M', 'P', 'L', 'S', 'D'];
+    // Solo las letras que ya han trabajado en clase: las marca la familia en la zona de padres (profile.letters).
+    // Hacen falta al menos tres para tener entre qué elegir; si no, se usan las de siempre.
+    const mine = (Core.state.letters || this.worked).filter(l => WORDS[l]), known = mine.length >= 3 ? mine : this.worked;
+    const isVowel = l => 'AEIOU'.includes(l);
+    let VOWELS = known.filter(isVowel), CONS = known.filter(l => !isVowel(l));
+    if (VOWELS.length < 3) VOWELS = known;        // nivel 1 sin vocales suficientes: con las que haya
+    if (!CONS.length) CONS = known;               // nivel 2 sin consonantes: lo mismo
     // La letra de la semana (zona de padres) sale más veces, en cualquier nivel.
     const WEEK = WORDS[Core.state.letter] ? Core.state.letter : null, weekTurn = () => WEEK && Math.random() < 0.4;
     // Alarga la primera letra para que se oiga el sonido: "mmmono", "ooooso".
@@ -36,7 +42,7 @@ Games.push({
       id: this.id, maxLevel: this.maxLevel,
       makeQuestion(level) {
         if (level <= 2) {
-          const pool = level === 1 ? VOWELS : [...VOWELS, ...CONS];
+          const pool = level === 1 ? VOWELS : known;
           const letter = weekTurn() ? WEEK : level === 1 ? Core.pick(VOWELS) : Core.pick(CONS);
           const [emoji, word] = Core.pick(WORDS[letter]);
           const opts = Core.shuffle([letter, ...Core.sample(pool.filter(l => l !== letter), 2)]);
@@ -50,7 +56,7 @@ Games.push({
           };
         }
         // Nivel 3: al revés, letra -> dibujo.
-        const all = [...VOWELS, ...CONS];
+        const all = known;
         const [letter, ...others] = weekTurn() ? [WEEK, ...Core.sample(all.filter(l => l !== WEEK), 2)] : Core.sample(all, 3);
         const target = Core.pick(WORDS[letter]);
         const opts = Core.shuffle([target, ...others.map(l => Core.pick(WORDS[l]))]);
