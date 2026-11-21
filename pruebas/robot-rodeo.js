@@ -22,8 +22,10 @@ const { chromium } = require('playwright');
     let won = false; for (let k = 0; k < 80 && !won; k++) { await new Promise(r => setTimeout(r, 40)); won = (await st()).count >= 1; }
     if (won && s2.prog.length === sol.length) ok++; else mal.push(JSON.stringify({ pasos: sol.length, puestas: s2.prog.length, huecos: s1.slots, en: s1.pos, meta: s0.puzzle.goal }));
   }
-  console.log(`${ok}/${N} tableros: tras llegar sin estrella, lo que falta cabe entero y se llega · con más de 9 pasos por delante: ${largos} · máximo de huecos visto: ${maxSlots} · veces con dos filas: ${filas2}` + (mal.length ? '\nFALLAN: ' + mal.slice(0, 4).join(' ; ') : ''));
+  console.log(`${ok === N ? 'OK  ' : 'FAIL'} ${ok}/${N} tableros: tras llegar sin estrella, lo que falta cabe entero y se llega · con más de 9 pasos por delante: ${largos} · máximo de huecos visto: ${maxSlots} · veces con dos filas: ${filas2}` + (mal.length ? '\nFALLAN: ' + mal.slice(0, 4).join(' ; ') : ''));
   console.log('borde inferior de los botones en el peor caso:', await p.evaluate(() => window.__bajo + ' px de ' + innerHeight));
-  console.log('errores:', errs.length ? errs.join(' | ') : 'ninguno');
+  console.log(`${errs.length ? 'FAIL' : 'OK  '} sin errores` + (errs.length ? '  — ' + errs.join(' | ') : ''));
   await b.close();
+  const fallos = (ok === N ? 0 : 1) + (errs.length ? 1 : 0);
+  console.log(fallos ? `\n${fallos} FALLOS` : '\nTodo bien'); process.exit(fallos ? 1 : 0);
 })();

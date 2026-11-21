@@ -12,7 +12,7 @@ sleep 1.5
 fallos=0
 for b in general robot robot-guia robot-rodeo ayuda semana personalizacion letras; do
   node "pruebas/$b.js" > "pruebas/out/$b.txt" 2>&1 || fallos=$((fallos + 1))
-  echo "== $b: $(grep -c '^OK' "pruebas/out/$b.txt") bien, $(grep -c '^FAIL' "pruebas/out/$b.txt") mal"
+  echo "== $b: $(grep -c "^OK" "pruebas/out/$b.txt") bien, $(grep -c '^FAIL' "pruebas/out/$b.txt") mal"
   grep '^FAIL' "pruebas/out/$b.txt"
 done
 [ "$fallos" = 0 ] && echo "Todo bien" || echo "$fallos baterías con fallos (detalle en pruebas/out/)"

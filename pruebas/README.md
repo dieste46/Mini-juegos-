@@ -16,7 +16,7 @@ bash pruebas/pasar.sh          # todas, desde la raíz del repo (unos veinte min
 | `ayuda.js` | El botón "?" y la ventana de cómo se juega, en todos los juegos |
 | `semana.js` | La letra de la semana |
 | `personalizacion.js` | Juegos del menú, favoritos, Mi Bip, nivel a mano y letras trabajadas |
-| `letras.js` | Qué letras pregunta el juego Letras en cada nivel (informativa: no falla, hay que leerla) |
+| `letras.js` | Qué letras pregunta el juego Letras en cada nivel y en cada tema: vocales en el 1 y, en los demás, solo las trabajadas |
 | `desplegado.js` | Contra una dirección ya publicada: `node pruebas/desplegado.js https://mundojoor.pages.dev/` |
 
 - `robot.js`, `ayuda.js` y `personalizacion.js` aceptan también una dirección publicada como argumento.
