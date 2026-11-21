@@ -5,6 +5,7 @@ Games.push({
   emoji: '🎨', art: () => 'colores',
   color: '#ffb000',
   learns: 'Colores, formas geométricas y seguir instrucciones con dos condiciones.',
+  how: ['Escucha lo que pide la voz: un color, una forma o las dos cosas.', 'Toca la figura que ha dicho.', 'Si fallas, no pasa nada. Prueba otra vez.'],
   maxLevel: 3,
   start(root, exit) {
     const COLORS = [['rojo', 'roja', '#e8323c'], ['azul', 'azul', '#2f80ff'], ['verde', 'verde', '#2ebd6b'],

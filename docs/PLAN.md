@@ -35,7 +35,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
 | Guía a Bip | `robot` | aprende | DOM | Programar el camino de Bip con flechas y verlo ejecutarse (5 niveles; el último, con ficha de repetir) |
 
-Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, exportar e importar partidas con formato versionado), PWA sin conexión.
+Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles con guardado versionado, mundo de recompensas, mascota Bip, zona de padres (voz, estilo, perfiles, cómo se juega cada juego, exportar e importar partidas con formato versionado), botón "?" en cada juego con la explicación y un altavoz que la lee, PWA sin conexión.
 
 ## 3. Pendiente conocido
 

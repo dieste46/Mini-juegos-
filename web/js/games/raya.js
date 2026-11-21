@@ -53,6 +53,7 @@
     id: 'raya', section: 'recreo',
     name: 'Tres en raya', emoji: '⭕', color: '#35D6E6',
     learns: 'Pensar antes de mover, anticipar la jugada del otro y esperar el turno.',
+    how: () => ['Por turnos, cada uno pone una ficha en una casilla vacía.', 'Solo hay tres fichas por jugador. Al poner la cuarta, se va la más antigua, que es la que parpadea.', 'Pon tus tres fichas en fila. Gana la partida quien lo consigue tres veces.', `Puedes jugar contra ${Mascot.NAME} o contra otra persona.`],
     maxLevel: 4,
     start(root, exit) {
       const T = Themes.set('raya'), g = Core.gameState('raya'), GOAL = 3;

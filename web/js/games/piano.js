@@ -7,6 +7,7 @@ Games.push({
   id: 'piano', section: 'recreo',
   name: 'Piano', emoji: '🎹', art: () => 'piano', color: '#2f80ff',
   learns: 'Música, memoria auditiva y seguir una secuencia.',
+  how: ['Toca las teclas para oír cómo suenan.', 'Si eliges una canción, las notas caen y esperan sobre su tecla hasta que la tocas.', 'Con la oreja, la canción suena sola para que la escuches.'],
   badge: s => s.songs ? `🎵 ${s.songs}` : '',
   start(root, exit) {
     const FREQ = [262, 294, 330, 349, 392, 440, 494, 523];

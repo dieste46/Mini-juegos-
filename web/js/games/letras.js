@@ -5,6 +5,7 @@ Games.push({
   emoji: '🔤', art: () => 'letras',
   color: '#2ebd6b',
   learns: 'Sonido inicial de las palabras, vocales y primeras consonantes (base de la lectura).',
+  how: ['Escucha la palabra y fíjate en cómo empieza.', 'Toca la letra por la que empieza.', 'En el nivel más alto es al revés: sale una letra y hay que tocar el dibujo que empieza por ella.'],
   maxLevel: 3,
   start(root, exit) {
     const WORDS = {

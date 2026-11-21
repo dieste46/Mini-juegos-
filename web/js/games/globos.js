@@ -3,6 +3,7 @@ Games.push({
   id: 'globos', section: 'recreo',
   name: 'Globos', emoji: '🎈', art: () => 'globos', color: '#ff4f6d',
   learns: 'Coordinación ojo-mano y rapidez de reacción.',
+  how: ['Toca los globos para explotarlos.', 'Hay que explotar veinticinco. Si sale uno dorado, vale tres.', 'Si alguno se escapa, no pasa nada.'],
   start(root, exit) {
     const GOAL = 25;
     const KINDS = ['🎈', '🎈', '🎈', '🎈', '🫧'];

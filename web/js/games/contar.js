@@ -5,6 +5,7 @@ Games.push({
   emoji: t => t.sets.contables[0][0],
   color: '#ff6fa5',
   learns: 'Contar del 1 al 10, asociar cantidad con cifra y primeras sumas.',
+  how: ['Cuenta los dibujos que aparecen. Puedes ayudarte con el dedo.', 'Toca el número que has contado.', 'En el nivel más alto llegan más: di cuántos hay en total.', 'Si fallas, no pasa nada. Prueba otra vez.'],
   maxLevel: 4,
   start(root, exit) {
     const ANIMALS = Themes.set('contables');

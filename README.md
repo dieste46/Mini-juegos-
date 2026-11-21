@@ -69,6 +69,7 @@ js/app.js       Menú, navegación por #hash, zona de padres
 | `id` | Ruta `#id` y clave de su progreso |
 | `section` | `'recreo'` o `'aprende'` (sección del menú) |
 | `name`, `color`, `learns` | Tarjeta del menú y zona de padres |
+| `how` | Cómo se juega: lista de frases cortas, o función que la devuelve según el tema. Se enseña en la ventana del botón "?" de la barra (con altavoz que la lee) y en la zona de padres |
 | `emoji` | Texto o función `t => ...` que lo saca del tema |
 | `maxLevel` | Solo si usa nivel adaptativo (`Core.registerAnswer`) |
 | `badge(state)` | Opcional: marca a mostrar en la tarjeta |

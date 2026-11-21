@@ -5,6 +5,7 @@ Games.push({
   id: 'pintar', section: 'recreo',
   name: 'Pintar', emoji: '🎨', art: () => 'pintar', color: '#ff8a1c',
   learns: 'Creatividad, motricidad fina y simetría.',
+  how: ['Elige una hoja en blanco o un dibujo para colorear.', 'Escoge un color y una herramienta, y pinta con el dedo.', 'Tu dibujo se guarda solo. Luego lo encuentras en tu galería.'],
   start(root, exit) {
     const COLORS = ['#e8323c', '#ff8a1c', '#ffd23f', '#8bd450', '#2ebd6b', '#35c9d6', '#2f80ff', '#8e4ad8', '#ff6fa5', '#b9773f', '#2d2552', '#ffffff'];
     const NOTES = [262, 294, 330, 392, 440, 523, 587, 659, 784, 880];

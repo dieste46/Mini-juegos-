@@ -5,6 +5,7 @@ Games.push({
   id: 'topo', section: 'recreo',
   name: '¡Pilla, pilla!', art: t => (t.id === 'granja' ? 'cerdo' : null), emoji: t => t.sets.pilla.targets[0], color: '#c46a2b',
   learns: 'Reflejos y atención: tocar a los que asoman y no tocar al que no toca.',
+  how: () => { const T = Themes.set('pilla'); return [`Los ${T.word} asoman por los agujeros. Tócalos antes de que se escondan.`, 'Hay que pillar veinte. No hay reloj.', `Más adelante sale también ${T.avoidName}: a ese no hay que tocarlo. Y la estrella vale por tres.`]; },
   badge: s => s.total ? `🏅 ${s.total}` : '',
   start(root, exit) {
     const GOAL = 20, T = Themes.set('pilla');

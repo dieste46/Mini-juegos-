@@ -5,6 +5,7 @@ Games.push({
   emoji: '🧩', art: () => 'series',
   color: '#00b4c6',
   learns: 'Reconocer y continuar patrones: razonamiento lógico y pensamiento computacional.',
+  how: ['Mira la fila de dibujos: se repiten siguiendo un orden.', 'Toca el dibujo que viene después.', 'Si fallas, no pasa nada. Prueba otra vez.'],
   maxLevel: 3,
   start(root, exit) {
     const SETS = Themes.set('series');

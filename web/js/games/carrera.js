@@ -146,6 +146,7 @@
     id: 'carrera', section: 'recreo',
     name: 'Carrera', art: t => (t.id === 'granja' ? 'coche' : null), emoji: t => t.sets.carrera.vehicle, color: '#555b6e',
     learns: 'Reflejos, anticipación y lateralidad (izquierda / derecha).',
+    how: () => [`Toca a la izquierda o a la derecha de la pantalla para que ${Themes.set('carrera').road ? 'el coche' : 'el cohete'} cambie de carril.`, 'Coge quince estrellas para llegar a la meta.', 'Si chocas, solo frenas un poco. No se pierde nada.'],
     badge: s => s.wins ? `🏁 ${s.wins}` : '',
     start(root, exit) {
       const T = Themes.set('carrera'), TR = TRACKS[T.scene] || TRACKS.campo, isCar = T.road;

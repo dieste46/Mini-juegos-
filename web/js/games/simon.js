@@ -14,6 +14,7 @@
     id: 'simon', section: 'recreo', hidden: true, icon,
     name: 'Repite con Bip', emoji: '🎵', color: '#B79CFF',
     learns: 'Memoria de trabajo: recordar y repetir una secuencia que va creciendo.',
+    how: () => [`Mira qué luces enciende ${Mascot.NAME}.`, 'Después tócalas tú, en el mismo orden.', `Cada vez hay una más. Si te equivocas, ${Mascot.NAME} lo repite más despacio.`],
     badge: s => s.best ? `🎵 ${s.best}` : '',
     start(root, exit) {
       const g = Core.gameState('simon'), ROUNDS = 5;

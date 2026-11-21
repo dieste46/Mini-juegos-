@@ -6,7 +6,7 @@
   const title = { set textContent(t) { titleEl.innerHTML = Decor.rainbow(t); titleEl.setAttribute('aria-label', t); } };
   const APP_NAME = 'Mundo Joor';   // nombre de la app y título del menú
   Decor.mount();
-  const btnHome = document.getElementById('btn-home');
+  const btnHome = document.getElementById('btn-home'), btnHelp = document.getElementById('btn-help');
 
   // ---------- Protecciones táctiles ----------
   // Safari iOS ignora user-scalable=no: el pellizco con dos dedos (dos pulgares jugando) hace zoom y se queda.
@@ -137,7 +137,8 @@
       const s = Core.gameState(g.id);
       const pct = s.answered ? Math.round(100 * s.firstTry / s.answered) + ' %' : '—';
       const lvl = g.maxLevel ? `${s.level}/${g.maxLevel}` : (g.badge ? g.badge(s) || '—' : '—');
-      return `<tr><td>${emojiOf(g)} ${g.name}<br><small>${g.learns}</small></td><td>${lvl}</td><td>${pct}</td><td>${s.played}</td></tr>`;
+      const how = howOf(g);
+      return `<tr><td>${emojiOf(g)} ${g.name}<br><small>${g.learns}</small>${how.length ? `<details class="how"><summary>Cómo se juega</summary><ol>${how.map(t => `<li>${esc(t)}</li>`).join('')}</ol></details>` : ''}</td><td>${lvl}</td><td>${pct}</td><td>${s.played}</td></tr>`;
     }).join('');
     app.innerHTML = `<div class="parents">
       <h3>Jugador</h3>
@@ -233,10 +234,32 @@
     app.querySelector('#reset').onclick = () => { if (confirm(`¿Borrar todo el progreso de ${P.name || 'este jugador'}?`)) { Core.reset(); document.getElementById('star-count').textContent = 0; location.hash = ''; } };
   }
 
+  // ---------- Cómo se juega ----------
+  // Cada juego trae su explicación en `how` (lista de frases, o función que la da según el tema). Se enseña en una
+  // ventana desde el botón "?" de la barra, con un altavoz que la lee, y también en la zona de padres.
+  const howOf = g => (typeof g.how === 'function' ? g.how() : g.how) || [];
+  let helpEl = null, helpGame = null;
+  function closeHelp() { if (!helpEl) return; helpEl.remove(); helpEl = null; window.speechSynthesis?.cancel(); }
+  function openHelp() {
+    if (!helpGame || helpEl) return;
+    const steps = howOf(helpGame), name = helpGame.name;
+    helpEl = Core.el(`<div class="help" role="dialog" aria-modal="true" aria-label="Cómo se juega">
+      <div class="help-card"><h2>${esc(name)}</h2><ol>${steps.map(t => `<li>${esc(t)}</li>`).join('')}</ol>
+        <div class="help-btns"><button class="speak-btn" id="help-say" aria-label="Leer en voz alta">🔊</button><button class="round again" id="help-ok" aria-label="Cerrar">👍</button></div></div></div>`);
+    document.body.appendChild(helpEl);
+    helpEl.querySelector('#help-say').onclick = () => Core.say(`${name}. ${steps.join(' ')}`);
+    helpEl.querySelector('#help-ok').onclick = closeHelp;
+    helpEl.addEventListener('pointerdown', e => { if (e.target === helpEl) closeHelp(); });   // tocar fuera también cierra
+  }
+  let helpAt = 0;   // como la casa: responde al levantar el dedo, aunque haya otro apoyado
+  btnHelp.addEventListener('pointerup', e => { e.preventDefault(); helpAt = Date.now(); openHelp(); });
+  btnHelp.onclick = () => { if (Date.now() - helpAt > 500) openHelp(); };
+
   // ---------- Navegación por hash ----------
   let cleanup = null;
   function route() {
     if (cleanup) { try { cleanup(); } catch {} cleanup = null; }
+    closeHelp(); helpGame = null; btnHelp.hidden = true;
     unzoom();
     document.getElementById('star-count').textContent = Core.state.stars;
     const id = location.hash.slice(1);
@@ -251,6 +274,7 @@
     if (!game) return menu();
     title.textContent = game.name;
     btnHome.hidden = false;
+    helpGame = game; btnHelp.hidden = !howOf(game).length;
     document.body.classList.toggle('in-game', game.section === 'recreo');
     app.innerHTML = '';
     window.scrollTo(0, 0); app.scrollTop = 0;

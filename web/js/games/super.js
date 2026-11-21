@@ -129,6 +129,7 @@
     id: 'super', section: 'recreo',
     name: 'Súper Rescate', art: t => (t.id === 'granja' ? 'rescate' : null), emoji: t => t.sets.rescate.hero, color: '#d7263d',
     learns: 'Seguimiento con el dedo, anticipación y control del movimiento.',
+    how: () => { const T = Themes.set('rescate'); return [`Mueve el dedo por la pantalla: el ${T.heroName.toLowerCase()} vuela detrás de él.`, `Recoge a los ${T.plural}. Hay que rescatar a diez.`, `Si te chocas con ${T.hazardName}, solo da unas vueltas. No se pierde nada.`]; },
     badge: s => s.total ? `🏅 ${s.total}` : '',
     start(root, exit) {
       const GOAL = 10, T = Themes.set('rescate');

@@ -5,6 +5,7 @@ Games.push({
   emoji: '🧠',
   color: '#8e6cff',
   learns: 'Memoria de trabajo, atención y vocabulario de animales.',
+  how: ['Toca dos cartas para darles la vuelta.', 'Si son iguales, se quedan a la vista. Si no, se vuelven a tapar.', 'Acuérdate de dónde está cada una y encuentra todas las parejas.'],
   maxLevel: 4,
   start(root, exit) {
     const CARDS = Themes.set('parejas');

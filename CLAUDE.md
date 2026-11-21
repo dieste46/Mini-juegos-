@@ -24,7 +24,7 @@ El nombre de la app y el título del menú son "Mundo Joor"; el nombre del jugad
 ## Reglas pedagógicas (no negociables)
 
 - Explicar, no castigar el error. Nada de cruces rojas, vidas ni cronómetros.
-- No lee: toda instrucción va por voz (`Core.say`) o por dibujo. Cada pantalla de juego tiene un botón 🔊 para repetirla.
+- No lee: toda instrucción va por voz (`Core.say`) o por dibujo. Cada pantalla de juego tiene un botón 🔊 para repetirla. La ventana de "Cómo se juega" (botón "?" de la barra) lleva texto, pero también su altavoz para leerlo.
 - Recompensa inmediata y partidas cortas con final claro; cortar cuando aún quiere más.
 - Retos, no tareas. Dificultad que sube y baja sola (dos o tres aciertos seguidos suben, dos fallos seguidos bajan).
 - Escalera de pistas antes que dar la solución: repetir más despacio, marcar lo siguiente, mostrar un trozo del camino.
@@ -62,6 +62,7 @@ Games.push({
   emoji: '🎯',                                // o t => ... según el tema; es el dibujo de reserva de la tarjeta
   art: t => 'nombre',                         // opcional: img/icons/nombre.webp (o null para usar el emoji)
   color: '#35D6E6', learns: 'Qué trabaja (se enseña en la zona de padres).',
+  how: ['Frase corta.', 'Otra frase.'],       // cómo se juega (o función que lo da según el tema): ventana del "?" y zona de padres
   maxLevel: 4,                                // opcional: pinta estrellas de nivel en la tarjeta
   badge: s => (s.total ? `🏅 ${s.total}` : ''), // opcional: sustituye a las estrellas de nivel
   hidden: true,                               // opcional: sin tarjeta; se entra desde otro juego

@@ -42,6 +42,7 @@
     id: 'laberinto', section: 'recreo',
     name: 'Laberinto', emoji: t => t.sets.laberinto.pairs[0][0], color: '#5BE38C',
     learns: 'Planificar un camino, orientación espacial y trazo con el dedo (preescritura).',
+    how: ['Arrastra el dedo por los pasillos para llevar al personaje hasta su meta.', 'No atraviesa las paredes. Si se queda parado, vuelve con el dedo al camino.', 'Si te atascas, se iluminan unas baldosas del camino.'],
     badge: s => s.solved ? `🏁 ${s.solved}` : '',
     start(root, exit) {
       const T = Themes.set('laberinto'), g = Core.gameState('laberinto'), PER = 3;

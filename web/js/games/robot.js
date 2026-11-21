@@ -80,6 +80,7 @@
     id: 'robot', section: 'aprende',
     name: 'Guía a Bip', emoji: '🤖', art: () => 'bip', color: '#35D6E6',
     learns: 'Pensar el camino antes de andarlo: ordenar pasos, arriba, abajo, izquierda y derecha, y corregir sobre la marcha (pensamiento computacional).',
+    how: () => [`Mira dónde está ${Mascot.NAME} y adónde tiene que llegar.`, 'Toca las flechas del camino, en orden. Se van poniendo en los huecos.', `Pulsa el botón verde y ${Mascot.NAME} hará lo que le has dicho.`, 'Si choca o no llega, no pasa nada. Sigue desde donde se ha quedado.', 'Si hay una estrella, pasa primero por ella. El botón amarillo repite la última flecha.'],
     maxLevel: LEVELS.length,
     start(root, exit) {
       const g = Core.gameState('robot'), PER = 3;
