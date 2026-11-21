@@ -40,15 +40,12 @@
   // ---------- PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada ----------
   // Solo existe en las vistas previas (y en local). Se elige en la zona de padres. Quitar cuando se decida.
   const BAR_TEST = /\.mundojoor\.pages\.dev$|^localhost$|^127\./.test(location.hostname);
-  const BAR_MODES = { normal: 'Como ahora', franja: 'Franja fina', fija: 'Barra fija', quieta: 'Página quieta' };
+  const BAR_MODES = { normal: 'Como ahora', fija: 'Barra fija', quieta: 'Página quieta' };
   const barMode = () => { try { return localStorage.getItem('mj-prueba-barra') || 'normal'; } catch { return 'normal'; } };
   function applyBarMode() {
     const m = BAR_TEST ? barMode() : 'normal';
     document.body.classList.toggle('barra-fija', m === 'fija');
-    // "Franja fina": una caja fija, opaca y del color del fondo, pegada arriba. Es lo que WebKit mira para no difuminar.
-    let strip = document.getElementById('edge-strip');
-    if (m === 'franja' && !strip) { strip = document.createElement('div'); strip.id = 'edge-strip'; strip.setAttribute('aria-hidden', 'true'); document.body.prepend(strip); }
-    if (m !== 'franja' && strip) strip.remove();
+
     document.documentElement.classList.toggle('pagina-quieta', m === 'quieta');
   }
   if (BAR_TEST) {

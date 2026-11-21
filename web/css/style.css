@@ -804,10 +804,15 @@ body.sticker .di, body.sticker .bip-edit { border: 3px solid var(--line); box-sh
 .parents .lvb { width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 1.2rem; line-height: 1; }
 .parents .lvb:disabled { opacity: .3; }
 
+/* ----- Franja del borde superior -----
+   En las apps de pantalla de inicio, iOS 26 difumina la zona bajo la hora y un poco más, y ahí cae el título.
+   WebKit no lo hace si encuentra pegada arriba una caja fija, casi tan ancha como la pantalla, de más de 10 px
+   de alto y con fondo opaco; usa su color para la zona de la hora. Esta es esa caja: del color del fondo, no se ve
+   ni mueve nada de sitio. Va por debajo de la barra superior, que sigue recibiendo los toques. No quitarla. */
+#edge { position: fixed; top: 0; left: 0; right: 0; height: 14px; background: var(--ground); z-index: 29; }
+
 /* ===== PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada =====
    Solo se activa en las vistas previas, desde la zona de padres (ver BAR_TEST en app.js). Quitar cuando se decida. */
-/* "Franja fina": caja fija de 14 px, tan ancha como la pantalla y del color del fondo. No cambia nada de sitio. */
-#edge-strip { position: fixed; top: 0; left: 0; right: 0; height: 14px; background: var(--ground); z-index: 29; }
 /* "Barra fija": la barra deja de irse con el contenido y se queda pegada arriba, opaca. */
 body.barra-fija .topbar { position: fixed; top: 0; left: 0; right: 0; }
 body.barra-fija { padding-top: var(--topbar-h, 72px); }
