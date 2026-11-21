@@ -10,16 +10,16 @@ Games.push({
   letters: ['A', 'E', 'I', 'O', 'U', 'M', 'P', 'L', 'S', 'D', 'T'],   // las que tienen palabras: entre ellas se elige la letra de la semana
   start(root, exit) {
     const WORDS = {
-      A: [['🐝', 'abeja'], ['🌳', 'árbol'], ['✈️', 'avión'], ['🕷️', 'araña']],
-      E: [['🐘', 'elefante'], ['⭐', 'estrella'], ['🧹', 'escoba']],
-      I: [['🏝️', 'isla'], ['🧲', 'imán'], ['🦎', 'iguana']],
-      O: [['🐻', 'oso'], ['🐑', 'oveja'], ['👁️', 'ojo'], ['🌊', 'ola']],
-      U: [['🍇', 'uva'], ['🦄', 'unicornio']],
-      M: [['🐵', 'mono'], ['🍎', 'manzana'], ['🏍️', 'moto'], ['🦋', 'mariposa']],
-      P: [['🦆', 'pato'], ['🍐', 'pera'], ['🐶', 'perro'], ['🐟', 'pez'], ['⚽', 'pelota']],
-      S: [['☀️', 'sol'], ['🍄', 'seta'], ['🐍', 'serpiente'], ['🪑', 'silla']],
-      L: [['🌙', 'luna'], ['🦁', 'león'], ['🍋', 'limón'], ['✏️', 'lápiz']],
-      D: [['🎲', 'dado'], ['☝️', 'dedo'], ['🦷', 'diente'], ['🚿', 'ducha'], ['🐬', 'delfín'], ['🦖', 'dinosaurio']],
+      A: [['🐝', 'abeja'], ['🌳', 'árbol'], ['✈️', 'avión'], ['🕷️', 'araña'], ['💍', 'anillo'], ['🐿️', 'ardilla'], ['🦅', 'águila'], ['🌈', 'arcoíris']],
+      E: [['🐘', 'elefante'], ['⭐', 'estrella'], ['🧹', 'escoba'], ['🦔', 'erizo'], ['🪞', 'espejo'], ['🪜', 'escalera']],
+      I: [['🏝️', 'isla'], ['🧲', 'imán'], ['🦎', 'iguana'], ['⛪', 'iglesia']],
+      O: [['🐻', 'oso'], ['🐑', 'oveja'], ['👁️', 'ojo'], ['🌊', 'ola'], ['👂', 'oreja'], ['8️⃣', 'ocho']],
+      U: [['🍇', 'uva'], ['🦄', 'unicornio'], ['💅', 'uña'], ['1️⃣', 'uno']],
+      M: [['🐵', 'mono'], ['🍎', 'manzana'], ['🏍️', 'moto'], ['🦋', 'mariposa'], ['🪼', 'medusa'], ['🗺️', 'mapa'], ['✋', 'mano'], ['🎒', 'mochila'], ['⛰️', 'montaña'], ['🔨', 'martillo']],
+      P: [['🦆', 'pato'], ['🍐', 'pera'], ['🐶', 'perro'], ['🐟', 'pez'], ['⚽', 'pelota'], ['🍞', 'pan'], ['🦶', 'pie'], ['🐧', 'pingüino'], ['🍍', 'piña'], ['🍕', 'pizza'], ['🐙', 'pulpo']],
+      S: [['☀️', 'sol'], ['🍄', 'seta'], ['🐍', 'serpiente'], ['🪑', 'silla'], ['🍉', 'sandía'], ['🚦', 'semáforo'], ['👒', 'sombrero'], ['🛋️', 'sofá']],
+      L: [['🌙', 'luna'], ['🦁', 'león'], ['🍋', 'limón'], ['✏️', 'lápiz'], ['🐺', 'lobo'], ['📕', 'libro'], ['🦜', 'loro'], ['🔍', 'lupa']],
+      D: [['🎲', 'dado'], ['☝️', 'dedo'], ['🦷', 'diente'], ['🚿', 'ducha'], ['🐬', 'delfín'], ['🦖', 'dinosaurio'], ['🐉', 'dragón'], ['2️⃣', 'dos'], ['💎', 'diamante']],
       T: [['🍅', 'tomate'], ['🐢', 'tortuga'], ['🚂', 'tren'], ['☕', 'taza']]
     };
     // Palabras del tema actual (p. ej. espacio): se añaden y salen con más frecuencia.
