@@ -588,7 +588,7 @@ button { font-family: inherit; }
 .parents { background: #fff; color: #14235A; font-weight: 700; }
 .parents h3 { font-family: 'Lilita One', sans-serif; font-weight: 400; }
 .parents button { color: #14235A; font-weight: 700; }
-.profiles .look.on, .profiles .wk.on { outline: 3px solid var(--primary); background: #eef3ff; }
+.profiles .look.on, .profiles .wk.on, .profiles .barm.on { outline: 3px solid var(--primary); background: #eef3ff; }
 .profiles .wk { min-width: 44px; }
 
 /* ---------- Pegatina: contorno negro y sombra dura, en los dos temas ---------- */
@@ -803,3 +803,15 @@ body.sticker .di, body.sticker .bip-edit { border: 3px solid var(--line); box-sh
 .lv { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .parents .lvb { width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 1.2rem; line-height: 1; }
 .parents .lvb:disabled { opacity: .3; }
+
+/* ===== PRUEBA TEMPORAL: desenfoque de iOS sobre la franja de arriba en la app instalada =====
+   Solo se activa en las vistas previas, desde la zona de padres (ver BAR_TEST en app.js). Quitar cuando se decida. */
+/* "Barra fija": la barra deja de irse con el contenido y se queda pegada arriba, opaca. */
+body.barra-fija .topbar { position: fixed; top: 0; left: 0; right: 0; }
+body.barra-fija { padding-top: var(--topbar-h, 72px); }
+/* "Página quieta": la página no se desplaza; lo que se desplaza es el contenido, por debajo de la barra. */
+html.pagina-quieta, html.pagina-quieta body { height: 100%; min-height: 0; overflow: hidden; }
+html.pagina-quieta body { display: flex; flex-direction: column; }
+html.pagina-quieta .topbar { flex: none; }
+html.pagina-quieta main { flex: 1; min-height: 0; width: 100%; box-sizing: border-box; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+html.pagina-quieta body.in-game main { overflow: hidden; }
