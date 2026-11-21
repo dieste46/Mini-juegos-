@@ -31,7 +31,7 @@ El contexto personal no está en este repo, que es público. Va en `docs/privado
 | Cuenta | `contar` | aprende | preguntas | Hasta 10 y sumas con dibujos (4 niveles) |
 | Parejas | `memoria` | aprende | DOM | |
 | Colores | `colores` | aprende | preguntas | 3 niveles |
-| Letras | `letras` | aprende | preguntas | Sonido inicial con 10 letras (3 niveles). Se queda corto: ver 4.2 |
+| Letras | `letras` | aprende | preguntas | Sonido inicial con las 10 letras trabajadas en clase: vocales y M, P, L, S, D (3 niveles). Se queda corto: ver 4.2 |
 | Series | `series` | aprende | preguntas | Patrones hasta 4 elementos (3 niveles) |
 | Guía a Bip | `robot` | aprende | DOM | Programar el camino de Bip con flechas y verlo ejecutarse (5 niveles; el último, con ficha de repetir) |
 

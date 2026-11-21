@@ -36,7 +36,11 @@ Las que no convengan (por pronunciación o porque no las conoce) se quitan. Las 
 | Y | YOYÓ 🪀 · YATE 🛥️ · YOGUR 🥛 |
 | Z | ZAPATO 👞 · ZORRO 🦊 · ZUMO 🧃 · ZANAHORIA 🥕 |
 
+Letras ya trabajadas en clase, en este orden (a 21/11/2026): **A E I O U M P L S D**. Son las que usa hoy el juego Letras.
+Las siguientes las va diciendo la familia, una por semana.
+
 Pendiente de decidir en el chat:
-- Orden en que el colegio presenta las letras (se sabe que han hecho la O y la M).
+- Validar las palabras de esas diez letras (las de la D son nuevas en el juego).
+- Si se añaden al juego las palabras que escribió en sus fichas, marcadas con (cole). Ojo: MAR y OLA comparten dibujo.
 - Qué palabras quitar por pronunciación.
 - Si se enseñan los dos sonidos de C y G desde el principio o solo el fuerte.

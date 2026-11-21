@@ -18,12 +18,14 @@ Games.push({
       P: [['🦆', 'pato'], ['🍐', 'pera'], ['🐶', 'perro'], ['🐟', 'pez'], ['⚽', 'pelota']],
       S: [['☀️', 'sol'], ['🍄', 'seta'], ['🐍', 'serpiente'], ['🪑', 'silla']],
       L: [['🌙', 'luna'], ['🦁', 'león'], ['🍋', 'limón'], ['✏️', 'lápiz']],
+      D: [['🎲', 'dado'], ['☝️', 'dedo'], ['🦷', 'diente'], ['🚿', 'ducha'], ['🐬', 'delfín'], ['🦖', 'dinosaurio']],
       T: [['🍅', 'tomate'], ['🐢', 'tortuga'], ['🚂', 'tren'], ['☕', 'taza']]
     };
     // Palabras del tema actual (p. ej. espacio): se añaden y salen con más frecuencia.
     Object.entries(Themes.set('letras')).forEach(([l, ws]) => { if (WORDS[l]) WORDS[l] = [...ws, ...ws, ...WORDS[l]]; });
-    const NAME = { A: 'a', E: 'e', I: 'i', O: 'o', U: 'u', M: 'eme', P: 'pe', S: 'ese', L: 'ele', T: 'te' };
-    const VOWELS = ['A', 'E', 'I', 'O', 'U'], CONS = ['M', 'P', 'S', 'L', 'T'];
+    const NAME = { A: 'a', E: 'e', I: 'i', O: 'o', U: 'u', M: 'eme', P: 'pe', S: 'ese', L: 'ele', D: 'de', T: 'te' };
+    // Solo las letras que ya han trabajado en clase, en su orden (lo dice la familia). La T tiene sus palabras listas para cuando toque.
+    const VOWELS = ['A', 'E', 'I', 'O', 'U'], CONS = ['M', 'P', 'L', 'S', 'D'];
     // Alarga la primera letra para que se oiga el sonido: "mmmono", "ooooso".
     const stretch = w => w[0].repeat(3) + w.slice(1);
 
