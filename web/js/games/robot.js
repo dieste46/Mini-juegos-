@@ -148,10 +148,14 @@
           // Rastro de lo programado (en los dos primeros niveles, y después como ayuda) y pistas
           [...board.children].forEach(c => c.classList.remove('trail', 'way'));
           if (P.level <= 2 || fails >= 2) a.cells.forEach(c => !same(c, P.goal) && !same(c, P.star) && cellAt(c).classList.add('trail'));
-          const rest = a.ok && !a.home ? route(P.n, P.walls, a.at, targets(a.star)) : null;
+          // Lo que falta, contando como giro cambiar respecto a la última flecha puesta: así la ayuda sigue recto mientras puede
+          const rest = a.ok && !a.home ? route(P.n, P.walls, a.at, targets(a.star), prog.length ? prog[prog.length - 1].d : null) : null;
           if (fails >= 3 && rest) { let at = a.at; rest.slice(0, 3).forEach(d => { at = [at[0] + DIR[d][0], at[1] + DIR[d][1]]; cellAt(at).classList.add('way'); }); }
-          const hint = guided && !busy && !done;
-          KEYS.forEach(k => keyEl[k].classList.toggle('next', hint && !!rest && rest[0] === k && prog.length < slots));
+          const hint = guided && !busy && !done, last = prog[prog.length - 1];
+          // Con la ficha de repetir, si el paso que toca es igual que la última flecha, lo que se marca es el botón de repetir
+          const again = hint && P.repeat && !!rest && !!last && last.d === rest[0] && last.n < MAX_REPEAT;
+          KEYS.forEach(k => keyEl[k].classList.toggle('next', hint && !again && !!rest && rest[0] === k && prog.length < slots));
+          repBtn.classList.toggle('next', again);
           goBtn.classList.toggle('next', hint && (a.home || prog.length >= slots));   // sin ayuda no se chiva de que el camino ya está bien
           repBtn.style.visibility = P.repeat ? 'visible' : 'hidden';
         }
@@ -200,7 +204,7 @@
             Mascot.mood(bip, 'wow', 1200);
             Core.say(why === 'crash' ? '¡Uy! Por ahí no se puede pasar. Sigue desde aquí.'
               : why === 'star' ? 'Falta la estrella. Ve a por ella.'
-              : fails >= 2 ? 'Te ayudo: toca la flecha que brilla.' : '¡Bien! Todavía falta un poco. Sigue desde aquí.');
+              : fails >= 2 ? 'Te ayudo: toca el botón que brilla.' : '¡Bien! Todavía falta un poco. Sigue desde aquí.');
             resize(); paint();
           };
           const step = () => {
