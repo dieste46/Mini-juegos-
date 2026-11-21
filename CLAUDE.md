@@ -7,7 +7,7 @@ Mientras dure la mudanza se publica también en GitHub Pages (https://dieste46.g
 y GitHub no redirige las direcciones de Pages al renombrar: la antigua deja de responder. Estado y pasos en `docs/PLAN.md`, apartado 3.
 
 **La web vive en `web/`** y es la única carpeta que se publica. Las rutas de esta guía (`js/...`, `css/...`, `img/...`, `sw.js`) son relativas a `web/`.
-La documentación (`CLAUDE.md`, `README.md`, `docs/`) queda fuera de lo publicado.
+La documentación (`CLAUDE.md`, `README.md`, `docs/`) y las pruebas (`pruebas/`) quedan fuera de lo publicado.
 
 Antes de tocar nada, lee `docs/PLAN.md` (estado, prioridades y reparto de trabajo). Si existe `docs/privado/contexto.md`
 (no se sube al repo), léelo también: tiene el contexto personal del niño.
@@ -101,7 +101,7 @@ Todo el estilo "arcade" está al final de `css/style.css` y se gobierna con vari
 
 ## Publicar
 
-- **`main` es producción: es la versión con la que juega el niño.** Trabaja en una rama, prueba en el iPhone y solo entonces lleva a `main`.
+- **`main` es producción: es la versión con la que juega el niño.** Trabaja en una rama, prueba en el iPhone y solo entonces lleva a `main`. El autor lo pide con "fusiona": hasta entonces, nada a `main`.
 - Cloudflare Pages publica el contenido de `web/` (sin compilación; directorio de salida `web`) y da una dirección de vista previa por rama: `https://<alias>.mundojoor.pages.dev`. El alias es la rama en minúsculas, con guiones en lugar de lo que no sea letra o número y recortada a 28 caracteres (`claude/dazzling-thompson-octlzr` → `claude-dazzling-thompson-oct`).
 - GitHub Pages publica lo mismo en paralelo (`.github/workflows/pages.yml`) hasta que se dé por cerrada la mudanza. No tocar ese workflow antes.
 - **Rutas siempre relativas** (`js/...`, `./`, `sw.js`), también en el manifest: la misma carpeta se sirve desde la raíz en Cloudflare y desde `/mundojoor/` en GitHub. Una ruta que empiece por `/` rompe una de las dos.
@@ -116,7 +116,7 @@ python3 -m http.server 8800 --directory web        # desde la raíz del repo
 ```
 
 - En el iPhone, por la wifi: `http://<ip-del-ordenador>:8800`. Para ver errores del móvil, inspector web de Safari desde un Mac.
-- Automático con Playwright, emulando móvil (390×844, táctil). Recetas que funcionan:
+- Automático con Playwright, emulando móvil (390×844, táctil). Las baterías están en `pruebas/` (`bash pruebas/pasar.sh` las pasa todas; ver `pruebas/README.md`). **Antes de llevar algo a `main`, pasarlas**; lo nuevo lleva sus propias comprobaciones. Recetas que funcionan:
   - Sembrar un perfil: `localStorage.clear(); localStorage.setItem('juegos-peque-v1', JSON.stringify({stars:12, games:{}, name:'Prueba'}))` y recargar (se migra solo; sin el `clear()` no, porque la primera carga ya crea un guardado vacío).
   - Comparar lo guardado: llamar antes a `Store.flush()`. Abrir el menú o la zona de padres crea en memoria el estado inicial de cada juego y no lo guarda hasta el siguiente cambio.
   - Zona de padres: responder al `prompt` de la multiplicación desde el manejador de diálogos; los `confirm` y `alert` de importar llegan por el mismo sitio.

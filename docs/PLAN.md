@@ -339,10 +339,33 @@ Sobre la mesa, sin decidir:
 
 Descartado: bloquear los minijuegos hasta hacer los de aprender (convierte aprender en un peaje) y un límite de tiempo con cuenta atrás a la vista.
 
+### 4.11 Mi Bip, segunda vuelta (propuesta del 21/11/2026)
+
+Hoy Bip tiene un color y un solo complemento a la vez, y se queda corto. El autor quiere tipos de ojos, de cabeza o casco, y más accesorios.
+
+Primera tanda recomendada (pendiente de que el autor la confirme):
+- **Ranuras separadas**: cabeza, cara, cuerpo y espalda, para combinar corona, capa y pajarita a la vez. Es la base de lo demás. Hoy `profile.bip = { color, item }`; pasaría a llevar una pieza por ranura, aceptando el formato actual.
+- **Tipos de ojos**: redondos (los de ahora), estrellas, corazones, cuadrados de píxel, dormilones. Y su color aparte.
+- **Cascos y sombreros**: astronauta con burbuja, bombero, obra, vikingo, vaquero, pirata, además del gorro y la corona.
+- **Antena**: bolita, estrella, corazón, muelle, hélice, dos antenas.
+- **Emblema en la barriga**: estrella, rayo, corazón o la inicial del nombre del jugador.
+- **Un vestidor más de niño**: pestañas con dibujos, Bip que reacciona, un dado para un conjunto al azar y aviso de "regalo nuevo" en el menú.
+
+Después:
+- **Regalos por lograr cosas, no solo por estrellas**: "llega al nivel 3 en Guía a Bip y se abre el casco de explorador". Empuja los juegos de aprender sin bloquear los otros.
+- Dos colores y estampado; algo en la mano.
+- Forma de la cabeza (redonda, cuadrada, con orejas): la última, porque cambia la silueta y obliga a redibujar lo que va encima.
+
+Límites:
+- Cada pieza se dibuja a mano en SVG, en `js/mascot.js`. Mejor seis buenas por ranura que veinte flojas.
+- Los ojos cambian con el ánimo (contento, riendo, sorprendido): cada tipo necesita sus tres versiones, o se usa solo en reposo.
+- Dentro de los juegos Bip mide unos 60 px: las piezas tienen que leerse a ese tamaño.
+- Las piezas nuevas del perfil hay que añadirlas a `cleanProfile()` en `store.js`, y sus comprobaciones a `pruebas/personalizacion.js`.
+
 ## 5. Reparto del trabajo
 
 - **Chat (proyecto "Aprendizaje Jr" en Claude)**: ideas, mecánicas, contenido (listas de palabras, frases de voz, orden de letras), valorar propuestas, decisiones y arreglos pequeños desde el móvil. Lo que se decide allí se escribe en `docs/`, para que quede en el repo.
-- **Claude Code**: los bloques grandes de código (4.0 a 4.3), las pruebas en el iPhone real, las ramas y la limpieza técnica.
+- **Claude Code**: los bloques grandes de código (4.0 a 4.3), las pruebas en el iPhone real, las ramas y la limpieza técnica. Las baterías automáticas están en `pruebas/`.
 - **El autor**: probar con el niño, generar las hojas de iconos y decir cada semana qué letra toca.
 
 ## 6. Decisiones tomadas
