@@ -1,6 +1,6 @@
 # Plan de Mundo Joor
 
-Actualizado: 20/11/2026. Quien cierre algo actualiza los apartados 2, 3 y 6.
+Actualizado: 21/11/2026. Quien cierre algo actualiza los apartados 2, 3 y 6.
 
 ## 1. Para quién y para qué
 
@@ -40,6 +40,7 @@ Además: temas granja y espacio, estilo arcade con opción pegatina, perfiles co
 ## 3. Pendiente conocido
 
 - **Casa que no respondía en iPhone** tras un juego. Encontrada una causa, reproducible en Chromium: en Cuenta, Colores, Letras y Series, al pulsar la casa en el segundo y medio que sigue a un acierto, la siguiente pregunta se pintaba encima del menú, ya sin botón de casa (el motor de preguntas no tenía limpieza). Arreglado en `Core.runQuiz`, que ahora devuelve su función de limpieza. Falta confirmar en el iPhone que era esto y que no hay otra causa.
+- **Franja de arriba borrosa en la app instalada (iOS)**: bajo la hora, iOS difumina el borde superior de la página y el título cae ahí. En Safari no pasa. No hay arreglo documentado. En la rama de vista previa hay una prueba (zona de padres → "Prueba de la franja de arriba") con dos alternativas, "Barra fija" y "Página quieta"; falta ver en el iPhone, con la vista previa instalada como icono, si alguna lo quita. No está en `main`.
 - **Service worker**: tras actualizarse, la caché nueva queda vacía hasta la siguiente carga con red. Sin conexión justo después de una actualización, puede faltar algún archivo.
 - **Nada de lo hecho en canvas está probado a fondo en iPhone.** En Carrera hay que validar la dificultad de la vista desde detrás: se ajusta con `BASE` (velocidad) y `Z0` (distancia de aparición).
 - **Repite con Bip sin tarjeta propia**: decidir tras observar si lo encuentra. Sacarlo al menú es quitar `hidden`.
